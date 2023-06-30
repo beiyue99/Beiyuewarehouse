@@ -44,7 +44,8 @@ Copy code
 
 
 
-
+git push -u origin master 命令是将本地的 master 分支推送到名为 origin 的远程仓库，
+并设置 origin 为 master 分支的默认远程仓库。
 
 
 

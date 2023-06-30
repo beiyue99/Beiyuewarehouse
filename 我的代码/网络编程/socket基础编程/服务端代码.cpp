@@ -18,21 +18,21 @@ int main()
     int addrlen = sizeof(struct sockaddr_in);
     struct sockaddr_in address;
     struct sockaddr_in client_addr;
-    // ´´½¨·şÎñÆ÷Ì×½Ó×Ö
+    // åˆ›å»ºæœåŠ¡å™¨å¥—æ¥å­—
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
         perror("socket failed");
         exit(EXIT_FAILURE);
     }
 
-    // ÉèÖÃ·şÎñÆ÷Ì×½Ó×ÖÑ¡Ïî
+    // è®¾ç½®æœåŠ¡å™¨å¥—æ¥å­—é€‰é¡¹
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) == -1)
     {
         perror("setsockopt failed");
         exit(EXIT_FAILURE);
     }
 
-    // °ó¶¨·şÎñÆ÷µØÖ·ºÍ¶Ë¿Ú
+    // ç»‘å®šæœåŠ¡å™¨åœ°å€å’Œç«¯å£
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(PORT);
@@ -42,54 +42,54 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    // ¼àÌıÁ¬½ÓÇëÇó
+    // ç›‘å¬è¿æ¥è¯·æ±‚
     if (listen(server_fd, 5) == -1)
     {
         perror("listen failed");
         exit(EXIT_FAILURE);
     }
-    //¼àÌı£¬½«¿Í»§¶Ë·¢À´µÄÇëÇó·ÅÈë¶ÓÁĞ£¬Ò»¸öÒ»¸ö´¦Àí
-    // ×èÈû²¢µÈ´ı¿Í»§¶ËµÄÁ¬½Ó
+    //ç›‘å¬ï¼Œå°†å®¢æˆ·ç«¯å‘æ¥çš„è¯·æ±‚æ”¾å…¥é˜Ÿåˆ—ï¼Œä¸€ä¸ªä¸€ä¸ªå¤„ç†
+    // é˜»å¡å¹¶ç­‰å¾…å®¢æˆ·ç«¯çš„è¿æ¥
     while (1)
     {
         if ((new_socket = accept(server_fd, (struct sockaddr*)&client_addr, (socklen_t*)&addrlen)) == -1)
         {
             perror("accept failed");
-            continue; // ¼ÌĞøµÈ´ıÏÂÒ»¸öÁ¬½Ó
+            continue; // ç»§ç»­ç­‰å¾…ä¸‹ä¸€ä¸ªè¿æ¥
         }
 
-        //Á¬½Ó³É¹¦£¬´òÓ¡¿Í»§¶ËµÄIPºÍ¶Ë¿ÚĞÅÏ¢
+        //è¿æ¥æˆåŠŸï¼Œæ‰“å°å®¢æˆ·ç«¯çš„IPå’Œç«¯å£ä¿¡æ¯
         char ip[32];
         printf("Client IP: %s, Port: %d\n", inet_ntop(AF_INET, &client_addr.sin_addr.s_addr, ip, sizeof(ip)), ntohs(client_addr.sin_port));
 
-        // Ñ­»·½ÓÊÕºÍ·¢ËÍÏûÏ¢
+        // å¾ªç¯æ¥æ”¶å’Œå‘é€æ¶ˆæ¯
         while (1)
         {
-            // ´Ó¿Í»§¶Ë¶ÁÈ¡Êı¾İ
+            // ä»å®¢æˆ·ç«¯è¯»å–æ•°æ®
             valread = read(new_socket, buffer, BUFFER_SIZE);
             if (valread == -1) {
                 perror("read failed");
-                break; // Ìø³öÄÚ²¿Ñ­»·£¬´¦Àí¶ÁÈ¡´íÎóµÄÇé¿ö
+                break; // è·³å‡ºå†…éƒ¨å¾ªç¯ï¼Œå¤„ç†è¯»å–é”™è¯¯çš„æƒ…å†µ
             }
             else if (valread == 0) {
-                // ¿Í»§¶Ë¶Ï¿ªÁ¬½Ó
+                // å®¢æˆ·ç«¯æ–­å¼€è¿æ¥
                 printf("Client disconnected\n");
-                break; // Ìø³öÄÚ²¿Ñ­»·£¬´¦Àí¿Í»§¶Ë¶Ï¿ªÁ¬½ÓµÄÇé¿ö
+                break; // è·³å‡ºå†…éƒ¨å¾ªç¯ï¼Œå¤„ç†å®¢æˆ·ç«¯æ–­å¼€è¿æ¥çš„æƒ…å†µ
             }
 
             printf("Client: %s\n", buffer);
 
-            // ÅĞ¶ÏÍ¨ĞÅÊÇ·ñ½áÊø
+            // åˆ¤æ–­é€šä¿¡æ˜¯å¦ç»“æŸ
             if (strcmp(buffer, "quit") == 0) {
-                break;  // ½áÊøÄÚ²¿Ñ­»·
+                break;  // ç»“æŸå†…éƒ¨å¾ªç¯
             }
 
-            // Ïò¿Í»§¶Ë·¢ËÍÏûÏ¢
+            // å‘å®¢æˆ·ç«¯å‘é€æ¶ˆæ¯
             if (send(new_socket, message, strlen(message), 0) == -1) {
                 perror("send failed");
-                break; // Ìø³öÄÚ²¿Ñ­»·£¬´¦Àí·¢ËÍÊ§°ÜµÄÇé¿ö
+                break; // è·³å‡ºå†…éƒ¨å¾ªç¯ï¼Œå¤„ç†å‘é€å¤±è´¥çš„æƒ…å†µ
             }
-            // Çå¿Õ»º³åÇø
+            // æ¸…ç©ºç¼“å†²åŒº
             memset(buffer, 0, BUFFER_SIZE);
         }
         close(new_socket);
