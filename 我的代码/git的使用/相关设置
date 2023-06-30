@@ -1,0 +1,21 @@
+
+
+
+
+
+
+
+对于 Windows 用户，通常推荐将 core.autocrlf 设置为 true，这样在你提交代码时，
+Git 会把行结束符 CRLF 转换为 LF，在你检出代码时，又把 LF 转换回 CRLF。
+git config --global core.autocrlf true
+
+
+不显示警告
+git config --global core.safecrlf false
+
+
+
+
+
+
+

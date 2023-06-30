@@ -1,0 +1,22 @@
+﻿  test01.cpp
+D:\VS2022\VC\Tools\MSVC\14.33.31424\include\thread(55,14): error C2672: “invoke”: 未找到匹配的重载函数
+D:\VS2022\VC\Tools\MSVC\14.33.31424\include\thread(61): message : 查看对正在编译的函数 模板 实例化“unsigned int std::thread::_Invoke<_Tuple,0,1>(void *) noexcept”的引用
+D:\VS2022\VC\Tools\MSVC\14.33.31424\include\thread(66): message : 查看对正在编译的函数 模板 实例化“unsigned int (__cdecl *std::thread::_Get_invoke<_Tuple,0,1>(std::integer_sequence<size_t,0,1>) noexcept)(void *)”的引用
+D:\VS2022\VC\Tools\MSVC\14.33.31424\include\thread(89): message : 查看对正在编译的函数 模板 实例化“void std::thread::_Start<void(__cdecl &)(A &),int&>(_Fn,int &)”的引用
+          with
+          [
+              _Fn=void (__cdecl &)(A &)
+          ]
+D:\C语言代码\C++多线程\C++多线程\test01.cpp(40): message : 查看对正在编译的函数 模板 实例化“std::thread::thread<void(__cdecl &)(A &),int&,0>(_Fn,int &)”的引用
+          with
+          [
+              _Fn=void (__cdecl &)(A &)
+          ]
+D:\VS2022\VC\Tools\MSVC\14.33.31424\include\thread(51,5): error C2893: 未能使函数模板“unknown-type std::invoke(_Callable &&,_Ty1 &&,_Types2 &&...) noexcept(<expr>)”专用化
+D:\VS2022\VC\Tools\MSVC\14.33.31424\include\type_traits(1482): message : 参见“std::invoke”的声明
+D:\VS2022\VC\Tools\MSVC\14.33.31424\include\thread(51,5): message : 用下列模板参数:
+D:\VS2022\VC\Tools\MSVC\14.33.31424\include\thread(51,5): message : “_Callable=void (__cdecl *)(A &)”
+D:\VS2022\VC\Tools\MSVC\14.33.31424\include\thread(51,5): message : “_Ty1=int”
+D:\VS2022\VC\Tools\MSVC\14.33.31424\include\thread(51,5): message : “_Types2={}”
+D:\VS2022\VC\Tools\MSVC\14.33.31424\include\thread(51,5): error C2780: “unknown-type std::invoke(_Callable &&) noexcept(<expr>)”: 应输入 1 个参数，却提供了 2 个
+D:\VS2022\VC\Tools\MSVC\14.33.31424\include\type_traits(1476): message : 参见“std::invoke”的声明

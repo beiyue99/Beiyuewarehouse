@@ -1,0 +1,16 @@
+﻿D:\各类软件缓存\VS\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: 中间目录(x64\Debug\)包含从另一个项目(C++多线程(1).vcxproj)共享的文件。   这会导致错误的清除和重新生成行为。
+  async的使用.cpp
+  package_task.cpp
+  promise储存返回值.cpp
+  test01.cpp
+  windows临界区.cpp
+  win下自动析构技术.cpp
+  原子操作.cpp
+  可多次get的future.cpp
+  各种锁.cpp
+  知识点.cpp
+D:\同步空间\BaiduSyncdisk\新建文件夹\网络编程\C++多线程\C++多线程\知识点.cpp(1,1): warning C4828: 文件包含在偏移 0x2b6 处开始的字符，该字符在当前源字符集中无效(代码页 936)。
+  简单知识点代码.cpp
+  线程阻塞和唤醒.cpp
+  正在生成代码...
+  C++多线程.vcxproj -> D:\同步空间\BaiduSyncdisk\新建文件夹\网络编程\C++多线程\x64\Debug\C++多线程.exe

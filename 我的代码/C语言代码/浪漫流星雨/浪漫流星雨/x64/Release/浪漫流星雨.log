@@ -1,0 +1,12 @@
+﻿  浪漫流星雨.cpp
+D:\C语言代码\浪漫流星雨\浪漫流星雨\浪漫流星雨.cpp(27,18): warning C4002: 类函数宏的调用“RGB”参数过多
+D:\C语言代码\浪漫流星雨\浪漫流星雨\浪漫流星雨.cpp(53,15): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+D:\C语言代码\浪漫流星雨\浪漫流星雨\浪漫流星雨.cpp(104,18): warning C4002: 类函数宏的调用“RGB”参数过多
+D:\C语言代码\浪漫流星雨\浪漫流星雨\浪漫流星雨.cpp(120,19): warning C4002: 类函数宏的调用“RGB”参数过多
+D:\C语言代码\浪漫流星雨\浪漫流星雨\浪漫流星雨.cpp(139,12): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+D:\C语言代码\浪漫流星雨\浪漫流星雨\浪漫流星雨.cpp(143,14): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  正在生成代码
+  Previous IPDB not found, fall back to full compilation.
+  All 16 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+  浪漫流星雨.vcxproj -> D:\C语言代码\浪漫流星雨\x64\Release\花式表白.exe

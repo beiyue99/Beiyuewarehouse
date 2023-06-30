@@ -1,0 +1,9 @@
+
+
+如果你修改了一个文件，但还没有将这些更改添加到暂存区或进行提交，你可以使用以下命令将文件还原到上次提交的状态：
+git checkout -- <file>
+git checkout -- <file>和git restore <file>命令在功能上是等效的
+
+
+如果你已经将更改添加到暂存区，但还没有进行提交，你可以使用
+git reset HEAD <file>命令将更改从暂存区移除，然后使用git checkout -- <file>命令丢弃更改

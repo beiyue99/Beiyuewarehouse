@@ -1,0 +1,41 @@
+
+
+
+
+git clone https://github.com/beiyue99/test.git  克隆远程仓库
+
+
+
+你可以使用 git pull 命令来获取远程仓库的最新更改并自动合并到你的本地仓库。git pull 是 git fetch 和 git merge 的组合。
+
+首先，打开你的命令行窗口或终端。
+
+git pull origin master
+这个命令将会把远程仓库 origin 的 master 分支的最新更改拉取到你的本地仓库，并自动合并到你的当前分支。
+如果你只想获取远程仓库的最新更改，但并不想立即合并，你可以使用 git fetch 命令。
+然后，你可以在你准备好合并的时候，使用 git merge 命令将这些更改合并到你的本地仓库。例如：
+git fetch origin master
+git merge origin/master
+
+
+
+这意味着如果你在一个仓库中设置了远程仓库，那么这个远程仓库的信息并不会被另一个仓库知道
+比如"~/OneDrive/桌面" 仓库并没有设置远程仓库，但是你的 "/d/test" 仓库设置了一个名为 "origin" 的远程仓库
+
+
+先克隆远程仓库，然后可以在本地做任何更改。在把更改push推回远程仓库前，需要先add和commit
+
+
+
+
+当需要把本地仓库文件上传到另一个有文件的远程仓库，需要先拉取远程仓库内容，然后推送。此时会报错，说没有相关历史
+Git 需要保持版本历史的连续性。因此，如果你试图将两个没有共享历史的仓库合并时，Git会报错，因为它不知道如何合并这两个项目的历史。
+
+git pull origin <branch-name> --allow-unrelated-histories  这个是允许
+ 
+
+
+
+一般情况下可以把远程仓库克隆到本地，更改完之后再推送。
+
+
