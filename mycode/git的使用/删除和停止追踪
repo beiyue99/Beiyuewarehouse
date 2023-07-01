@@ -1,0 +1,41 @@
+
+
+如果你要删除一个名为file.txt的文件，可以在命令行中使用rm命令：
+rm file.txt
+
+如果你想撤销删除文件的更改，可以使用git restore命令：
+git restore file.txt
+git restore --source=abc123 file.txt
+
+
+如果你已经提交了删除文件的操作，使用 git restore 将无法恢复文件。
+在这种情况下，你应该使用 git revert 命令来撤销删除文件的提交
+
+git revert abc123
+这会打开一个文本编辑器，让你输入这次撤销操作的提交信息。保存并关闭这个文件后，
+git会创建一个新的提交来撤销删除文件的操作。如果你撤销的是最近的一次提交，
+你也可以使用HEAD代替提交的哈希值，如下所示：git revert HEAD
+
+
+git rm --cached：仅从暂存区删除文件，保留在工作区中的文件，并将这个更改记录下来，准备提交到仓库。
+换句话说，git rm --cached 只解除了 Git 对这个文件的跟踪，但是并没有真正地删除文件。
+如果你想让 Git 忽略一个已经被追踪的文件，那么只添加该文件到 .gitignore 是不够的。
+你必须先用 git rm --cached 来取消追踪该文件，然后将其添加到 .gitignore 文件中。
+
+
+这是永久停止对某文件的追踪
+git rm --cached passwords.txt
+echo passwords.txt >> .gitignore
+git add .gitignore
+git commit -m "Stop tracking and ignore passwords.txt"
+
+
+
+git rm --cached -r directory/
+echo "directory/" >> .gitignore
+git commit -m "Stop tracking directory/"
+
+
+
+你可以使用以下的 Git 命令来查看当前 Git 仓库中被跟踪的文件：
+git ls-files

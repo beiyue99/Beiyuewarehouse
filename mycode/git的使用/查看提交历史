@@ -1,0 +1,19 @@
+在 Git 中，你可以通过 git log 命令来查看提交历史。
+
+
+
+git log
+单行：使用 git log --oneline 命令可以把每个提交缩减到一行。这种形式下，每个提交会显示一个短的唯一标识和提交信息。
+
+git log --oneline
+图形化：使用 git log --graph 命令可以图形化地显示提交历史。这个命令特别适用于查看分支和合并的情况。
+
+
+git log --graph
+详细：使用 git log -p 或者 git log --patch 命令可以查看每次提交的详细差异（即补丁）。
+
+git log -p
+统计：使用 git log --stat 命令可以查看每次提交的简单统计信息，包括改变的文件以及插入和删除的行数。
+
+git log --stat
+你也可以把这些选项混合使用，例如 git log --oneline --graph 将以单行图形化的方式显示提交历史。
