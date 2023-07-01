@@ -48,6 +48,7 @@ int main()
         perror("listen failed");
         exit(EXIT_FAILURE);
     }
+    printf("server is listening in 8080...\n");
     //监听，将客户端发来的请求放入队列，一个一个处理
     // 阻塞并等待客户端的连接
     while (1)

@@ -1,3 +1,5 @@
+
+
 Mac地址就是网卡的id  是个物理地址   6个字节  48位
 ipv4地址  4个字节 32位	
 一个IP将其分为子网id和主机id
@@ -32,40 +34,6 @@ port:2个字节0-65535
 
 
 
- 
-应用层
-4
-传输层
-3
-网络层
-2
-网络接口层
-1
-
-
-
-int main(int argc, char* argv[])
-{
-	char buf[4] = { 192,168,1,2 };
-	int num = * (int*)buf;
-	int sum = htonl(num);   //小端转大端
-	unsigned char* p= &sum;
-	printf("%d%d%d%d小n", *p, *(p + 1), *(p + 2), *(p + 3));
-	unsigned short a = 0x0102;
-	unsigned short b =  htons(a);
-	printf("%x\n", b);   //0201
-	return 0;
-}
-
-
-int main(int argc, char* argv[])
-{
-	unsigned char buf[4] = { 1,1,168,192 };
-	int  num = * (int*)buf;
-	int sum = ntohl(num);  //大端转小端
-	unsigned char* p= (unsigned char*)& sum;
-	printf("%d%d%d%d\n", *p, *(p + 1), *(p + 2), *(p + 3);
-	return 0;
 
 
 

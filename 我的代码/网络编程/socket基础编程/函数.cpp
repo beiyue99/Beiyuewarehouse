@@ -2,25 +2,20 @@
 
 //主机字节序的ip地址是字符串,网络字节序ip地址是整形   <arpa/inet.h>
 
+
+//小端转大端
 int inet_pton(int af, const char* src, void* dst);
-//用 inet_pton() 将点分十进制或 IPv6 地址表示法转换为二进制形式
 af:地址族(ip地址的家族包括ipv4和ipv6)协议
-■AF_INET : ipv4格式的ip地址
-■AF_INET6 : ipv6格式的ip地址
+AF_INET : ipv4格式的ip地址
+AF_INET6 : ipv6格式的ip地址
 src : 传入参数, 对应要转换的点分十进制的ip地址 : 192.168.1.100
 dst : 传出参数, 函数调用完成, 转换得到的大端整形IP被写入到这块内存中
 返回值 : 成功返回1, 失败返回0或者 - 1
 
 
 //将大端的整形数,转换为小端的点分十进制的IP地址          
-//inet_ntop() 函数将网络字节序的二进制地址转换为可打印的字符串形式，即将地址表示为点分十进制或 IPv6 地址表示法
 const char* inet_ntop(int af, const void* src, char* dst, socklen_t size);
 参数:
-af : 地址族协议
-AF_INET : ipv4格式的ip地址
-AF_INET6 : ipv6格式的ip地址
-srC : 传入参数, 这个指针指向的内存中存储了大端的整形IP地址
-dst : 传出参数, 存储转换得到的小端的点分十进制的IP地址
 size : 修饰dst参数的, 标记dst指向的内存中最多可以存储多少个字节
 返回值 :
 成功:指针指向第三个参数对应的内存地址, 通过返回值也可以直接取出转换得到的IP字符串
@@ -30,7 +25,7 @@ size : 修饰dst参数的, 标记dst指向的内存中最多可以存储多少�
 
 
 
-//点分十进制虹P->大端整形
+//点分十进制iP->大端整形
 in_addr_t inet_addr(const char* cp);
 //大端整形->点分十进制IP
 char* inet_ntoa(struct in_addr in);
@@ -68,7 +63,7 @@ protocol：指定使用的协议，一般为 0，表示根据 domain 和 type �
 函数 bind() 用于将一个套接字（socket）绑定到一个特定的地址和端口。
 bind() 函数将指定的套接字绑定到指定的地址。绑定后，套接字将与该地址相关联，从而可以通过该地址进行通信。
 int bind(int sockfd, const struct sockaddr* addr, socklen_t addrlen);
-//通常创建in 或者in6的结构体传参，方便初始化
+//通常创建in4 或者in6的结构体传参，方便初始化
 //绑定时 ，端口或者ip必须是大端的
 sockfd：要绑定的套接字的文件描述符。
 addr：指向要绑定的地址信息的结构体指针，通常是 struct sockaddr 类型的指针，需要进行类型转换。
@@ -98,6 +93,7 @@ sin_port：16 位端口号，使用网络字节序存储。
 sin_addr：存储 IPv4 地址的字段，类型为 struct in_addr，用于存储 32 位 IPv4 地址。
 sin_zero：用于补齐字段，通常设置为全 0。
 其中，struct in_addr 是一个用于存储 IPv4 地址的结构体。它的定义如下：
+
 struct in_addr {
     in_addr_t s_addr;  // 存储 IPv4 地址的无符号整数
 };
@@ -129,6 +125,7 @@ sin6_flowinfo：流标识，用于区分同一源地址和目标地址之间不�
 sin6_addr：存储 IPv6 地址的字段，类型为 struct in6_addr，用于存储 128 位 IPv6 地址。
 sin6_scope_id：作用域标识，用于指示地址的范围（例如，接口的索引）。
 其中，struct in6_addr 是一个用于存储 IPv6 地址的结构体。它的定义如下：
+
 struct in6_addr {
     unsigned char s6_addr[16];  // 存储 IPv6 地址的字节数组
 };
@@ -137,48 +134,19 @@ struct in6_addr 中的 s6_addr 是一个长度为 16 的无符号字符数组，
 
 
 
-//将ip和端口存到结构体需要转化为大端，htons() 和 htonl() 是用于在主机字节序(小端)和网络字节序(大端)之间进行字节序转换的函数。
 
 
 
 
 
 
-listen() 函数是用于将套接字（socket）设置为监听模式，以便接受传入的连接请求。它用于服务器端程序，用于准备接受客户端的连接。
-int listen(int sockfd, int backlog);
-sockfd：表示要监听的套接字文件描述符。这个套接字必须已经通过 socket() 函数创建，并且已经通过 bind() 函数绑定了地址。
-backlog：表示等待连接队列的最大长度。它指定允许同时等待连接的最大客户端数量（128）。超过这个数量的连接请求将被拒绝。
 
-
-
-
-
-accept() 函数用于从监听套接字的等待连接队列中接受传入的连接请求，并创建一个新的已连接套接字，用于与客户端进行通信。
-int accept(int sockfd, struct sockaddr* addr, socklen_t* addrlen);
-sockfd：表示监听套接字的文件描述符，即调用 listen() 函数后返回的套接字。
-
-addr：表示指向用于存储客户端地址信息的结构体指针。当 accept() 函数成功返回后，该结构体将被填充为客户端的地址信息。
-
-addrlen：表示一个指向整数变量的指针，用于指定 addr 结构体的长度。在调用 accept() 之前，需要将 addrlen 设置为 addr 结构体的大小。
-
-
-
-函数的返回值为整数类型。如果调用成功，返回值为新创建的已连接套接字的文件描述符。该套接字可以用于与客户端进行通信。
-如果调用失败，返回值为 - 1，并设置 errno 来指示错误类型。
 accept() 函数会阻塞程序的执行，直到有新的连接请求到达，并且从等待连接队列中取出一个连接请求进行处理。
 如果等待连接队列为空，则程序会一直等待，直到有连接请求到达为止。
 
 
 
-connect()函数用于在客户端与服务器之间建立网络连接。它的原型如下：
-int connect(int sockfd, const struct sockaddr* addr, socklen_t addrlen);
 
-sockfd：一个整数值，表示套接字描述符（socket descriptor）。它是之前使用socket()函数创建的套接字。
-
-addr：一个指向sockaddr结构体的指针，其中包含要连接的目标服务器的地址信息。sockaddr结构体是一个通用的网络地址结构，
-需要将其转换为适当的地址类型，如sockaddr_in（用于IPv4）或sockaddr_in6（用于IPv6）。
-
-addrlen：一个表示addr结构体的长度的整数值。可以使用sizeof运算符来获取addr结构体的大小。
 
 connect()函数是一个阻塞函数，即当调用该函数时，程序会一直等待连接建立或发生错误。
 如果你希望在建立连接过程中设置超时时间，可以使用select()或poll()等函数实现非阻塞操作。
@@ -212,11 +180,8 @@ fd : 通信的文件描述符, accept函数的返回值
 buf : 传入参数, 要发送的字符串
 len : 要发送的字符串的长度
 lags : 特殊的属性, 一般不使用, 指定为0
-·返回值 :
-大于0:实际发送的字节数, 和参数len是相等的
- - 1 : 发送数据失败了
 
-    read, write属于unistd.h   recv, send属于<sys / socket.h>
+
 
 
 
@@ -235,4 +200,31 @@ SO_REUSEPORT 选项允许多个套接字绑定到相同的地址和端口上。�
 
 
 
+
+
+//将ip和端口存到结构体需要转化为大端，htons() 和 htonl() 是用于在(小端)和(大端)之间进行转换的函数。
+
+int main(int argc, char* argv[])
+{
+	char buf[4] = { 192,168,1,2 };
+	int num = * (int*)buf;
+	int sum = htonl(num);   //小端转大端
+	unsigned char* p= &sum;
+	printf("%d%d%d%d小n", *p, *(p + 1), *(p + 2), *(p + 3));
+	unsigned short a = 0x0102;
+	unsigned short b =  htons(a);
+	printf("%x\n", b);   //0201
+	return 0;
+}
+
+
+int main(int argc, char* argv[])
+{
+	unsigned char buf[4] = { 1,1,168,192 };
+	int  num = * (int*)buf;
+	int sum = ntohl(num);  //大端转小端
+	unsigned char* p= (unsigned char*)& sum;
+	printf("%d%d%d%d\n", *p, *(p + 1), *(p + 2), *(p + 3);
+	return 0;
+}
 

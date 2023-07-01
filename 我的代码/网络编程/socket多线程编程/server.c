@@ -23,24 +23,20 @@ int main() {
     struct sockaddr_in serverAddress, clientAddress;
     socklen_t clientAddressLength = sizeof(clientAddress);
 
-    // ´´½¨·þÎñÆ÷Ì×½Ó×Ö
     if ((serverSocket = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("socket failed");
         exit(EXIT_FAILURE);
     }
 
-    // ÉèÖÃ·þÎñÆ÷µØÖ·ºÍ¶Ë¿Ú
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = INADDR_ANY;
     serverAddress.sin_port = htons(PORT);
 
-    // °ó¶¨·þÎñÆ÷µØÖ·ºÍ¶Ë¿Ú
     if (bind(serverSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1) {
         perror("bind failed");
         exit(EXIT_FAILURE);
     }
 
-    // ¼àÌýÁ¬½ÓÇëÇó
     if (listen(serverSocket, 5) == -1) {
         perror("listen failed");
         exit(EXIT_FAILURE);
@@ -50,13 +46,13 @@ int main() {
 
     while (1) 
     {
-        // ½ÓÊÜ¿Í»§¶ËÁ¬½Ó
+        // ï¿½ï¿½ï¿½Ü¿Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if ((clientSocket = accept(serverSocket, (struct sockaddr*)&clientAddress, &clientAddressLength)) == -1) {
             perror("accept failed");
             exit(EXIT_FAILURE);
         }
 
-        // ´´½¨ÐÂÏß³Ì´¦Àí¿Í»§¶ËÇëÇó
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì´ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         pthread_t tid;
         ClientInfo* clientInfo = (ClientInfo*)malloc(sizeof(ClientInfo));
         clientInfo->clientSocket = clientSocket;
@@ -65,7 +61,7 @@ int main() {
         pthread_detach(tid);
     }
 
-    // ¹Ø±Õ·þÎñÆ÷Ì×½Ó×Ö
+    // ï¿½Ø±Õ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×½ï¿½ï¿½ï¿½
     close(serverSocket);
     return 0;
 }
@@ -79,11 +75,11 @@ void* handleClient(void* arg) {
     struct sockaddr_in clientAddress = clientInfo->clientAddress;
     char buffer[BUFFER_SIZE];
 
-    // ´òÓ¡¿Í»§¶ËÁ¬½ÓÐÅÏ¢
+    // ï¿½ï¿½Ó¡ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
     printf("Client connected: IP %s, Port %d\n",inet_ntoa(clientAddress.sin_addr), ntohs(clientAddress.sin_port));
 
     while (1) {
-        // ¶ÁÈ¡¿Í»§¶Ë·¢ËÍµÄÊý¾Ý
+        // ï¿½ï¿½È¡ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½
         int bytesRead = read(clientSocket, buffer, sizeof(buffer) - 1);
         if (bytesRead == -1) {
             perror("read error");
@@ -97,27 +93,27 @@ void* handleClient(void* arg) {
         buffer[bytesRead] = '\0';
         printf("Received message from client: %s\n", buffer);
 
-        // ÐÞ¸ÄÊý¾Ý
+        // ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½
         for (int i = 0; i < bytesRead; i++) {
             buffer[i] = toupper(buffer[i]);
         }
 
         printf("Modified message: %s\n", buffer);
 
-        // ÅÐ¶ÏÍ¨ÐÅÊÇ·ñ½áÊø
+        // ï¿½Ð¶ï¿½Í¨ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
         if (strcmp(buffer, "QUIT") == 0) {
             printf("Closing connection\n");
             break;
         }
 
-        // Ïò¿Í»§¶Ë·¢ËÍÏûÏ¢
+        // ï¿½ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
         if (send(clientSocket, buffer, strlen(buffer), 0) == -1) {
             perror("send failed");
             break;
         }
     }
 
-    // ¹Ø±Õ¿Í»§¶ËÌ×½Ó×Ö
+    // ï¿½Ø±Õ¿Í»ï¿½ï¿½ï¿½ï¿½×½ï¿½ï¿½ï¿½
     close(clientSocket);
     free(clientInfo);
     return NULL;
