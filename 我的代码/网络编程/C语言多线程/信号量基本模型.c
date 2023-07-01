@@ -1,11 +1,11 @@
-6.1ÐÅºÅÁ¿¸ÅÊö
-ÐÅºÅÁ¿¹ã·ºÓÃÓÚ½ø³Ì»òÏß³Ì¼äµÄÍ¬²½ºÍ»¥³â, ÐÅºÅÁ¿±¾ÖÊÉÏÊÇÒ»¸ö·Ç¸ºµÄÕûÊý¼ÆÊýÆ÷, Ëü±»ÓÃÀ´¿ØÖÆ¶Ô¹«¹²
-×ÊÔ´µÄ·ÃÎÊ¡£
-±à³ÌÊ±¿É¸ù¾Ý²Ù×÷ÐÅºÅÁ¿ÖµµÄ½á¹ûÅÐ¶ÏÊÇ·ñ¶Ô¹«¹²×ÊÔ´¾ßÓÐ·ÃÎÊµÄÈ¨ÏÞ, µ±ÐÅºÅÁ¿Öµ´óÓÚ0Ê±, Ôò¿ÉÒÔ·Ã
-ÎÊ, ·ñÔò½«×èÈû¡£
-PVÔ­ÓïÊÇ¶ÔÐÅºÅÁ¿µÄ²Ù×÷, Ò»´ÎP²Ù×÷Ê¹ÐÅºÅÁ¿¼õ1, Ò»´ÎV²Ù×÷Ê¹ÐÅºÅÁ¿¼Ó1¡£
-ÐÅºÅÁ¿Ö÷ÒªÓÃÓÚ½ø³Ì»òÏß³Ì¼äµÄÍ¬²½ºÍ»¥³âÕâÁ½ÖÖµäÐÍÇé¿ö¡£
-ÐÅºÅÁ¿Êý¾ÝÀàÐÍÎª : sem_t
+6.1ä¿¡å·é‡æ¦‚è¿°
+ä¿¡å·é‡å¹¿æ³›ç”¨äºŽè¿›ç¨‹æˆ–çº¿ç¨‹é—´çš„åŒæ­¥å’Œäº’æ–¥, ä¿¡å·é‡æœ¬è´¨ä¸Šæ˜¯ä¸€ä¸ªéžè´Ÿçš„æ•´æ•°è®¡æ•°å™¨, å®ƒè¢«ç”¨æ¥æŽ§åˆ¶å¯¹å…¬å…±
+èµ„æºçš„è®¿é—®ã€‚
+ç¼–ç¨‹æ—¶å¯æ ¹æ®æ“ä½œä¿¡å·é‡å€¼çš„ç»“æžœåˆ¤æ–­æ˜¯å¦å¯¹å…¬å…±èµ„æºå…·æœ‰è®¿é—®çš„æƒé™, å½“ä¿¡å·é‡å€¼å¤§äºŽ0æ—¶, åˆ™å¯ä»¥è®¿
+é—®, å¦åˆ™å°†é˜»å¡žã€‚
+PVåŽŸè¯­æ˜¯å¯¹ä¿¡å·é‡çš„æ“ä½œ, ä¸€æ¬¡Pæ“ä½œä½¿ä¿¡å·é‡å‡1, ä¸€æ¬¡Væ“ä½œä½¿ä¿¡å·é‡åŠ 1ã€‚
+ä¿¡å·é‡ä¸»è¦ç”¨äºŽè¿›ç¨‹æˆ–çº¿ç¨‹é—´çš„åŒæ­¥å’Œäº’æ–¥è¿™ä¸¤ç§å…¸åž‹æƒ…å†µã€‚
+ä¿¡å·é‡æ•°æ®ç±»åž‹ä¸º : sem_t
 
 
 
@@ -13,32 +13,32 @@ PVÔ­ÓïÊÇ¶ÔÐÅºÅÁ¿µÄ²Ù×÷, Ò»´ÎP²Ù×÷Ê¹ÐÅºÅÁ¿¼õ1, Ò»´ÎV²Ù×÷Ê¹ÐÅºÅÁ¿¼Ó1¡£
 
 
 int sem_init(sem_t* sem, int pshared, unsigned int value);
-¹¦ÄÜ:
-´´½¨Ò»¸öÐÅºÅÁ¿²¢³õÊ¼»¯ËüµÄÖµ¡£Ò»¸öÎÞÃûÐÅºÅÁ¿ÔÚ±»Ê¹ÓÃÇ°±ØÐëÏÈ³õÊ¼»¯¡£
-²ÎÊý :
+åŠŸèƒ½:
+åˆ›å»ºä¸€ä¸ªä¿¡å·é‡å¹¶åˆå§‹åŒ–å®ƒçš„å€¼ã€‚ä¸€ä¸ªæ— åä¿¡å·é‡åœ¨è¢«ä½¿ç”¨å‰å¿…é¡»å…ˆåˆå§‹åŒ–ã€‚
+å‚æ•° :
 sem:
-ÐÅºÅÁ¿µÄµØÖ·¡£
-pshared : µÈÓÚ0, ÐÅºÅÁ¿ÔÚÏß³Ì¼ä¹²Ïí(³£ÓÃ); ²»µÈÓÚ0, ÐÅºÅÁ¿ÔÚ½ø³Ì¼ä¹²Ïí¡£
-value : ÐÅºÅÁ¿µÄ³õÊ¼Öµ¡£
-·µ»ØÖµ :
-³É¹¦:0
-Ê§°Ü : -1
+ä¿¡å·é‡çš„åœ°å€ã€‚
+pshared : ç­‰äºŽ0, ä¿¡å·é‡åœ¨çº¿ç¨‹é—´å…±äº«(å¸¸ç”¨); ä¸ç­‰äºŽ0, ä¿¡å·é‡åœ¨è¿›ç¨‹é—´å…±äº«ã€‚
+value : ä¿¡å·é‡çš„åˆå§‹å€¼ã€‚
+è¿”å›žå€¼ :
+æˆåŠŸ:0
+å¤±è´¥ : -1
 
 
 
 
 int sem_wait(sem_t * sem);
-¹¦ÄÜ:
-½«ÐÅºÅÁ¿µÄÖµ¼õ1¡£²Ù×÷Ç°, ÏÈ¼ì²éÐÅºÅÁ¿(sem)µÄÖµÊÇ·ñÎª0, ÈôÐÅºÅÁ¿Îª0, ´Ëº¯Êý»á×èÈû, Ö±µ½ÐÅºÅ
-Á¿´óÓÚ0Ê±²Å½øÐÐ¼õ1²Ù×÷¡£
-²ÎÊý :
-sem:ÐÅºÅÁ¿µÄµØÖ·¡£
-·µ»ØÖµ :
-³É¹¦:0
-Ê§°Ü : -1
+åŠŸèƒ½:
+å°†ä¿¡å·é‡çš„å€¼å‡1ã€‚æ“ä½œå‰, å…ˆæ£€æŸ¥ä¿¡å·é‡(sem)çš„å€¼æ˜¯å¦ä¸º0, è‹¥ä¿¡å·é‡ä¸º0, æ­¤å‡½æ•°ä¼šé˜»å¡ž, ç›´åˆ°ä¿¡å·
+é‡å¤§äºŽ0æ—¶æ‰è¿›è¡Œå‡1æ“ä½œã€‚
+å‚æ•° :
+sem:ä¿¡å·é‡çš„åœ°å€ã€‚
+è¿”å›žå€¼ :
+æˆåŠŸ:0
+å¤±è´¥ : -1
 int sem_trywait(sem_t * sem);
-ÒÔ·Ç×èÈûµÄ·½Ê½À´¶ÔÐÅºÅÁ¿½øÐÐ¼õ1²Ù×÷¡£
-Èô²Ù×÷Ç°, ÐÅºÅÁ¿µÄÖµµÈÓÚ0, Ôò¶ÔÐÅºÅÁ¿µÄ²Ù×÷Ê§°Ü, º¯ÊýÁ¢¼´·µ»Ø¡£
+ä»¥éžé˜»å¡žçš„æ–¹å¼æ¥å¯¹ä¿¡å·é‡è¿›è¡Œå‡1æ“ä½œã€‚
+è‹¥æ“ä½œå‰, ä¿¡å·é‡çš„å€¼ç­‰äºŽ0, åˆ™å¯¹ä¿¡å·é‡çš„æ“ä½œå¤±è´¥, å‡½æ•°ç«‹å³è¿”å›žã€‚
 
 
 
@@ -48,14 +48,14 @@ int sem_trywait(sem_t * sem);
 
 
 int sem_getvalue(sem_t* sem, int* sval);
-¹¦ÄÜ:
-»ñÈ¡sem±êÊ¶µÄÐÅºÅÁ¿µÄÖµ, ±£´æÔÚsva1ÖÐ¡£
-²ÎÊý :
-sem:ÐÅºÅÁ¿µØÖ·¡£
-sVa1 : ±£´æÐÅºÅÁ¿ÖµµÄµØÖ·¡£
-·µ»ØÖµ :
-³É¹¦:0
-Ê§°Ü : -1
+åŠŸèƒ½:
+èŽ·å–semæ ‡è¯†çš„ä¿¡å·é‡çš„å€¼, ä¿å­˜åœ¨sva1ä¸­ã€‚
+å‚æ•° :
+sem:ä¿¡å·é‡åœ°å€ã€‚
+sVa1 : ä¿å­˜ä¿¡å·é‡å€¼çš„åœ°å€ã€‚
+è¿”å›žå€¼ :
+æˆåŠŸ:0
+å¤±è´¥ : -1
 
 
 
@@ -65,13 +65,13 @@ sVa1 : ±£´æÐÅºÅÁ¿ÖµµÄµØÖ·¡£
 
 
 
-//ÐÅºÅÁ¿±äÁ¿
+//ä¿¡å·é‡å˜é‡
 sem_t sem;
-//Êä³ö´óÐ´×ÖÄ¸
+//è¾“å‡ºå¤§å†™å­—æ¯
 void* fun1(void* arg)
 {
 	int i = 0;
-	//ÉêÇë×ÊÔ´,½«¿ÉÓÃ×ÊÔ´¼õ1
+	//ç”³è¯·èµ„æº,å°†å¯ç”¨èµ„æºå‡1
 	sem_wait(&sem);
 	for (i = 'A'; i <= 'Z'; i++)
 	{
@@ -79,7 +79,7 @@ void* fun1(void* arg)
 		fflush(stdout);
 		usleep(100000);//100ms
 	}
-	//ÊÍ·Å×ÊÔ´½«¿ÉÓÃ×ÊÔ´¼Ó1
+	//é‡Šæ”¾èµ„æºå°†å¯ç”¨èµ„æºåŠ 1
 	sem_post(&sem);
 	return NULL;
 }
@@ -87,11 +87,11 @@ void* fun1(void* arg)
 
 
 
-//Êä³öÐ¡Ð´×Ö
+//è¾“å‡ºå°å†™å­—
 void* fun2(void* arg)
 {
 	int i = 0;
-	//ÉêÇë×ÊÔ´,½«¿ÉÓÃ×ÊÔ´¼õ1
+	//ç”³è¯·èµ„æº,å°†å¯ç”¨èµ„æºå‡1
 	sem_wait(&sem);
 	for (i = 'a'; i <= 'z'; i++)
 	{
@@ -99,33 +99,33 @@ void* fun2(void* arg)
 		fflush(stdout);
 		usleep(100000);//100ms
 	}
-	//ÊÍ·Å×ÊÔ´½«¿ÉÓÃ×ÊÔ´¼Ó1
+	//é‡Šæ”¾èµ„æºå°†å¯ç”¨èµ„æºåŠ 1
 	sem_post(&sem);
 	return NULL;
 }
 
-//Ä£ÄâÊä³ö×Ö·û
+//æ¨¡æ‹Ÿè¾“å‡ºå­—ç¬¦
 int main(void)
 {
 	int ret = -1;
 	pthread_t tid1, tid2;
-	//³õÊ¼»¯Ò»¸öÐÅºÅÁ¿
+	//åˆå§‹åŒ–ä¸€ä¸ªä¿¡å·é‡
 	ret = sem_init(&sem, 0, 1);
 	if (0 != ret)
 	{
 		printf("sem_init failed...\n");
 		return 1;
 	}
-	printf("³õÊ¼»¯Ò»¸öÐÅºÅÁ¿ok....\n");
-	//´´½¨Á½¸öÏß³Ì
+	printf("åˆå§‹åŒ–ä¸€ä¸ªä¿¡å·é‡ok....\n");
+	//åˆ›å»ºä¸¤ä¸ªçº¿ç¨‹
 	pthread_create(&tid1, NULL, fun1, NULL);
 	pthread_create(&tid2, NULL, fun2, NULL);
-	//µÈ´ýÁ½¸öÏß³Ì½áÊø
+	//ç­‰å¾…ä¸¤ä¸ªçº¿ç¨‹ç»“æŸ
 	pthread_join(tid1, NULL);
 	pthread_join(tid2, NULL);
 	printf("\n");
 	printf("main thread exit....\n");
-	//Ïú»ÙÐÅºÅÁ¿
+	//é”€æ¯ä¿¡å·é‡
 	sem_destroy(&sem);
 	return 0;
 }

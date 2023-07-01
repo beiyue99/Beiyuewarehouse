@@ -3,27 +3,26 @@
 #define _THREAD_H
 
 typedef struct ThreadPool ThreadPool;
-// ´´½¨Ïß³Ì³Ø²¢³õÊ¼»¯
+// åˆ›å»ºçº¿ç¨‹æ± å¹¶åˆå§‹åŒ–
 ThreadPool* threadPoolCreate(int min, int max, int queueSize);
 
-// Ïú»ÙÏß³Ì³Ø
+// é”€æ¯çº¿ç¨‹æ± 
 int threadPoolDestroy(ThreadPool* pool);
 
-// ¸øÏß³Ì³ØÌí¼ÓÈÎÎñ
+// ç»™çº¿ç¨‹æ± æ·»åŠ ä»»åŠ¡
 void threadPoolAdd(ThreadPool* pool, void(*func)(void*), void* arg);
 
-// »ñÈ¡Ïß³Ì³ØÖĞ¹¤×÷µÄÏß³ÌµÄ¸öÊı
+// è·å–çº¿ç¨‹æ± ä¸­å·¥ä½œçš„çº¿ç¨‹çš„ä¸ªæ•°
 int threadPoolBusyNum(ThreadPool* pool);
 
-// »ñÈ¡Ïß³Ì³ØÖĞ»î×ÅµÄÏß³ÌµÄ¸öÊı
+// è·å–çº¿ç¨‹æ± ä¸­æ´»ç€çš„çº¿ç¨‹çš„ä¸ªæ•°
 int threadPoolAliveNum(ThreadPool* pool);
 
-//////////////////////
-// ¹¤×÷µÄÏß³Ì(Ïû·ÑÕßÏß³Ì)ÈÎÎñº¯Êı
+// å·¥ä½œçš„çº¿ç¨‹(æ¶ˆè´¹è€…çº¿ç¨‹)ä»»åŠ¡å‡½æ•°
 void* worker(void* arg);
-// ¹ÜÀíÕßÏß³ÌÈÎÎñº¯Êı
+// ç®¡ç†è€…çº¿ç¨‹ä»»åŠ¡å‡½æ•°
 void* manager(void* arg);
-// µ¥¸öÏß³ÌÍË³ö
+// å•ä¸ªçº¿ç¨‹é€€å‡º
 void threadExit(ThreadPool* pool);
 #endif  // _THREADPOOL_H
 

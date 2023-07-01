@@ -23,6 +23,7 @@ typedef struct PoolInfo
     ThreadPool* p;
     int fd;
 }PoolInfo;
+
 void working(void* arg);
 void acceptConn(void* arg);
 

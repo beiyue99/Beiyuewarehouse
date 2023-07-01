@@ -1,155 +1,112 @@
 
 
-int pthread_join(pthread_t thread, void** retval);
-¹¦ÄÜ:
-µÈ´ıÏß³Ì½áÊø(´Ëº¯Êı»á×èÈû), ²¢»ØÊÕÏß³Ì×ÊÔ´, ÀàËÆ½ø³ÌµÄwait()º¯Êı¡£Èç¹ûÏß³ÌÒÑ¾­½áÊø, ÄÇÃ´¸Ãº¯Êı»áÁ¢¼´·µ»Ø¡£
-²ÎÊı :
-thread:±»µÈ´ıµÄÏß³ÌºÅ¡£
-retva1 : ÓÃÀ´´æ´¢Ïß³ÌÍË³ö×´Ì¬µÄÖ¸ÕëµÄµØÖ·¡£
-·µ»ØÖµ : ³É¹¦:0    Ê§°Ü : ·Ç0
+//å‡è®¾sem1ä»£è¡¨å•†å“å®¹å™¨ï¼Œåˆå§‹å€¼ä¸º4ï¼Œæ¯ç”Ÿäº§ä¸€ä¸ªå•†å“ï¼Œå®¹å™¨å°±ä¼šå‡ä¸€ï¼Œ
+//sem2ä»£è¡¨å•†å“ï¼Œåˆå§‹å€¼ä¸º0ï¼Œæ¯æ¶ˆè€—ä¸€ä¸ªå•†å“ï¼Œå®¹å™¨å°±ä¼šåŠ ä¸€
 
 
 
 
-
-
-
-void* fun(void* arg)
+//èŠ‚ç‚¹ç»“æ„
+typedef struct node
 {
-	int i = 0;
-	for (i = 0; i < 5; i++)
+	int data;
+	struct node* next;
+}Node;
+//æ°¸è¿œæŒ‡å‘é“¾è¡¨å¤´éƒ¨çš„æŒ‡é’ˆ
+Node* head = NULL;
+//å®¹å™¨çš„ä¸ªæ•°
+sem_t sem_producer;
+//å¯ä»¥å–äº§å“çš„ä¸ªæ•°
+sem_t sem_customer;
+//ç”Ÿäº§è€…
+void* producer(void* arg)
+{
+	Node* pnew = NULL;
+	//å¾ªç¯ç”Ÿäº§äº§å“
+	while (1)
 	{
-		printf("fun thread do working %d\n", i);
-		sleep(1);
+		//ç”³è¯·ä¸€ä¸ªèµ„æºå®¹å™¨
+		sem_wait(&sem_producer);
+		//åˆ†é…èŠ‚ç‚¹ç©ºé—´
+		pnew = malloc(sizeof(Node));
+		if (NULL == pnew)
+		{
+			printf("malloc failed....\n");
+			break;
+		}
+		memset(pnew, 0, sizeof(Node));
+		//èµ‹å€¼
+		pnew->data = random() % 100 + 1;
+		pnew->next = NULL;
+		printf("ç”Ÿäº§è€…ç”Ÿäº§äº§å“%d\n", pnew->data);
+		//å¤´æ’æ³•
+		pnew->next = head;
+		head = pnew;
+		//é€šçŸ¥æ¶ˆè´¹è€…æ¶ˆè´¹å°†å¯ä»¥å–çš„å•†å“ä¸ªæ•°åŠ 1
+		sem_post(&sem_customer);
+		sleep(random() % 3 + 1);
 	}
-	return (void*)0x3;
+	return NULL;
 }
+
+
+//æ¶ˆè´¹è€…
+void* customer(void* arg)
+{
+	Node* tmp = NULL;
+	while (1)
+	{
+		//ç”³è¯·èµ„æºå¯ä»¥å–çš„å•†å“ä¸ªæ•°å‡1
+		sem_wait(&sem_customer);
+		//é“¾è¡¨ä¸ºç©ºçš„æƒ…å½¢
+		if (NULL == head)
+		{
+			printf("äº§å“é“¾è¡¨ä¸ºç©º..,.å…ˆä¼‘æ¯2ç§’é’Ÿ..n");
+		}
+		//ç¬¬ä¸€ä¸ªèŠ‚ç‚¹åœ°å€èµ‹å€¼ç»™ä¸´æ—¶å˜é‡tmp
+		tmp = head;
+		//headæŒ‡å‘é“¾è¡¨çš„ç¬¬äºŒä¸ªèŠ‚ç‚¹
+		head = head->next;
+		printf("æ¶ˆè´¹è€…æ¶ˆè€—äº§å“%d\n", tmp->data);
+		//é‡Šæ”¾ç©ºé—´
+		free(tmp);
+		//é‡Šæ”¾èµ„æºå°†å®¹å™¨ä¸ªæ•°åŠ 1
+		sem_post(&sem_producer);
+		//ç¡çœ 1-3ç§’
+		sleep(random() % 3 + 1);
+	}
+	return NULL;
+}
+
+//æ²¡æœ‰ä½¿ç”¨æ¡ä»¶å˜é‡çš„ç”Ÿäº§è€…å’Œæ¶ˆè´¹è€…æ¨¡å‹
 int main(void)
 {
 	int ret = -1;
-	void* retp = NULL;
-	pthread_t tid = -1;
-	//´´½¨Ò»¸öÏß³Ì
-	ret = pthread_create(&tid, NULL, fun, NULL);
-	if (0 != ret)
-	{
-		printf("pthread_create failed....\n");
-		return 1;
-	}
-	printf("main thread running.....\n");
-	//µÈ´ıÏß³Ì½áÊø
-	ret = pthread_join(tid, &retp);
-	if (0 != ret)
-	{
-		printf("pthread_join failed...\n");
-		return 1;
-	}
-	printf("retp:%p\n", retp);
-	printf("main thread exit.....\n");
-	return 0;
-}
-
-
-main thread running.....
-fun thread do working 0
-fun thread do working 1
-fun thread do working 2
-fun thread do working 3
-fun thread do working 4
-retp:0x3
-main thread exit.....
-
-
-
-
-
-
-//Êä³ö´óĞ´×ÖÄ¸
-void* fun1(void* arg)
-{
-	int i = 0;
-	for (i = 'A'; i <= 'Z'; i++)
-	{
-		putchar(i);
-		fflush(stdout);
-		usleep(100000);//100ms
-	}
-	return NULL;
-}
-
-//Êä³öĞ¡Ğ´×ÖÄ¸
-void* fun2(void* arg)
-{
-	int i = 0;
-	for (i = 'a'; i <= 'z'; i++)
-	{
-		putchar(i);
-		fflush(stdout);   //Èç¹û²»Ë¢ĞÂ£¬¾Í»áÊä³öÔÚ»º³åÇø
-		usleep(100000);//100ms
-	}
-	return NULL;
-}
-//Ä£ÄâÊä³ö×Ö·û
-int main(void)
-{
 	pthread_t tid1, tid2;
-	//´´½¨Á½¸öÏß³Ì
-	pthread_create(&tid1, NULL, fun1, NULL);
-	pthread_create(&tid2, NULL, fun2, NULL);
-	//µÈ´ıÁ½¸öÏß³Ì½áÊø
+	//è®¾ç½®éšæœºç§å­
+	srandom(getpid());
+	//åˆå§‹åŒ–
+	ret = sem_init(&sem_producer, 0, 4);
+	if (0 != ret)
+	{
+		printf("sem_init failed...\n");
+		return 1;
+	}
+	//åˆå§‹åŒ–å¯ä»¥å–çš„å•†å“çš„ä¸ªæ•°
+	ret = sem_init(&sem_customer, 0, 0);
+	if (0 != ret)
+	{
+		printf("sem_init failed...\n");
+		return 1;
+	}
+	//åˆ›å»ºä¸¤ä¸ªçº¿ç¨‹
+	pthread_create(&tid1, NULL, producer, NULL);
+	pthread_create(&tid2, NULL, customer, NULL);
+	//å›æ”¶çº¿ç¨‹èµ„æº
 	pthread_join(tid1, NULL);
 	pthread_join(tid2, NULL);
-	printf("\n");
-	printf("main thread exit....\n");
+	//é”€æ¯
+	sem_destroy(&sem_producer);
+	sem_destroy(&sem_customer);
 	return 0;
 }
-
-AabBcCDdeEfFgGhHiIjJkKlLmMnNOopPQqrRsStTuUVvwWXxyYZz
-main thread exit....
-
-
-
-
-
-
-
-
-int pthread_detach(pthread_t thread);
-¹¦ÄÜ:
-Ê¹µ÷ÓÃÏß³ÌÓëµ±Ç°½ø³Ì·ÖÀë, ·ÖÀëºó²»´ú±í´ËÏß³Ì²»ÒÀÀµÓëµ±Ç°½ø³Ì, Ïß³Ì·ÖÀëµÄÄ¿µÄÊÇ½«Ïß³Ì×ÊÔ´µÄ»ØÊÕ¹¤
-×÷½»ÓÉÏµÍ³×Ô¶¯À´Íê³É, Ò²¾ÍÊÇËµµ±±»·ÖÀëµÄÏß³Ì½áÊøÖ®ºó, ÏµÍ³»á×Ô¶¯»ØÊÕËüµÄ×ÊÔ´¡£ËùÒÔ, ´Ëº¯Êı²»»á×èÈû¡£
-²ÎÊı :
-thread:Ïß³ÌºÅ¡£
-·µ»ØÖµ :
-³É¹¦:0
-Ê§°Ü : ·Ç0
-
-
-
-µ÷ÓÃdetachºó£¬Ïß³ÌÓëÖ÷Ïß³Ì·ÖÀë£¬Ö÷Ïß³Ì²»»áµÈ´ı×ÓÏß³Ì¡£
-Èç¹û×ÓÏß³Ìµ÷ÓÃÁË½ø³ÌÍË³öº¯Êı£¬Õû¸ö½ø³Ì¾Í»á½áÊø
-¶øpthread_exitÊÇÏß³ÌÍË³öº¯Êı£¬µÈ¼ÛÓÚreturn ÊÇÍË³öÏß³Ì
-
-
-int main(void)
-{
-	int ret = -1;
-	pthread_t tid = -1;
-	//´´½¨Ò»¸öÏß³Ì
-	ret pthread_create(&tid, NULL, fun, NULL);
-	if (0 != ret)
-	{
-		printf("pthread_create failed....\n");
-		return 1;
-	}
-	printf("main thread....tid:%Lu\n", pthread_self())
-		//ÉèÖÃÏß³Ì·ÖÀë
-		ret pthread_detach(tid);
-	if (0 != ret)
-	{
-		printf("pthread_detach failed...\n");
-		return 1;
-	}
-	printf("°´ÏÂÈÎÒâ¼üÖ÷Ïß³ÌÍË³ö..,,\n");           //Èç¹û°´ÏÂ£¬ÄÇÃ´½ø³ÌÍË³ö£¬ËùÓĞµÄÏß³ÌÒ²ÖÕÖ¹
-	getchar();
-	return 0;

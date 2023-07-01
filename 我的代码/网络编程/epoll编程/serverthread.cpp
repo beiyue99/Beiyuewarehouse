@@ -10,7 +10,7 @@
 constexpr int MAX_EVENTS = 10;
 constexpr int BUFFER_SIZE = 1024;
 
-std::vector<int> client_sockets; // ¿Í»§¶ËÌ×½Ó×ÖÁĞ±í
+std::vector<int> client_sockets; // å®¢æˆ·ç«¯å¥—æ¥å­—åˆ—è¡¨
 
 void handle_client(int client_socket);
 
@@ -31,7 +31,7 @@ void epoll_event_loop(int epoll_fd)
             int event_fd = events[i].data.fd;
             if (event_fd == STDIN_FILENO) 
             {
-                // ´¦Àí±ê×¼ÊäÈëÊÂ¼ş
+                // å¤„ç†æ ‡å‡†è¾“å…¥äº‹ä»¶
                 char input_buffer[BUFFER_SIZE];
                 ssize_t bytes_read = read(event_fd, input_buffer, BUFFER_SIZE);
                 if (bytes_read == -1) 
@@ -40,11 +40,11 @@ void epoll_event_loop(int epoll_fd)
                     break;
                 }
 
-                // ´¦Àí±ê×¼ÊäÈëÊı¾İ
+                // å¤„ç†æ ‡å‡†è¾“å…¥æ•°æ®
                 std::string input_data(input_buffer, bytes_read);
-                //²¢½« input_buffer ÖĞµÄÇ° bytes_read ¸ö×Ö·û×÷Îª³õÊ¼ÄÚÈİ´æ´¢µ½ input_data ÖĞ¡£
+                //å¹¶å°† input_buffer ä¸­çš„å‰ bytes_read ä¸ªå­—ç¬¦ä½œä¸ºåˆå§‹å†…å®¹å­˜å‚¨åˆ° input_data ä¸­ã€‚
                 std::cout << "recive standard date:" << input_data << std::endl;
-                if (input_data == "quit\n") //ÒòÎª read() º¯Êı¶ÁÈ¡µÄÊı¾İ°üº¬ÁË»»ĞĞ·û \n£¬
+                if (input_data == "quit\n") //å› ä¸º read() å‡½æ•°è¯»å–çš„æ•°æ®åŒ…å«äº†æ¢è¡Œç¬¦ \nï¼Œ
                 {
                     std::cout << "Server is shutting down..." << std::endl;
                     should_continue = false;
@@ -54,7 +54,7 @@ void epoll_event_loop(int epoll_fd)
             }
             else if (events[i].events & EPOLLIN)
             {
-                // ´¦Àí¿Í»§¶ËÁ¬½ÓÊÂ¼ş
+                // å¤„ç†å®¢æˆ·ç«¯è¿æ¥äº‹ä»¶
                 sockaddr_in client_address{};
                 socklen_t client_address_len = sizeof(client_address);
                 int client_socket = accept(event_fd, reinterpret_cast<sockaddr*>(&client_address), &client_address_len);
@@ -64,11 +64,11 @@ void epoll_event_loop(int epoll_fd)
                     break;
                 }
 
-                // ÉèÖÃ¿Í»§¶ËÌ×½Ó×ÖÎª·Ç×èÈûÄ£Ê½
+                // è®¾ç½®å®¢æˆ·ç«¯å¥—æ¥å­—ä¸ºéé˜»å¡æ¨¡å¼
                 int client_flags = fcntl(client_socket, F_GETFL, 0);
                 fcntl(client_socket, F_SETFL, client_flags | O_NONBLOCK);
 
-                // ½«¿Í»§¶ËÌ×½Ó×Ö×¢²áµ½ epoll ¶ÔÏó
+                // å°†å®¢æˆ·ç«¯å¥—æ¥å­—æ³¨å†Œåˆ° epoll å¯¹è±¡
                 epoll_event client_event{};
                 client_event.events = EPOLLIN | EPOLLET;
                 client_event.data.fd = client_socket;
@@ -80,12 +80,12 @@ void epoll_event_loop(int epoll_fd)
                 }
                 std::cout << "New client connected. Socket: " << client_socket << std::endl;
 
-                // ½«¿Í»§¶ËÌ×½Ó×ÖÌí¼Óµ½¿Í»§¶ËÌ×½Ó×ÖÁĞ±í
+                // å°†å®¢æˆ·ç«¯å¥—æ¥å­—æ·»åŠ åˆ°å®¢æˆ·ç«¯å¥—æ¥å­—åˆ—è¡¨
                 client_sockets.push_back(client_socket);
 
-                // ´´½¨Ò»¸öÏß³Ì´¦Àí¿Í»§¶ËÁ¬½Ó
+                // åˆ›å»ºä¸€ä¸ªçº¿ç¨‹å¤„ç†å®¢æˆ·ç«¯è¿æ¥
                 std::thread client_thread(handle_client, client_socket);
-                client_thread.detach(); // ÔÚºóÌ¨ÔËĞĞÏß³Ì
+                client_thread.detach(); // åœ¨åå°è¿è¡Œçº¿ç¨‹
             }
         }
     }
@@ -94,14 +94,14 @@ void epoll_event_loop(int epoll_fd)
 void handle_client(int client_socket) {
     char buffer[BUFFER_SIZE];
     while (true) {
-        memset(buffer, 0, BUFFER_SIZE);  // Çå¿Õ½ÓÊÕ»º³åÇø
+        memset(buffer, 0, BUFFER_SIZE);  // æ¸…ç©ºæ¥æ”¶ç¼“å†²åŒº
         ssize_t bytes_read = recv(client_socket, buffer, BUFFER_SIZE - 1, 0);
 
         if (bytes_read == -1)
         {
             if (errno == EAGAIN || errno == EWOULDBLOCK)
             {
-                // ÔİÊ±ÎŞ¿É¶ÁÊı¾İ£¬¼ÌĞøÏÂÒ»´ÎÑ­»·µÈ´ı
+                // æš‚æ—¶æ— å¯è¯»æ•°æ®ï¼Œç»§ç»­ä¸‹ä¸€æ¬¡å¾ªç¯ç­‰å¾…
                 continue;
             }
             else
@@ -113,7 +113,7 @@ void handle_client(int client_socket) {
         }
         else if (bytes_read == 0)
         {
-            // ¿Í»§¶ËÁ¬½Ó¹Ø±Õ
+            // å®¢æˆ·ç«¯è¿æ¥å…³é—­
             std::cout << "Client disconnected. Socket: " << client_socket << std::endl;
             close(client_socket);
             break;
@@ -127,13 +127,13 @@ void handle_client(int client_socket) {
 }
 
 int main() {
-    // ´´½¨Ì×½Ó×Ö
+    // åˆ›å»ºå¥—æ¥å­—
     int server_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (server_socket == -1) {
         perror("Failed to create socket");
         return -1;
     }
-    // ÉèÖÃÌ×½Ó×ÖµØÖ·ÖØÓÃ
+    // è®¾ç½®å¥—æ¥å­—åœ°å€é‡ç”¨
     int reuseaddr = 1;
     if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr)) == -1) {
         perror("Failed to set socket options");
@@ -141,7 +141,7 @@ int main() {
         return -1;
     }
 
-    // °ó¶¨ºÍ¼àÌıÌ×½Ó×Ö
+    // ç»‘å®šå’Œç›‘å¬å¥—æ¥å­—
     sockaddr_in server_address{};
     server_address.sin_family = AF_INET;
     server_address.sin_addr.s_addr = INADDR_ANY;
@@ -158,7 +158,7 @@ int main() {
         return -1;
     }
 
-    // ´´½¨epoll¶ÔÏó
+    // åˆ›å»ºepollå¯¹è±¡
     int epoll_fd = epoll_create(1);
     if (epoll_fd == -1) {
         perror("Failed to create epoll");
@@ -166,7 +166,7 @@ int main() {
         return -1;
     }
 
-    // ×¢²á¼àÌıÌ×½Ó×ÖºÍ±ê×¼ÊäÈëµ½epoll¶ÔÏó
+    // æ³¨å†Œç›‘å¬å¥—æ¥å­—å’Œæ ‡å‡†è¾“å…¥åˆ°epollå¯¹è±¡
     epoll_event event{};
     event.events = EPOLLIN;
     event.data.fd = server_socket;
@@ -185,10 +185,10 @@ int main() {
         return -1;
     }
 
-    // ½øÈëÊÂ¼şÑ­»·
+    // è¿›å…¥äº‹ä»¶å¾ªç¯
     epoll_event_loop(epoll_fd);
 
-    // ¹Ø±ÕÌ×½Ó×ÖºÍepoll¶ÔÏó
+    // å…³é—­å¥—æ¥å­—å’Œepollå¯¹è±¡
     close(server_socket);
     close(epoll_fd);
 

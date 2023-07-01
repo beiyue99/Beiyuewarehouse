@@ -12,55 +12,55 @@ int main() {
     char message[BUFFER_SIZE] = { 0 };
     char buffer[BUFFER_SIZE] = { 0 };
 
-    // ´´½¨¿Í»§¶ËÌ×½Ó×Ö
+    // åˆ›å»ºå®¢æˆ·ç«¯å¥—æ¥å­—
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("socket failed");
         exit(EXIT_FAILURE);
     }
 
-    // ÉèÖÃ·şÎñÆ÷µØÖ·ºÍ¶Ë¿Ú
+    // è®¾ç½®æœåŠ¡å™¨åœ°å€å’Œç«¯å£
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
 
-    // ½«IPv4µØÖ·´Óµã·ÖÊ®½øÖÆ×ª»»Îª¶ş½øÖÆ
+    // å°†IPv4åœ°å€ä»ç‚¹åˆ†åè¿›åˆ¶è½¬æ¢ä¸ºäºŒè¿›åˆ¶
     if (inet_pton(AF_INET, "192.168.43.27", &serv_addr.sin_addr.s_addr) <= 0) {
         perror("Invalid address/ Address not supported");
         exit(EXIT_FAILURE);
     }
-    // Á¬½Ó·şÎñÆ÷
+    // è¿æ¥æœåŠ¡å™¨
     if (connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) == -1) {
         perror("Connection Failed");
         exit(EXIT_FAILURE);
     }
 
-    // ÔÚÑ­»·ÖĞ·¢ËÍºÍ½ÓÊÕÏûÏ¢
+    // åœ¨å¾ªç¯ä¸­å‘é€å’Œæ¥æ”¶æ¶ˆæ¯
     while (1)
     {
-        // ´ÓÓÃ»§ÊäÈë¶ÁÈ¡ÏûÏ¢
+        // ä»ç”¨æˆ·è¾“å…¥è¯»å–æ¶ˆæ¯
         printf("Enter message: ");
         fgets(message, BUFFER_SIZE, stdin);
-        //²¢Ê¹ÓÃ fgets º¯Êı½«ÊäÈëµÄÏûÏ¢´æ´¢ÔÚ message ×Ö·ûÊı×éÖĞ£¬
-        //×î¶à¶ÁÈ¡ BUFFER_SIZE-1 ¸ö×Ö·û¡£È»ºó£¬Ëü½«ÊäÈëµÄÏûÏ¢´òÓ¡»ØÀ´
-        //¸Ãº¯Êı´ÓÊäÈëÁ÷£¨ÔÚÕâÀïÊÇ±ê×¼ÊäÈëÁ÷ stdin£©¶ÁÈ¡×î¶à n - 1 ¸ö×Ö·û£¬»òÕßÖ±µ½Óöµ½»»ĞĞ·û£¨'\n'£©£¬²¢½«½á¹û´æ´¢ÔÚ×Ö·ûÊı×é str ÖĞ¡£
-        //¸Ãº¯Êı»áÔÚ×Ö·û´®µÄÄ©Î²×Ô¶¯Ìí¼ÓÒ»¸öÖÕÖ¹·û£¨'\0'£©
-        // fgets »á½«»»ĞĞ·û£¨'\n'£©Ò²¶ÁÈ¡²¢´æ´¢ÔÚ×Ö·û´®ÖĞ£¬Èç¹ûÊäÈëµÄĞĞ³¤¶È²»³¬¹ı n-1£¬Ôò»»ĞĞ·û½«ÊÇ×Ö·û´®µÄ×îºóÒ»¸ö×Ö·û¡£
-        //É¾³ıÄ©Î²µÄ»»ĞĞ·û
+        //å¹¶ä½¿ç”¨ fgets å‡½æ•°å°†è¾“å…¥çš„æ¶ˆæ¯å­˜å‚¨åœ¨ message å­—ç¬¦æ•°ç»„ä¸­ï¼Œ
+        //æœ€å¤šè¯»å– BUFFER_SIZE-1 ä¸ªå­—ç¬¦ã€‚ç„¶åï¼Œå®ƒå°†è¾“å…¥çš„æ¶ˆæ¯æ‰“å°å›æ¥
+        //è¯¥å‡½æ•°ä»è¾“å…¥æµï¼ˆåœ¨è¿™é‡Œæ˜¯æ ‡å‡†è¾“å…¥æµ stdinï¼‰è¯»å–æœ€å¤š n - 1 ä¸ªå­—ç¬¦ï¼Œæˆ–è€…ç›´åˆ°é‡åˆ°æ¢è¡Œç¬¦ï¼ˆ'\n'ï¼‰ï¼Œå¹¶å°†ç»“æœå­˜å‚¨åœ¨å­—ç¬¦æ•°ç»„ str ä¸­ã€‚
+        //è¯¥å‡½æ•°ä¼šåœ¨å­—ç¬¦ä¸²çš„æœ«å°¾è‡ªåŠ¨æ·»åŠ ä¸€ä¸ªç»ˆæ­¢ç¬¦ï¼ˆ'\0'ï¼‰
+        // fgets ä¼šå°†æ¢è¡Œç¬¦ï¼ˆ'\n'ï¼‰ä¹Ÿè¯»å–å¹¶å­˜å‚¨åœ¨å­—ç¬¦ä¸²ä¸­ï¼Œå¦‚æœè¾“å…¥çš„è¡Œé•¿åº¦ä¸è¶…è¿‡ n-1ï¼Œåˆ™æ¢è¡Œç¬¦å°†æ˜¯å­—ç¬¦ä¸²çš„æœ€åä¸€ä¸ªå­—ç¬¦ã€‚
+        //åˆ é™¤æœ«å°¾çš„æ¢è¡Œç¬¦
         message[strcspn(message, "\n")] = 0;
 
-        // Ïò·şÎñÆ÷·¢ËÍÏûÏ¢
+        // å‘æœåŠ¡å™¨å‘é€æ¶ˆæ¯
         if (send(sock, message, strlen(message), 0) == -1) {
             perror("send failed");
             exit(EXIT_FAILURE);
         }
         //printf("Message sent to the server successfully! \n");
 
-        // ¼ì²éÊÇ·ñÊÕµ½ÍË³öÖ¸Áî
+        // æ£€æŸ¥æ˜¯å¦æ”¶åˆ°é€€å‡ºæŒ‡ä»¤
         if (strcmp(message, "quit") == 0) {
             printf("Quitting...\n");
             break;
         }
 
-        // ´Ó·şÎñÆ÷½ÓÊÕÏìÓ¦
+        // ä»æœåŠ¡å™¨æ¥æ”¶å“åº”
         valread = read(sock, buffer, BUFFER_SIZE);
         if (valread == -1) {
             perror("read failed");
@@ -68,11 +68,11 @@ int main() {
         }
         printf("Server: %s\n", buffer);
 
-        // Çå¿Õ»º³åÇø
+        // æ¸…ç©ºç¼“å†²åŒº
         memset(buffer, 0, BUFFER_SIZE);
     }
 
-    // ¹Ø±ÕÌ×½Ó×Ö
+    // å…³é—­å¥—æ¥å­—
     close(sock);
 
     return 0;
