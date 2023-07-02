@@ -9,22 +9,22 @@ template <typename T>
 class ThreadPool
 {
 public:
-    ThreadPool(int min, int max); //×î´óºÍ×îĞ¡Ïß³ÌÊı
+    ThreadPool(int min, int max); //æœ€å¤§å’Œæœ€å°çº¿ç¨‹æ•°
     ~ThreadPool();
 
-    // Ìí¼ÓÈÎÎñ
+    // æ·»åŠ ä»»åŠ¡
     void addTask(Task<T> task);
 
-    // »ñÈ¡Ã¦Ïß³ÌµÄ¸öÊı
+    // è·å–å¿™çº¿ç¨‹çš„ä¸ªæ•°
     int getBusyNumber();
 
-    // »ñÈ¡»î×ÅµÄÏß³Ì¸öÊı
+    // è·å–æ´»ç€çš„çº¿ç¨‹ä¸ªæ•°
     int getAliveNumber();
 
 private:
-    // ¹¤×÷µÄÏß³ÌµÄÈÎÎñº¯Êı
+    // å·¥ä½œçš„çº¿ç¨‹çš„ä»»åŠ¡å‡½æ•°
     static void* worker(void* arg);
-    // ¹ÜÀíÕßÏß³ÌµÄÈÎÎñº¯Êı
+    // ç®¡ç†è€…çº¿ç¨‹çš„ä»»åŠ¡å‡½æ•°
     static void* manager(void* arg);
     void threadExit();
 

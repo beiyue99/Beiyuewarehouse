@@ -12,7 +12,7 @@
 // server
 int main(int argc, const char* argv[])
 {
-    // ´´½¨¼àÌýµÄÌ×½Ó×Ö
+    // åˆ›å»ºç›‘å¬çš„å¥—æŽ¥å­—
     int lfd = socket(AF_INET, SOCK_STREAM, 0);
     if (lfd == -1)
     {
@@ -20,18 +20,18 @@ int main(int argc, const char* argv[])
         exit(1);
     }
 
-    // °ó¶¨
+    // ç»‘å®š
     struct sockaddr_in serv_addr;
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(9999);
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);  
 
-    // ÉèÖÃ¶Ë¿Ú¸´ÓÃ
+    // è®¾ç½®ç«¯å£å¤ç”¨
     int opt = 1;
     setsockopt(lfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
-    // °ó¶¨¶Ë¿Ú
+    // ç»‘å®šç«¯å£
     int ret = bind(lfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
     if (ret == -1)
     {
@@ -39,7 +39,7 @@ int main(int argc, const char* argv[])
         exit(1);
     }
 
-    // ¼àÌý
+    // ç›‘å¬
     ret = listen(lfd, 64);
     if (ret == -1)
     {
@@ -47,7 +47,7 @@ int main(int argc, const char* argv[])
         exit(1);
     }
 
-    // ´´½¨Ò»¸öepollÄ£ÐÍ
+    // åˆ›å»ºä¸€ä¸ªepollæ¨¡åž‹
     int epfd = epoll_create(100);
     if (epfd == -1)
     {
@@ -55,10 +55,10 @@ int main(int argc, const char* argv[])
         exit(0);
     }
 
-    // ÍùepollÊµÀýÖÐÌí¼ÓÐèÒª¼ì²âµÄ½Úµã, ÏÖÔÚÖ»ÓÐ¼àÌýµÄÎÄ¼þÃèÊö·û
+    // å¾€epollå®žä¾‹ä¸­æ·»åŠ éœ€è¦æ£€æµ‹çš„èŠ‚ç‚¹, çŽ°åœ¨åªæœ‰ç›‘å¬çš„æ–‡ä»¶æè¿°ç¬¦
     struct epoll_event ev;
     ev.events = EPOLLIN;  
-    // ÔÚ epoll Ä£ÐÍÖÐÖ¸¶¨Òª¼àÊÓµÄÎÄ¼þÃèÊö·ûµÄÊÂ¼þ¡£ÔÚÕâÖÖÇé¿öÏÂ£¬Ëü±íÊ¾µ±ÎÄ¼þÃèÊö·ûÖÐÓÐ¿É¶ÁÊý¾ÝÊ±£¬´¥·¢ epoll ÊÂ¼þ
+    // åœ¨ epoll æ¨¡åž‹ä¸­æŒ‡å®šè¦ç›‘è§†çš„æ–‡ä»¶æè¿°ç¬¦çš„äº‹ä»¶ã€‚åœ¨è¿™ç§æƒ…å†µä¸‹ï¼Œå®ƒè¡¨ç¤ºå½“æ–‡ä»¶æè¿°ç¬¦ä¸­æœ‰å¯è¯»æ•°æ®æ—¶ï¼Œè§¦å‘ epoll äº‹ä»¶
     ev.data.fd = lfd;
     ret = epoll_ctl(epfd, EPOLL_CTL_ADD, lfd, &ev);
     if (ret == -1)
@@ -69,21 +69,21 @@ int main(int argc, const char* argv[])
 
     struct epoll_event evs[_EVENT_SIZE_];
     int size = sizeof(evs) / sizeof(struct epoll_event);
-    // ³ÖÐø¼ì²â
+    // æŒç»­æ£€æµ‹
     while (1)
     {
-        // µ÷ÓÃÒ»´Î, ¼ì²âÒ»´Î
+        // è°ƒç”¨ä¸€æ¬¡, æ£€æµ‹ä¸€æ¬¡
         int num = epoll_wait(epfd, evs, size, -1);
         for (int i = 0; i < num; ++i)
         {
-            // È¡³öµ±Ç°µÄÎÄ¼þÃèÊö·û
+            // å–å‡ºå½“å‰çš„æ–‡ä»¶æè¿°ç¬¦
             int curfd = evs[i].data.fd;
-            // ÅÐ¶ÏÕâ¸öÎÄ¼þÃèÊö·ûÊÇ²»ÊÇÓÃÓÚ¼àÌýµÄ
+            // åˆ¤æ–­è¿™ä¸ªæ–‡ä»¶æè¿°ç¬¦æ˜¯ä¸æ˜¯ç”¨äºŽç›‘å¬çš„
             if (curfd == lfd)
             {
-                // ½¨Á¢ÐÂµÄÁ¬½Ó
+                // å»ºç«‹æ–°çš„è¿žæŽ¥
                 int cfd = accept(curfd, NULL, NULL);
-                ev.events = EPOLLIN;     //¼ÓÉÏEPOLLET  ±íÊ¾±ßÔµ´¥·¢  È»ºóÐèÒªÉèÖÃ·Ç×èÈûÊôÐÔ
+                ev.events = EPOLLIN;     //åŠ ä¸ŠEPOLLET  è¡¨ç¤ºè¾¹ç¼˜è§¦å‘  ç„¶åŽéœ€è¦è®¾ç½®éžé˜»å¡žå±žæ€§
                 ev.data.fd = cfd;
                 ret = epoll_ctl(epfd, EPOLL_CTL_ADD, cfd, &ev);
                 if (ret == -1)
@@ -94,35 +94,35 @@ int main(int argc, const char* argv[])
             }
             else
             {
-                // ´¦ÀíÍ¨ÐÅµÄÎÄ¼þÃèÊö·û
-                // ½ÓÊÕÊý¾Ý
+                // å¤„ç†é€šä¿¡çš„æ–‡ä»¶æè¿°ç¬¦
+                // æŽ¥æ”¶æ•°æ®
                 char buf[1024];
                 memset(buf, 0, sizeof(buf));
                 int len = recv(curfd, buf, sizeof(buf), 0);
                 if (len == 0)
                 {
                     printf("The client has disconnected!\n");
-                    // ½«Õâ¸öÎÄ¼þÃèÊö·û´ÓepollÄ£ÐÍÖÐÉ¾³ý
+                    // å°†è¿™ä¸ªæ–‡ä»¶æè¿°ç¬¦ä»Žepollæ¨¡åž‹ä¸­åˆ é™¤
                     epoll_ctl(epfd, EPOLL_CTL_DEL, curfd, NULL);
                     close(curfd);
                 }
                 else if (len > 0)
                 {
-                    //STDOUT_FILENO: ½«Êý¾ÝÖ±½ÓÐ´Èë±ê×¼Êä³ö¾ÍÊÇ½«Êý¾ÝÊä³öµ½ÖÕ¶Ë£¨Í¨³£ÊÇÃüÁîÐÐ½çÃæ£©
-                    // write(STDOUT_FILENO,buf,1en);   ·¢ËÍµ½µ±Ç°ÖÕ¶Ë£¬´úÌæÏÂÃæÕâÐÐ´úÂë
+                    //STDOUT_FILENO: å°†æ•°æ®ç›´æŽ¥å†™å…¥æ ‡å‡†è¾“å‡ºå°±æ˜¯å°†æ•°æ®è¾“å‡ºåˆ°ç»ˆç«¯ï¼ˆé€šå¸¸æ˜¯å‘½ä»¤è¡Œç•Œé¢ï¼‰
+                    // write(STDOUT_FILENO,buf,1en);   å‘é€åˆ°å½“å‰ç»ˆç«¯ï¼Œä»£æ›¿ä¸‹é¢è¿™è¡Œä»£ç 
                     printf("client say: %s\n", buf);
-          /*        Èç¹û buf µÄ×îºóÒ»¸ö×Ö·û²»ÊÇ¿Õ×Ö·û(\0)£¬ÔòÔÚÊ¹ÓÃ printf º¯ÊýÊä³öÊ±¿ÉÄÜ»áµ¼ÖÂÂÒÂë»òÒâÍâµÄ½á¹û¡£
-                    Ê¹ÓÃ write º¯ÊýÖ±½ÓÊä³ö buf µÄÄÚÈÝ£¬²»ÒÀÀµ×Ö·û´®µÄ½áÎ²¿Õ×Ö·û¡£Òò´Ë£¬¼´Ê¹×îºóÒ»¸ö×Ö·û²»ÊÇ¿Õ×Ö·û£¬
-                    Ò²²»»á³öÏÖÂÒÂë£¬write º¯Êý»á°´ÕÕÖ¸¶¨µÄ³¤¶ÈÊä³ö¡£
-                    printf º¯ÊýÊÇÍ¨¹ýÑ°ÕÒ×Ö·û´®µÄ½áÎ²¿Õ×Ö·û(\0) À´È·¶¨×Ö·û´®µÄ½áÊøÎ»ÖÃµÄ¡£Èç¹û buf µÄ×îºóÒ»¸ö×Ö·û²»ÊÇ¿Õ×Ö·û£¬
-                    Ôò printf º¯Êý»á¼ÌÐø¶ÁÈ¡ÄÚ´æÖÐµÄÆäËûÊý¾Ý£¬Ö±µ½Óöµ½µÚÒ»¸ö¿Õ×Ö·ûÎªÖ¹£¬Õâ¿ÉÄÜµ¼ÖÂÂÒÂë»òÒâÍâµÄÊä³ö½á¹û¡£
-                    ÎªÁË±ÜÃâ³öÏÖÂÒÂë»òÒâÍâ½á¹û£¬È·±£ buf ÊÇÒÔ¿Õ×Ö·û½áÎ²µÄ×Ö·û´®»òÕßÃ÷È·Ö¸¶¨ÒªÊä³öµÄ×Ö½ÚÊý¡£*/
+          /*        å¦‚æžœ buf çš„æœ€åŽä¸€ä¸ªå­—ç¬¦ä¸æ˜¯ç©ºå­—ç¬¦(\0)ï¼Œåˆ™åœ¨ä½¿ç”¨ printf å‡½æ•°è¾“å‡ºæ—¶å¯èƒ½ä¼šå¯¼è‡´ä¹±ç æˆ–æ„å¤–çš„ç»“æžœã€‚
+                    ä½¿ç”¨ write å‡½æ•°ç›´æŽ¥è¾“å‡º buf çš„å†…å®¹ï¼Œä¸ä¾èµ–å­—ç¬¦ä¸²çš„ç»“å°¾ç©ºå­—ç¬¦ã€‚å› æ­¤ï¼Œå³ä½¿æœ€åŽä¸€ä¸ªå­—ç¬¦ä¸æ˜¯ç©ºå­—ç¬¦ï¼Œ
+                    ä¹Ÿä¸ä¼šå‡ºçŽ°ä¹±ç ï¼Œwrite å‡½æ•°ä¼šæŒ‰ç…§æŒ‡å®šçš„é•¿åº¦è¾“å‡ºã€‚
+                    printf å‡½æ•°æ˜¯é€šè¿‡å¯»æ‰¾å­—ç¬¦ä¸²çš„ç»“å°¾ç©ºå­—ç¬¦(\0) æ¥ç¡®å®šå­—ç¬¦ä¸²çš„ç»“æŸä½ç½®çš„ã€‚å¦‚æžœ buf çš„æœ€åŽä¸€ä¸ªå­—ç¬¦ä¸æ˜¯ç©ºå­—ç¬¦ï¼Œ
+                    åˆ™ printf å‡½æ•°ä¼šç»§ç»­è¯»å–å†…å­˜ä¸­çš„å…¶ä»–æ•°æ®ï¼Œç›´åˆ°é‡åˆ°ç¬¬ä¸€ä¸ªç©ºå­—ç¬¦ä¸ºæ­¢ï¼Œè¿™å¯èƒ½å¯¼è‡´ä¹±ç æˆ–æ„å¤–çš„è¾“å‡ºç»“æžœã€‚
+                    ä¸ºäº†é¿å…å‡ºçŽ°ä¹±ç æˆ–æ„å¤–ç»“æžœï¼Œç¡®ä¿ buf æ˜¯ä»¥ç©ºå­—ç¬¦ç»“å°¾çš„å­—ç¬¦ä¸²æˆ–è€…æ˜Žç¡®æŒ‡å®šè¦è¾“å‡ºçš„å­—èŠ‚æ•°ã€‚*/
 
                     send(curfd, buf, len, 0);
-                    //Èç¹ûÒ»´Î¶ÁÎå¸ö£¬Ò»´Î¶Á²»ÍêµÄÇé¿öÏÂ£¬»á´òÓ¡ÂÒÂë£¬ÒÔÏÂÊÇ½â¾ö·½°¸
+                    //å¦‚æžœä¸€æ¬¡è¯»äº”ä¸ªï¼Œä¸€æ¬¡è¯»ä¸å®Œçš„æƒ…å†µä¸‹ï¼Œä¼šæ‰“å°ä¹±ç ï¼Œä»¥ä¸‹æ˜¯è§£å†³æ–¹æ¡ˆ
                     // send(fd, buf, strlen(buf) + 1, 0);
-                    //strlen(buf) + 1 µÄÖµÍ¨³£ÓÃÓÚÈ·±£ÍêÕû·¢ËÍ°üÀ¨×Ö·û´®½áÎ²µÄ¿Õ×Ö·û£¨'\0'£©¡£
-                    //Èç¹ûÒª·¢ËÍµÄÊý¾Ý²»ÊÇÒÔ¿Õ×Ö·û½áÎ²µÄ×Ö·û´®£¬¶øÖ»ÊÇÆÕÍ¨µÄ×Ö½ÚÊý¾Ý£¬Ôò²»ÐèÒªÔÚµÚÈý¸ö²ÎÊýÖÐ¼ÓÒ»£¬Ö±½ÓÊ¹ÓÃÊý¾ÝµÄ³¤¶È¼´¿É¡£
+                    //strlen(buf) + 1 çš„å€¼é€šå¸¸ç”¨äºŽç¡®ä¿å®Œæ•´å‘é€åŒ…æ‹¬å­—ç¬¦ä¸²ç»“å°¾çš„ç©ºå­—ç¬¦ï¼ˆ'\0'ï¼‰ã€‚
+                    //å¦‚æžœè¦å‘é€çš„æ•°æ®ä¸æ˜¯ä»¥ç©ºå­—ç¬¦ç»“å°¾çš„å­—ç¬¦ä¸²ï¼Œè€Œåªæ˜¯æ™®é€šçš„å­—èŠ‚æ•°æ®ï¼Œåˆ™ä¸éœ€è¦åœ¨ç¬¬ä¸‰ä¸ªå‚æ•°ä¸­åŠ ä¸€ï¼Œç›´æŽ¥ä½¿ç”¨æ•°æ®çš„é•¿åº¦å³å¯ã€‚
                 }
                 else
                 {

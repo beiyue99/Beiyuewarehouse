@@ -72,11 +72,9 @@ int main() {
         for (int i = 0; i < nfds; ++i) {
             if (events[i].data.fd == server_fd) {
                 client_fd = accept(server_fd, (struct sockaddr*)&client_addr, &client_len);
-
                 // Make the accepted socket non-blocking
                 int flags = fcntl(client_fd, F_GETFL, 0);
                 fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
-
                 std::thread t(handle_client, client_fd);
                 t.detach();
             }

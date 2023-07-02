@@ -1,4 +1,4 @@
-//bufferevent½¨Á¢¿Í»§¶ËµÄ¹ý³Ì
+//buffereventå»ºç«‹å®¢æˆ·ç«¯çš„è¿‡ç¨‹
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -22,34 +22,34 @@ int main(int argc, char** argv)
 {
     if (argc < 3)
     {
-        //Á½¸ö²ÎÊýÒÀ´ÎÊÇ·þÎñÆ÷¶ËµÄIPµØÖ·¡¢¶Ë¿ÚºÅ
+        //ä¸¤ä¸ªå‚æ•°ä¾æ¬¡æ˜¯æœåŠ¡å™¨ç«¯çš„IPåœ°å€ã€ç«¯å£å·
         printf("please input 2 parameter\n");
         return -1;
     }
-    //´´½¨¸ù½Úµã
+    //åˆ›å»ºæ ¹èŠ‚ç‚¹
     struct event_base* base = event_base_new();
-    //´´½¨²¢ÇÒ³õÊ¼»¯buffer»º³åÇø
+    //åˆ›å»ºå¹¶ä¸”åˆå§‹åŒ–bufferç¼“å†²åŒº
     struct bufferevent* bev = bufferevent_socket_new(base, -1,
         BEV_OPT_CLOSE_ON_FREE);
 
-    //¼àÌýÖÕ¶ËÊäÈëÊÂ¼þ
+    //ç›‘å¬ç»ˆç«¯è¾“å…¥äº‹ä»¶
     struct event* ev_cmd = event_new(base, STDIN_FILENO,
         EV_READ | EV_PERSIST,
         cmd_msg_cb, (void*)bev);
-    //ÉÏÊ÷ ¿ªÊ¼¼àÌý±ê×¼ÊäÈëµÄ¶ÁÊÂ¼þ
+    //ä¸Šæ ‘ å¼€å§‹ç›‘å¬æ ‡å‡†è¾“å…¥çš„è¯»äº‹ä»¶
     event_add(ev_cmd, NULL);
 
     struct sockaddr_in server_addr;
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(atoi(argv[2]));
-    //½«ipµØÖ·×ª»»ÎªÍøÂç×Ö½ÚÐò
+    //å°†ipåœ°å€è½¬æ¢ä¸ºç½‘ç»œå­—èŠ‚åº
     inet_aton(argv[1], &server_addr.sin_addr);
 
-    //Á¬½Óµ½ ·þÎñÆ÷ipµØÖ·ºÍ¶Ë¿Ú ³õÊ¼»¯ÁË socketÎÄ¼þÃèÊö·û
+    //è¿žæŽ¥åˆ° æœåŠ¡å™¨ipåœ°å€å’Œç«¯å£ åˆå§‹åŒ–äº† socketæ–‡ä»¶æè¿°ç¬¦
     bufferevent_socket_connect(bev, (struct sockaddr*)&server_addr,
         sizeof(server_addr));
-    //ÉèÖÃbufferµÄ»Øµ÷º¯Êý Ö÷ÒªÉèÖÃÁË¶Á»Øµ÷ server_msg_cb ,´«Èë²ÎÊýÊÇ±ê×¼ÊäÈëµÄ¶ÁÊÂ¼þ
+    //è®¾ç½®bufferçš„å›žè°ƒå‡½æ•° ä¸»è¦è®¾ç½®äº†è¯»å›žè°ƒ server_msg_cb ,ä¼ å…¥å‚æ•°æ˜¯æ ‡å‡†è¾“å…¥çš„è¯»äº‹ä»¶
     bufferevent_setcb(bev, server_msg_cb, NULL, event_cb, (void*)ev_cmd);
     bufferevent_enable(bev, EV_READ | EV_PERSIST);
 
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
     printf("finished \n");
     return 0;
 }
-//ÖÕ¶ËÊäÈë»Øµ÷
+//ç»ˆç«¯è¾“å…¥å›žè°ƒ
 void cmd_msg_cb(int fd, short events, void* arg)
 {
     char msg[1024];
@@ -72,7 +72,7 @@ void cmd_msg_cb(int fd, short events, void* arg)
 
     struct bufferevent* bev = (struct bufferevent*)arg;
 
-    //°ÑÖÕ¶ËµÄÏûÏ¢·¢ËÍ¸ø·þÎñÆ÷¶Ë
+    //æŠŠç»ˆç«¯çš„æ¶ˆæ¯å‘é€ç»™æœåŠ¡å™¨ç«¯
     bufferevent_write(bev, msg, ret);
 }
 
@@ -99,9 +99,9 @@ void event_cb(struct bufferevent* bev, short event, void* arg)
         return;
     }
 
-    //Õâ½«×Ô¶¯closeÌ×½Ó×ÖºÍfree¶ÁÐ´»º³åÇø
+    //è¿™å°†è‡ªåŠ¨closeå¥—æŽ¥å­—å’Œfreeè¯»å†™ç¼“å†²åŒº
     bufferevent_free(bev);
-    //ÊÍ·ÅeventÊÂ¼þ ¼à¿Ø¶ÁÖÕ¶Ë
+    //é‡Šæ”¾eventäº‹ä»¶ ç›‘æŽ§è¯»ç»ˆç«¯
     struct event* ev = (struct event*)arg;
     event_free(ev);
 }

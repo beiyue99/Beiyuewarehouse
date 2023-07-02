@@ -7,20 +7,20 @@
 constexpr int BUFFER_SIZE = 1024;
 
 int main() {
-    // ´´½¨Ì×½Ó×Ö
+    // åˆ›å»ºå¥—æ¥å­—
     int client_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (client_socket == -1) {
         perror("Failed to create socket");
         return -1;
     }
 
-    // ÉèÖÃ·şÎñÆ÷µØÖ·
+    // è®¾ç½®æœåŠ¡å™¨åœ°å€
     sockaddr_in server_address{};
     server_address.sin_family = AF_INET;
-    server_address.sin_addr.s_addr = inet_addr("192.168.43.27");  // Ìæ»»ÎªÊµ¼ÊµÄ·şÎñÆ÷IPµØÖ·
-    server_address.sin_port = htons(8080);  // Ìæ»»ÎªÊµ¼ÊµÄ·şÎñÆ÷¶Ë¿ÚºÅ
+    server_address.sin_addr.s_addr = inet_addr("192.168.43.27");  // æ›¿æ¢ä¸ºå®é™…çš„æœåŠ¡å™¨IPåœ°å€
+    server_address.sin_port = htons(8080);  // æ›¿æ¢ä¸ºå®é™…çš„æœåŠ¡å™¨ç«¯å£å·
 
-    // Á¬½Ó·şÎñÆ÷
+    // è¿æ¥æœåŠ¡å™¨
     if (connect(client_socket, reinterpret_cast<const sockaddr*>(&server_address), sizeof(server_address)) == -1) {
         perror("Failed to connect to server");
         close(client_socket);
@@ -40,16 +40,16 @@ int main() {
             return 0;
         }
 
-        // ·¢ËÍÏûÏ¢¸ø·şÎñÆ÷
+        // å‘é€æ¶ˆæ¯ç»™æœåŠ¡å™¨
         ssize_t bytes_sent = send(client_socket, input_data.c_str(), input_data.size(), 0);
         if (bytes_sent == -1) {
             perror("Failed to send message to server");
             break;
         }
 
-        // ½ÓÊÕ·şÎñÆ÷µÄÏìÓ¦
+        // æ¥æ”¶æœåŠ¡å™¨çš„å“åº”
         char buffer[BUFFER_SIZE];
-        memset(buffer, 0, BUFFER_SIZE);  // Çå¿Õ½ÓÊÕ»º³åÇø
+        memset(buffer, 0, BUFFER_SIZE);  // æ¸…ç©ºæ¥æ”¶ç¼“å†²åŒº
         ssize_t bytes_received = recv(client_socket, buffer, BUFFER_SIZE - 1, 0);
         if (bytes_received == -1) {
             perror("Failed to receive response from server");

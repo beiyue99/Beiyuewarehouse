@@ -5,8 +5,8 @@
 
 void echo_read_cb(struct bufferevent* bev, void* ctx) {
     /* This callback is invoked when there is data to read on bev. */
-    struct evbuffer* input = bufferevent_get_input(bev);   //»ñÈ¡ÊäÈë»º³åÇø
-    struct evbuffer* output = bufferevent_get_output(bev);//»ñÈ¡Êä³ö»º³åÇø
+    struct evbuffer* input = bufferevent_get_input(bev);   //è·å–è¾“å…¥ç¼“å†²åŒº
+    struct evbuffer* output = bufferevent_get_output(bev);//è·å–è¾“å‡ºç¼“å†²åŒº
 
     /* Copy all the data from the input buffer to the output buffer. */
     evbuffer_add_buffer(output, input);
@@ -22,7 +22,7 @@ void echo_event_cb(struct bufferevent* bev, short events, void* ctx) {
 
 void accept_conn_cb(evutil_socket_t listener, short event, void* arg) {
     struct event_base* base = arg;
-    struct sockaddr_storage ss;  //´¢´æÈÎÒâsocketÀàĞÍµÄ½á¹¹Ìå
+    struct sockaddr_storage ss;  //å‚¨å­˜ä»»æ„socketç±»å‹çš„ç»“æ„ä½“
     socklen_t slen = sizeof(ss);
     int fd = accept(listener, (struct sockaddr*)&ss, &slen);
     if (fd < 0) {
@@ -65,12 +65,12 @@ int main(int argc, char** argv) {
 }
 
 
-//ÎªÊ²Ã´ÖÊÁ¿±ÈµÚÒ»¶ÎºÃ£¿  µÚÒ»¶ÎÎªÊ²Ã´Ã»ÓĞÒıÈëÈ«¾Öevents´¢´æÊÂ¼şÄØ£¿ËûÊÇÔõÃ´ÊÍ·ÅµÄ£¿
-//×ÊÔ´¹ÜÀí£ºµÚ¶ş¶Î´úÂëÊ¹ÓÃÈ«¾Ö events Êı×éÀ´´æ´¢Ã¿¸ö¿Í»§¶ËµÄ event£¬ÕâÑùÔÚ¿Í»§¶Ë¶Ï¿ªÁ¬½ÓÊ±£¬¿ÉÒÔ·½±ãµØÕÒµ½ºÍÊÍ·Å¶ÔÓ¦µÄ event¡£
-//¶øµÚÒ»¶Î´úÂë²¢Ã»ÓĞÃ÷ÏÔµÄµØ·½À´´æ´¢ºÍ¹ÜÀíÕâĞ© event£¬¿ÉÄÜÔÚÄ³Ğ©Çé¿öÏÂÔì³É×ÊÔ´Ğ¹Â©¡£
+//ä¸ºä»€ä¹ˆè´¨é‡æ¯”ç¬¬ä¸€æ®µå¥½ï¼Ÿ  ç¬¬ä¸€æ®µä¸ºä»€ä¹ˆæ²¡æœ‰å¼•å…¥å…¨å±€eventså‚¨å­˜äº‹ä»¶å‘¢ï¼Ÿä»–æ˜¯æ€ä¹ˆé‡Šæ”¾çš„ï¼Ÿ
+//èµ„æºç®¡ç†ï¼šç¬¬äºŒæ®µä»£ç ä½¿ç”¨å…¨å±€ events æ•°ç»„æ¥å­˜å‚¨æ¯ä¸ªå®¢æˆ·ç«¯çš„ eventï¼Œè¿™æ ·åœ¨å®¢æˆ·ç«¯æ–­å¼€è¿æ¥æ—¶ï¼Œå¯ä»¥æ–¹ä¾¿åœ°æ‰¾åˆ°å’Œé‡Šæ”¾å¯¹åº”çš„ eventã€‚
+//è€Œç¬¬ä¸€æ®µä»£ç å¹¶æ²¡æœ‰æ˜æ˜¾çš„åœ°æ–¹æ¥å­˜å‚¨å’Œç®¡ç†è¿™äº› eventï¼Œå¯èƒ½åœ¨æŸäº›æƒ…å†µä¸‹é€ æˆèµ„æºæ³„æ¼ã€‚
 //
-//ÖÁÓÚÄãµÄµÚ¶ş¸öÎÊÌâ£¬µÚÒ»¶Î´úÂëÖĞ£¬event ÊÇÔÚ bufferevent ÖĞ´´½¨ºÍ¹ÜÀíµÄ¡£µ± bufferevent ÓÉÓÚ EOF »òÕß´íÎó±»ÊÍ·ÅÊ±
-//£¨ÔÚ echo_event_cb º¯ÊıÖĞµ÷ÓÃ bufferevent_free£©£¬ÓëÆäÏà¹ØµÄ event Ò²»á±»×Ô¶¯ÊÍ·Å¡£
+//è‡³äºä½ çš„ç¬¬äºŒä¸ªé—®é¢˜ï¼Œç¬¬ä¸€æ®µä»£ç ä¸­ï¼Œevent æ˜¯åœ¨ bufferevent ä¸­åˆ›å»ºå’Œç®¡ç†çš„ã€‚å½“ bufferevent ç”±äº EOF æˆ–è€…é”™è¯¯è¢«é‡Šæ”¾æ—¶
+//ï¼ˆåœ¨ echo_event_cb å‡½æ•°ä¸­è°ƒç”¨ bufferevent_freeï¼‰ï¼Œä¸å…¶ç›¸å…³çš„ event ä¹Ÿä¼šè¢«è‡ªåŠ¨é‡Šæ”¾ã€‚
 //
-//È»¶ø£¬¼´Ê¹Èç´Ë£¬µÚ¶ş¶Î´úÂëÖĞÊ¹ÓÃÈ«¾Ö events Êı×é¹ÜÀí event µÄ·½Ê½»¹ÊÇÓĞÆäÓÅµãµÄ¡£ËüÊ¹µÃÊÂ¼şµÄÉúÃüÖÜÆÚ¸ü¼ÓÇåÎúºÍ¿É¿Ø£¬
-//¿ÉÒÔ±ÜÃâÔÚ¸´ÔÓÇé¿öÏÂ¿ÉÄÜ³öÏÖµÄ×ÊÔ´Ğ¹Â©¡£ÁíÍâ£¬Ëü»¹¿ÉÒÔÔÚĞèÒªÊ±Ìá¹©¶ÔËùÓĞ»î¶¯ event µÄ·ÃÎÊ£¬±ÈÈçÔÚ·şÎñÆ÷¹Ø±ÕÊ±ĞèÒªÊÍ·ÅËùÓĞµÄ event¡£
+//ç„¶è€Œï¼Œå³ä½¿å¦‚æ­¤ï¼Œç¬¬äºŒæ®µä»£ç ä¸­ä½¿ç”¨å…¨å±€ events æ•°ç»„ç®¡ç† event çš„æ–¹å¼è¿˜æ˜¯æœ‰å…¶ä¼˜ç‚¹çš„ã€‚å®ƒä½¿å¾—äº‹ä»¶çš„ç”Ÿå‘½å‘¨æœŸæ›´åŠ æ¸…æ™°å’Œå¯æ§ï¼Œ
+//å¯ä»¥é¿å…åœ¨å¤æ‚æƒ…å†µä¸‹å¯èƒ½å‡ºç°çš„èµ„æºæ³„æ¼ã€‚å¦å¤–ï¼Œå®ƒè¿˜å¯ä»¥åœ¨éœ€è¦æ—¶æä¾›å¯¹æ‰€æœ‰æ´»åŠ¨ event çš„è®¿é—®ï¼Œæ¯”å¦‚åœ¨æœåŠ¡å™¨å…³é—­æ—¶éœ€è¦é‡Šæ”¾æ‰€æœ‰çš„ eventã€‚

@@ -2,7 +2,7 @@
 #include<iostream>
 #include<unistd.h>
 #include<queue>
-// ¶¨ÒåÈÎÎñ½á¹¹Ìå
+// å®šä¹‰ä»»åŠ¡ç»“æ„ä½“
 using callback = void(*)(void*);
 template <typename T>
 struct Task
@@ -23,28 +23,28 @@ struct Task
 };
 
 template <typename T>
-// ÈÎÎñ¶ÓÁĞ
+// ä»»åŠ¡é˜Ÿåˆ—
 class TaskQueue
 {
 public:
     TaskQueue();
     ~TaskQueue();
 
-    // Ìí¼ÓÈÎÎñ
+    // æ·»åŠ ä»»åŠ¡
     void addTask(Task<T>& task);
     void addTask(callback func, void* arg);
 
-    // È¡³öÒ»¸öÈÎÎñ
+    // å–å‡ºä¸€ä¸ªä»»åŠ¡
     Task<T> takeTask();
 
-    // »ñÈ¡µ±Ç°¶ÓÁĞÖĞÈÎÎñ¸öÊı
+    // è·å–å½“å‰é˜Ÿåˆ—ä¸­ä»»åŠ¡ä¸ªæ•°
     inline size_t taskNumber()
     {
         return m_queue.size();
     }
 
 private:
-    pthread_mutex_t m_mutex;    // »¥³âËø
-    std::queue<Task<T>> m_queue;   // ÈÎÎñ¶ÓÁĞ
+    pthread_mutex_t m_mutex;    // äº’æ–¥é”
+    std::queue<Task<T>> m_queue;   // ä»»åŠ¡é˜Ÿåˆ—
 };
 

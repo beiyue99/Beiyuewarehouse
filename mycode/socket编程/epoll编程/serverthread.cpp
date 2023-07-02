@@ -166,7 +166,7 @@ int main() {
         return -1;
     }
 
-    // 注册监听套接字和标准输入到epoll对象
+    // 注册监听套接字到epoll对象
     epoll_event event{};
     event.events = EPOLLIN;
     event.data.fd = server_socket;
@@ -177,6 +177,7 @@ int main() {
         return -1;
     }
 
+    // 注册标准输入到epoll对象
     event.data.fd = STDIN_FILENO;
     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, STDIN_FILENO, &event) == -1) {
         perror("Failed to add stdin to epoll");
