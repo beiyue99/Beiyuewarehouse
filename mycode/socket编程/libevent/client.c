@@ -6,7 +6,7 @@
 
 #define MAXLINE 1024
 
-// ����һ���µĽṹ������
+// 定义一个新的结构体类型
 struct sock_ev 
 {
     struct event_base* base;
@@ -37,6 +37,8 @@ void input_cb(int fd, short event, void* arg)
     struct sock_ev* sock_ev = (struct sock_ev*)arg;
     char buf[MAXLINE] = { 0 };
     if (fgets(buf, sizeof(buf), stdin) == NULL)
+    //fgets是用于从标准输入（stdin）读取数据的。在这种情况下，
+    //当没有更多的输入时（例如，如果用户按下了Ctrl+D来表示输入的结束，在Windows系统中，是Ctrl+Z），fgets会返回NULL
     {
         printf("No input, exiting\n");
         event_base_loopbreak(sock_ev->base);
