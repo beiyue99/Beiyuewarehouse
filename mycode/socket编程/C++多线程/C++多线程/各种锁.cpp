@@ -1,89 +1,82 @@
-//#define _CRT_SECURE_NO_WARNINGS 1
-////ËÀËø
-//#include<iostream>
-//using namespace std;
-//#include<mutex>
-//#include<chrono>
-//#include<list>
-//class A
-//{
-//public:
-//	void inMsgList()
-//	{
-//		for (int i = 0; i < 50000; i++)
-//		{
-//			unique_lock<mutex>sbguard1(my_mutex1, try_to_lock);       //ÔÚÃ»ËøµÄÇ°ÌáÏÂÊ¹ÓÃtry_to_lock
-//			if (sbguard1.owns_lock())//ÄÃµ½ÁËËø
-//			{
-//				cout << "inMsgListº¯ÊıÖ´ĞĞ£¡" << "²åÈëÒ»¸öÔªËØ:" << " " << i << endl;
-//				msgRecvList.push_back(i);
-//			}
-//			else
-//			{
-//				cout << "inMsgListÖ´ĞĞ,µ«Ã»ÄÃµ½Ëø!" << endl;
-//			}
-//			//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//
-//
-//	/*		cout << "inMsgListº¯ÊıÖ´ĞĞ£¡" << "²åÈëÒ»¸öÔªËØ:" << " " << i << endl;
-//			lock(my_mutex1, my_mutex2);
-//			msgRecvList.push_back(i);
-//			my_mutex2.unlock();
-//			my_mutex1.unlock();*/
-//		}
-//	}
-//	void outMsgList()
-//	{
-//		for (int i = 0; i < 50000; i++)
-//		{
-//			cout << "outMsgº¯ÊıÖ´ĞĞ£¡";
-//			//lock(my_mutex2, my_mutex1);    //Ò»´ÎËøÁ½°Ñ£¬²»»á³öÏÖËÀËø
-//			//lock_guard<mutex> myguard1(my_mutex2,adopt_lock);
-//			//lock_guard<mutex> myguard2(my_mutex1,adopt_lock);    //ÔÚÓĞËøµÄÇ°ÌáÏÂ£¬ÒªÊ¹ÓÃµÚ¶ş¸ö²ÎÊı´ú±í²»ÔÙ¼ÓËø£¬·ñÔò³ö´í
-//
-//
-//			//lock_guard<mutex> myguard2(my_mutex2);
-//			lock_guard<mutex> myguard1(my_mutex1);
-//
-//
-//			//unique_lock<mutex> myguard1(my_mutex1); 
-//			//unique_lock<mutex> myguard2(my_mutex2);     //´Ëº¯ÊıÒ²¿É¼Ó²Îadopt_lock£¬Óëlock_guardÒ»Ñù£¬±Èlock_guardÁé»î
-//
-//
-//			chrono::seconds dura(1);
-//			this_thread::sleep_for(dura);
-//
-//
-//
-//			if (!msgRecvList.empty())
-//			{
-//				int command = msgRecvList.front();
-//				cout << "½«ÒªÒÆ³ıµÄÔªËØ" << command << endl;
-//				msgRecvList.pop_front();
-//			}
-//			else
-//			{
-//				cout << "ÈİÆ÷Îª¿Õ" << i << endl;
-//			}
-//		/*	my_mutex1.unlock();
-//			my_mutex2.unlock();*/
-//		}
-//	}
-//private:
-//	list<int > msgRecvList;
-//	mutex my_mutex1;
-//	mutex my_mutex2;
-//};
-//int  main()
-//{
-//	A  a;
-//	thread myInObj(&A::inMsgList, &a);
-//	thread myOutObj(&A::outMsgList, &a);
-//	myInObj.join();
-//	myOutObj.join();
-//}
-//
-//
-//
+#define _CRT_SECURE_NO_WARNINGS 1
+//æ­»é”
+#include<iostream>
+using namespace std;
+#include<mutex>
+#include<chrono>
+#include<list>
+#include <thread>
+
+class A
+{
+public:
+	void inMsgList()
+	{
+		for (int i = 0; i < 50000; i++)
+		{
+			unique_lock<mutex>sbguard1(my_mutex1, try_to_lock);       //åœ¨æ²¡é”çš„å‰æä¸‹ä½¿ç”¨try_to_lock
+			if (sbguard1.owns_lock())//æ‹¿åˆ°äº†é”
+			{
+				cout << "inMsgListå‡½æ•°æ‰§è¡Œï¼" << "æ’å…¥ä¸€ä¸ªå…ƒç´ :" << " " << i << endl;
+				msgRecvList.push_back(i);
+			}
+			else
+			{
+				cout << "inMsgListæ‰§è¡Œ,ä½†æ²¡æ‹¿åˆ°é”!" << endl;
+			}
+			//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	/*		cout << "inMsgListå‡½æ•°æ‰§è¡Œï¼" << "æ’å…¥ä¸€ä¸ªå…ƒç´ :" << " " << i << endl;
+			lock(my_mutex1, my_mutex2);
+			msgRecvList.push_back(i);
+			my_mutex2.unlock();
+			my_mutex1.unlock();*/
+		}
+	}
+	void outMsgList()
+	{
+		for (int i = 0; i < 50000; i++)
+		{
+			cout << "outMsgå‡½æ•°æ‰§è¡Œï¼";
+			//lock_guard<mutex> myguard2(my_mutex2);
+			lock_guard<mutex> myguard1(my_mutex1);
+			chrono::seconds dura(1);
+			this_thread::sleep_for(dura);
+			if (!msgRecvList.empty())
+			{
+				int command = msgRecvList.front();
+				cout << "å°†è¦ç§»é™¤çš„å…ƒç´ " << command << endl;
+				msgRecvList.pop_front();
+			}
+			else
+			{
+				cout << "å®¹å™¨ä¸ºç©º" << i << endl;
+			}
+		/*	my_mutex1.unlock();
+			my_mutex2.unlock();*/
+		}
+	}
+private:
+	list<int > msgRecvList;
+	mutex my_mutex1;
+	mutex my_mutex2;
+};
+int  main()
+{
+	A  a;
+	thread myInObj(&A::inMsgList, &a);
+	thread myOutObj(&A::outMsgList, &a);
+	myInObj.join();
+	myOutObj.join();
+}
+
+
+
+
+
+
+//lock(my_mutex2, my_mutex1);    
+//lock_guard<mutex> myguard1(my_mutex2,adopt_lock);
+//lock_guard<mutex> myguard2(my_mutex1,adopt_lock);    
+//å½“ä½ å·²ç»æ‰‹åŠ¨é”å®šä¸€ä¸ªäº’æ–¥é‡ï¼Œå¹¶ä¸”å¸Œæœ›æŠŠå®ƒçš„æ‰€æœ‰æƒè½¬ç§»ç»™
+//  std::lock_guard æˆ– std::unique_lock å¯¹è±¡æ—¶ï¼Œä½ å¯ä»¥ä½¿ç”¨ std::adopt_lock

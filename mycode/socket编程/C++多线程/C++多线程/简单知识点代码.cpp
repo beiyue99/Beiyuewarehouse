@@ -1,17 +1,16 @@
-#define _CRT_SECURE_NO_WARNINGS 1
 #include<iostream>
 using namespace std;
 #include<thread>
 
 
 
-//Èç¹ûÀàÄÚÓĞÓĞ²Î¹¹Ôìº¯Êı£¬Ôò¿ÉÒÔ°Ñ²ÎÊı´«Èë£¬±àÒëÆ÷»á¸ù¾İ´«Èë²ÎÊı¹¹Ôì³öÒ»¸öÀà
+//å¦‚æœç±»å†…æœ‰æœ‰å‚æ„é€ å‡½æ•°ï¼Œåˆ™å¯ä»¥æŠŠå‚æ•°ä¼ å…¥ï¼Œç¼–è¯‘å™¨ä¼šæ ¹æ®ä¼ å…¥å‚æ•°æ„é€ å‡ºä¸€ä¸ªç±»
 //class A
 //{
 //public:
 //	int m_i;
-//	A(int a) :m_i(a) { cout << "ÓĞ²Î¹¹Ôì£¡" << endl; }
-//	~A() { cout << "Îö¹¹!" << endl; }
+//	A(int a) :m_i(a) { cout << "æœ‰å‚æ„é€ ï¼" << endl; }
+//	~A() { cout << "ææ„!" << endl; }
 //};
 //
 //void fun(const   A& a1)
@@ -24,43 +23,52 @@ using namespace std;
 //	int a = 12;
 //	fun(a);
 //}
+////
+
+
+
+
+
+
+
+
+
+
 //
-
-
-
-
-
-
-
-
-
-
-
 //class A
 //{
 //public:
 //	int m_i;
-//	A(int a) :m_i(a) { cout << "ÓĞ²Î¹¹Ôìº¯ÊıÖ´ĞĞ£¡" << this <<"  " << "threadid=" << this_thread::get_id() << endl; }
-//	A(const A& a) :m_i(a.m_i) { cout << "¿½±´¹¹Ôìº¯ÊıÖ´ĞĞ!" << this <<"  " << "threadid=" << this_thread::get_id() << endl; }
-//	~A() { cout << "Îö¹¹º¯ÊıÖ´ĞĞ£¡" << this <<"  " << "thradid=" << this_thread::get_id() << endl; }
+//	A(int a) :m_i(a)
+//	{
+//		cout << "æœ‰å‚æ„é€ å‡½æ•°æ‰§è¡Œï¼" << this << "  " << "threadid=" << this_thread::get_id() << endl;
+//	}
+//	A(const A& a) :m_i(a.m_i)
+//	{
+//		cout << "æ‹·è´æ„é€ å‡½æ•°æ‰§è¡Œ!" << this << "  " << "threadid=" << this_thread::get_id() << endl;
+//	}
+//	~A()
+//	{
+//		cout << "ææ„å‡½æ•°æ‰§è¡Œï¼" << this << "  " << "thradid=" << this_thread::get_id() << endl;
+//	}
 //	void thread_work(int num)
 //	{
-//		cout << "×ÓÏß³Ìworkº¯ÊıÖ´ĞĞ£¡" << this <<"  " << "threadid=" << this_thread::get_id() << endl;
+//		cout << "å­çº¿ç¨‹workå‡½æ•°æ‰§è¡Œï¼" << this << "  " << "threadid=" << this_thread::get_id() << endl;
 //	}
 //	void operator()(int num)
 //	{
-//		cout << "×ÓÏß³Ì()Ö´ĞĞ" << this << "threadid=" << this_thread::get_id() << endl;
+//		cout << "å­çº¿ç¨‹()æ‰§è¡Œ" << this << "threadid=" << this_thread::get_id() << endl;
 //	}
 //};
 //
 //int main()
 //{
 //	A a(10);
-//	thread myobj(&A::thread_work, (a), 15);       //Èô²»´«µİÒıÓÃ »á¿½±´ĞÂ¶ÔÏó     
-//	myobj.join();       // ¸øÀàÄÚÖØÔØ¸ö¿Éµ÷ÓÃ¶ÔÏó£¬´Ë´¦´«µİÁ©²ÎÊı£¬Ò²»áÆğµ½Ò»ÑùµÄĞ§¹û¡£Î¨Ò»Çø±ğÊÇÖ»ÄÜÓÃref,²»¿ÉÒÔÊ¹ÓÃ&
+//	thread myobj(&A::thread_work, ref(a), 15);       //è‹¥ä¸ä¼ é€’å¼•ç”¨ ä¼šæ‹·è´æ–°å¯¹è±¡     
+//	myobj.join();       // ç»™ç±»å†…é‡è½½ä¸ªå¯è°ƒç”¨å¯¹è±¡ï¼Œæ­¤å¤„ä¼ é€’ä¿©å‚æ•°ï¼Œä¹Ÿä¼šèµ·åˆ°ä¸€æ ·çš„æ•ˆæœã€‚å”¯ä¸€åŒºåˆ«æ˜¯åªèƒ½ç”¨ref,ä¸å¯ä»¥ä½¿ç”¨&
 //	//+++++++++++++++++++++++++++++++
 //	//A a(10);
-//	//thread myobj(ref(a), 15);
+//	//thread myobj(ref(a), 15);      //è°ƒç”¨é‡è½½å‡½æ•°
 //	//myobj.join();
 //}
 
@@ -75,15 +83,15 @@ using namespace std;
 //#include<vector>
 //void print(int i)
 //{
-//	cout << "ÎÒµÄÏß³Ì¿ªÊ¼Ö´ĞĞ£¡" <<i<< endl;
-//	cout << "ÎÒµÄÏß³ÌÖ´ĞĞÍê±Ï£¡" << endl;
+//	cout << "æˆ‘çš„çº¿ç¨‹å¼€å§‹æ‰§è¡Œï¼" <<i<< endl;
+//	cout << "æˆ‘çš„çº¿ç¨‹æ‰§è¡Œå®Œæ¯•ï¼" << endl;
 //}
 //int main()
 //{
 //	vector<thread> mythreads;
 //	for (int i = 0; i < 10; i++)
 //	{
-//		mythreads.push_back(thread(print, i)); //Ê®¸öÏß³Ì¿ªÊ¼Ö´ĞĞ£¬µ«ÊÇË³Ğò²»È·¶¨
+//		mythreads.push_back(thread(print, i)); //åä¸ªçº¿ç¨‹å¼€å§‹æ‰§è¡Œï¼Œä½†æ˜¯é¡ºåºä¸ç¡®å®š
 //	}
 //	for (auto it = mythreads.begin(); it != mythreads.end(); it++)
 //	{
@@ -107,7 +115,7 @@ using namespace std;
 //	{
 //		for (int i = 0; i < 100000; i++)
 //		{
-//			cout << "inMsgListº¯ÊıÖ´ĞĞ£¡" << "²åÈëÒ»¸öÔªËØ:" << " " << i << endl;
+//			cout << "inMsgListå‡½æ•°æ‰§è¡Œï¼" << "æ’å…¥ä¸€ä¸ªå…ƒç´ :" << " " << i << endl;
 //			my_mutex.lock();
 //			msgRecvList.push_back(i);
 //			my_mutex.unlock();
@@ -117,19 +125,19 @@ using namespace std;
 //	{
 //		for (int i = 0; i < 100000; i++)
 //		{
-//			cout << "outMsgº¯ÊıÖ´ĞĞ£¡";
+//			cout << "outMsgå‡½æ•°æ‰§è¡Œï¼";
 //			//my_mutex.lock();
 //			lock_guard<mutex> myguard(my_mutex);
 //			if (!msgRecvList.empty())
 //			{
 //				int command = msgRecvList.front();
-//				cout << "½«ÒªÒÆ³ıµÄÔªËØ" << command << endl;
+//				cout << "å°†è¦ç§»é™¤çš„å…ƒç´ " << command << endl;
 //				msgRecvList.pop_front();
 //				//my_mutex.unlock();
 //			}
 //			else
 //			{
-//				cout << "ÈİÆ÷Îª¿Õ" << i << endl;
+//				cout << "å®¹å™¨ä¸ºç©º" << i << endl;
 //				//my_mutex.unlock();
 //			}
 //		}
@@ -154,3 +162,49 @@ using namespace std;
 
 
 
+//#include <iostream>
+//#include <vector>
+//#include <functional>
+//
+//struct Foo {
+//    int x;
+//};
+//
+//int main() {
+//    Foo a{ 10 };
+//    Foo b{ 20 };
+//
+//    std::vector<std::reference_wrapper<Foo>> vec; 
+//    // æˆåŠŸï¼šå¯ä»¥åœ¨vectorä¸­å­˜æ”¾å¼•ç”¨åŒ…è£…å™¨  ,å¦‚æœFooçš„è¯ï¼Œé‚£ä¹ˆæ”¾å…¥çš„æ˜¯a,bçš„æ‹·è´
+//    vec.push_back(a);
+//    vec.push_back(b);
+//
+//    for (auto& fooRef : vec) {
+//        fooRef.get().x += 5;  // ä¿®æ”¹vectorä¸­çš„Fooå¯¹è±¡
+//    }
+//
+//    std::cout << a.x << ", " << b.x << "\n";  // è¾“å‡ºï¼š15, 25ï¼Œæ˜¾ç¤ºåŸå§‹å¯¹è±¡aå’Œbè¢«ä¿®æ”¹äº†
+//
+//    return 0;
+//}
+
+
+
+//#include <iostream>
+//#include <vector>
+//#include <functional>
+//
+//struct Foo {
+//    int x;
+//};
+//
+//int main() {
+//    Foo a{ 10 };
+//    Foo b{ 20 };
+//
+//    std::vector<Foo&> vec; // é”™è¯¯ï¼šä¸èƒ½åœ¨vectorä¸­å­˜æ”¾å¼•ç”¨
+//    vec.push_back(a);
+//    vec.push_back(b);
+//
+//    return 0;
+//}

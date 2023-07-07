@@ -22,20 +22,17 @@ int main(int argc, char** argv)
 {
     if (argc < 3)
     {
-        //两个参数依次是服务器端的IP地址、端口号
+        //两个参数依次是服务器端的IP地址、端口号     另外一个额外的参数是程序名
         printf("please input 2 parameter\n");
         return -1;
     }
     //创建根节点
     struct event_base* base = event_base_new();
     //创建并且初始化buffer缓冲区
-    struct bufferevent* bev = bufferevent_socket_new(base, -1,
-        BEV_OPT_CLOSE_ON_FREE);
+    struct bufferevent* bev = bufferevent_socket_new(base, -1,BEV_OPT_CLOSE_ON_FREE);
 
     //监听终端输入事件
-    struct event* ev_cmd = event_new(base, STDIN_FILENO,
-        EV_READ | EV_PERSIST,
-        cmd_msg_cb, (void*)bev);
+    struct event* ev_cmd = event_new(base, STDIN_FILENO,EV_READ | EV_PERSIST,cmd_msg_cb, (void*)bev);
     //上树 开始监听标准输入的读事件
     event_add(ev_cmd, NULL);
 
@@ -47,8 +44,7 @@ int main(int argc, char** argv)
     inet_aton(argv[1], &server_addr.sin_addr);
 
     //连接到 服务器ip地址和端口 初始化了 socket文件描述符
-    bufferevent_socket_connect(bev, (struct sockaddr*)&server_addr,
-        sizeof(server_addr));
+    bufferevent_socket_connect(bev, (struct sockaddr*)&server_addr, sizeof(server_addr));
     //设置buffer的回调函数 主要设置了读回调 server_msg_cb ,传入参数是标准输入的读事件
     bufferevent_setcb(bev, server_msg_cb, NULL, event_cb, (void*)ev_cmd);
     bufferevent_enable(bev, EV_READ | EV_PERSIST);
