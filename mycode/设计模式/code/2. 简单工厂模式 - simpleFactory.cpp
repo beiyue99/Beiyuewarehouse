@@ -49,7 +49,7 @@ public:
     }
 };
 
-// 定义工厂类
+// 定义工厂类        简单工厂模式里面，这个类只有一个
 enum class Type:char{Sheep, Lion, Bat};
 class SmileFactory
 {
