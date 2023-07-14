@@ -1,102 +1,108 @@
 #include<iostream>
 using namespace std;
-#include<thread>
-#include<mutex>
-#include<list>
-#include<json/json.h>
-#include<fstream>
-using namespace Json;
+#include"json.hpp"
+using json = nlohmann::json;
+#include<vector>
+#include<map>
 
-
-
-/*
-[
-	"1uffy", 19, 170, fa1se,
-	["ace", "sabo"],
-	{ "sex":"man","girlfriend" : "Hancock"}
-]
-*/
-
-void writeJson()
+void test1()   //jsonµÄĞòÁĞ»¯
 {
-	Value root;
-	root.append("luffy");
-	root.append("19");
-	root.append("170");
-	root.append("false");
-
-	Value subArray;
-	subArray.append("ace");
-	subArray.append("sabo");
-	root.append(subArray);
-
-	Value obj;
-	obj["sex"] = "man";
-	obj["girlfirend"] = "Hancock";
-	root.append(obj);
 #if 0
-
-	string json = root.toStyledString(); //æœ‰æ ¼å¼
+	json js;
+	// Ìí¼ÓÊı×é
+	js["id"] = { 1,2,3,4,5 };
+	// Ìí¼Ókey-value
+	js["name"] = "zhang san";
+	// Ìí¼Ó¶ÔÏó
+	js["msg"]["zhang san"] = "hello world";
+	js["msg"]["liu shuo"] = "hello china";
+	// ÉÏÃæµÈÍ¬ÓÚÏÂÃæÕâ¾äÒ»´ÎĞÔÌí¼ÓÊı×é¶ÔÏó
+	//js["msg"] = { {"zhang san", "hello world"}, {"liu shuo", "hello china"} };
+	cout << js << endl;
+	//js¶ÔÏóµÄĞòÁĞ»¯½á¹û:
+	//{"id":[1,2,3,4,5],"msg":{"liu shuo":"hello china","zhang san":"hello world"},"name":"zhang san"}
 #else
-	FastWriter w;
-	string json = w.write(root);         //æ— æ ¼å¼
+	json js;
+	//Ö±½ÓĞòÁĞ»¯Ò»¸övectorÈİÆ÷
+	vector<int> vec;
+	vec.push_back(1);
+	vec.push_back(2);
+	vec.push_back(5);
+	js["list"] = vec;
+	//cout << js << endl;    //{"list":[1,2,5]}
+	string sendBuf  =  js.dump();
+	cout << sendBuf.c_str() << endl;
 #endif
-
-
-	ofstream ofs("test.json");   //æ–‡ä»¶åä¸ºtest.json
-	ofs << json;
-	ofs.close();
 }
 
-void readJson()
+string func1() 
 {
-	ifstream ifs("test.ison");
-	Reader rd;
-	Value root;
-	rd.parse(ifs, root);
-
-	if (root.isArray())
-	{
-		for (int i = 0; i < root.size(); ++i)
-		{
-			Value item = root[i];
-			if (item.isInt())
-			{
-				cout << item.asInt() << ",";
-			}
-			else if (item.isString())
-			{
-				cout << item.asString() << ",";
-			}
-			else if (item.isBool())
-			{
-				cout << item.asBool() << ",";
-			}
-			else if (item.isArray())
-			{
-				for (int j = 0; j < item.size(); ++j)
-					cout << item[j].asString() << ", ";
-			}
-			else if (item.isObject())
-			{
-				Value::Members keys = item.getMemberNames();
-				for (int k = 0; k < keys.size(); ++k)
-				{
-					cout << keys.at(k) << ":" << item[keys[k]] << ",";
-				}
-			}
-			cout << endl;
-		}
-	}
-	else
-	{
-
-	}
+	json js;
+	js["msg_type"] = 2;
+	js["from"] = "zhang san";
+	js["to"] = "li si";
+	js["msg"] = "hello,what are you doing now?";
+	string sendBuf  = js.dump();  //°Ñjson¶ÔÏóĞòÁĞ»¯Îªjson×Ö·û´®
+	return sendBuf;
 }
+string func2()
+{
+#if 1
+	json js;
+	// Ìí¼ÓÊı×é
+	js["id"] = { 1,2,3,4,5 };
+	// Ìí¼Ókey-value
+	js["name"] = "zhang san";
+	// Ìí¼Ó¶ÔÏó
+	js["msg"]["zhang san"] = "hello world";
+	js["msg"]["liu shuo"] = "hello china";
+	return js.dump();
+#else
+	json js;
+	//Ö±½ÓĞòÁĞ»¯Ò»¸övectorÈİÆ÷
+	vector<int> vec;
+	vec.push_back(1);
+	vec.push_back(2);
+	vec.push_back(5);
+	js["list"] = vec;
+	string sendBuf = js.dump();
+	return sendBuf;
+#endif
+}
+void test2() //jsonµÄ·´ĞòÁĞ»¯
+{
+	string recvBuf = func1();  //¼ÙÈçfunc1¾ÍÊÇÍøÂç·¢ËÍÀ´µÄĞòÁĞ»¯µÄÊı¾İ
+	json jsbuf = json::parse(recvBuf);//Êı¾İµÄ·´ĞòÁĞ»¯json×Ö·û´®·´ĞòÁĞ»¯ÎªjsonÊı¾İ¶ÔÏó(¿´×÷ÈİÆ÷,·½±ã·ÃÎÊ)
+	cout << jsbuf["msg_type"] << endl;
+	cout << jsbuf["from"] << endl;
+	cout << jsbuf["to"] << endl;
+	cout << jsbuf["msg"] << endl;
+}
+void test3()
+{
+	string recvBuf = func2();  
+	json jsbuf = json::parse(recvBuf);
+#if 1
+	cout << jsbuf["id"] << endl;      //[1,2,3,4,5]
+	cout << jsbuf["name"] << endl;    //"zhang san"
+	cout << jsbuf["msg"] << endl;     //{"liu shuo":"hello china","zhang san":"hello world"}
+	auto arr = jsbuf["msg"];
+	cout << arr["zhang san"] << endl; //"hello world"
+	cout << arr["liu shuo"] << endl;  //"hello china"
+#else
+	cout << jsbuf << endl;	            //{"list": [1, 2, 5] }
+	cout << jsbuf["list"] << endl;	    //[1, 2, 5]
+	cout << jsbuf["list"][1] << endl;	//2
 
+	auto arr = jsbuf["list"];        //vectorÀàĞÍ
+	cout << arr[2] << endl;             //5
 
+#endif
+}
 int main()
 {
-	readJson();
-	writeJson();
+	//test1();    //jsonµÄĞòÁĞ»¯
+	//test2();      //jsonµÄ·´ĞòÁĞ»¯
+	test3();      //jsonµÄ·´ĞòÁĞ»¯++
 }
+
