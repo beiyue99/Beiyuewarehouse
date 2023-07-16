@@ -1,12 +1,9 @@
 #include<iostream>
 #include<muduo/net/TcpServer.h>
 #include<muduo/net/EventLoop.h>
-#include<iostream>
-#include<functional>
 using namespace std;
 using namespace muduo;
 using namespace muduo::net;
-using namespace placeholders;
 
 /*基于muduo网络库开发服务器程序
 1组合TcpServer对象
@@ -17,64 +14,61 @@ using namespace placeholders;
 
 */
 
-
 class ChatServer 
 {
-    public:
-    ChatServer(EventLoop* loop,//事件循环
-    const InetAddress& listenAddr,//监听地址
-    const string &nameArg)   //服务器名字
+public:
+    // 构造函数，初始化服务器，绑定连接回调和消息回调，设置工作线程数量
+    ChatServer(EventLoop* loop, const InetAddress& listenAddr, const string &nameArg)   
         :loop_(loop),
-        server_(loop,listenAddr,nameArg)
-        {
-            //给服务器注册用户连接的创建和断开回调
-            server_.setConnectionCallback(std::bind(&ChatServer::onConnection,this,_1));
-            //给服务器注册用户读写事件回调
-            server_.setMessageCallback(std::bind(&ChatServer::onMessage,this,_1,_2,_3));
-                //设置服务器端的线程数量
-            server_.setThreadNum(4);    //一个i/o线程，三个work线程
-            //启动服务器(事件循环)
-            void start()
-            {
-                server_.start();
-            }
-          
-        }
-    
-    private:
-    //专门处理用户的连接创建和断开epoll listenfd accept
-    void onConnection(const tcpConnectionPtr&conn)
+        server_(loop, listenAddr, nameArg)
+    {
+        // 绑定连接建立和断开时的回调函数
+        server_.setConnectionCallback(std::bind(&ChatServer::onConnection, this, std::placeholders::_1));
+        // 绑定消息接收时的回调函数
+        server_.setMessageCallback(std::bind(&ChatServer::onMessage, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        // 设置服务器工作线程数量
+        server_.setThreadNum(4);    
+    }
+
+    // 启动服务器
+    void start()
+    {
+        server_.start();
+    }
+      
+private:
+    // 连接回调函数，打印连接信息并在连接断开时关闭连接
+    void onConnection(const TcpConnectionPtr& conn)
     {
         if(conn->connected())
         {
-            cout<<conn->peerAddress().toIpPort()<<"->"<<conn->localAddress().toIpPort()<<"satee:online"<<endl;
+            cout<<conn->peerAddress().toIpPort()<<"->"<<conn->localAddress().toIpPort()<<" state: online"<<endl;
         }
         else
         {
-            cout<<conn->peerAddress().toIpPort()<<"->"<<conn->localAddress().toIpPort()<<"satee:offline"<<endl;
-            conn->shutdown();  //close(fd);
-            //loop_->quit();  //服务器退出
+            cout<<conn->peerAddress().toIpPort()<<"->"<<conn->localAddress().toIpPort()<<" state: offline"<<endl;
+            conn->shutdown();  //关闭连接
         }
     }
-    //专门处理用户的读写事件
-    void onMessage(const tcpConnectionPtr& conn,//  连接
-    Buffer* buf,  //缓冲区
-    Timestamp time //接收到数据的时间信息)
+
+    // 消息回调函数，打印接收到的消息并将其回传
+    void onMessage(const TcpConnectionPtr& conn, Buffer* buffer, Timestamp time)
     {
-        string buf=buffer->retrieveAsString();
-        cout<<"recv date: "<<buf<<"time: "<<time.toString()<<endl;
-        conn->send(buf);
+        string msg = buffer->retrieveAllAsString();
+        cout<<"recv data: "<<msg<<" time: "<<time.toString()<<endl;
+        conn->send(msg);  //回传消息
     }
-    TcpServer server_;  
-    EventLoop *loop_;    
-}
+
+    TcpServer server_;  // 服务器对象
+    EventLoop *loop_;  // 事件循环对象   
+};
 
 int main()
 {
-    EventLoop loop;  //epoll
-    InetAddress  addr("127.0.0.1",6000);
-    ChatServer server(&loop,addr,"ChatServer");
-    chatServer.start();
-    loop.loop();   // epoll_wait以阻塞方式等待新用户连接，已连接用户的读写事件
+    EventLoop loop;  // 创建事件循环
+    InetAddress  addr(6000);  // 创建网络地址对象，监听端口6000
+    ChatServer server(&loop,addr,"ChatServer");  // 创建服务器对象
+    server.start();  // 启动服务器
+    loop.loop();  // 启动事件循环
     return 0;
 }
