@@ -38,7 +38,6 @@ void handle_client(int client_fd) {
             }
         }
     }
-
     close(client_fd);
 }
 
@@ -67,7 +66,7 @@ int main() {
     epoll_ctl(epoll_fd, EPOLL_CTL_ADD, server_fd, &ev);
 
     while (1) {
-        int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);//第二个参数是数组指针，用来储存返回的事件
+        int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
 
         for (int i = 0; i < nfds; ++i) {
             if (events[i].data.fd == server_fd) {

@@ -25,7 +25,7 @@ int main()
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;     // ipv4
     addr.sin_port = htons(PORT);   // 服务器监听的端口, 字节序应该是网络字节序
-    inet_pton(AF_INET, "192.168.43.27", &addr.sin_addr.s_addr);
+    inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr.s_addr);
     int ret = connect(fd, (struct sockaddr*)&addr, sizeof(addr));
     if (ret == -1)
     {
@@ -37,7 +37,6 @@ int main()
     int i = 0;
     while (1)
     {
-        // 读数据
         char recvBuf[1024] = { 0 };
         // 写数据
         sprintf(recvBuf, "data: %d\n", i++);
@@ -56,6 +55,5 @@ int main()
 
     // 释放资源
     close(fd);
-
     return 0;
 }

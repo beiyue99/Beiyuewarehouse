@@ -17,7 +17,7 @@ int main() {
     // 设置服务器地址
     sockaddr_in server_address{};
     server_address.sin_family = AF_INET;
-    server_address.sin_addr.s_addr = inet_addr("192.168.43.27");  // 替换为实际的服务器IP地址
+    server_address.sin_addr.s_addr = inet_addr("127.0.0.1");  // 替换为实际的服务器IP地址
     server_address.sin_port = htons(8080);  // 替换为实际的服务器端口号
 
     // 连接服务器

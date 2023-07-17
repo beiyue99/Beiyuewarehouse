@@ -10,7 +10,6 @@
 constexpr int MAX_EVENTS = 10;
 constexpr int BUFFER_SIZE = 1024;
 
-std::vector<int> client_sockets; // 客户端套接字列表
 
 void handle_client(int client_socket);
 
@@ -79,10 +78,6 @@ void epoll_event_loop(int epoll_fd)
                     break;
                 }
                 std::cout << "New client connected. Socket: " << client_socket << std::endl;
-
-                // 将客户端套接字添加到客户端套接字列表
-                client_sockets.push_back(client_socket);
-
                 // 创建一个线程处理客户端连接
                 std::thread client_thread(handle_client, client_socket);
                 client_thread.detach(); // 在后台运行线程

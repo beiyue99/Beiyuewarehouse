@@ -55,10 +55,8 @@ int main(int argc, const char* argv[])
         exit(0);
     }
 
-    // 往epoll实例中添加需要检测的节点, 现在只有监听的文件描述符
     struct epoll_event ev;
     ev.events = EPOLLIN;  
-    // 在 epoll 模型中指定要监视的文件描述符的事件。在这种情况下，它表示当文件描述符中有可读数据时，触发 epoll 事件
     ev.data.fd = lfd;
     ret = epoll_ctl(epfd, EPOLL_CTL_ADD, lfd, &ev);
     if (ret == -1)
@@ -72,8 +70,7 @@ int main(int argc, const char* argv[])
     // 持续检测
     while (1)
     {
-        // 调用一次, 检测一次
-        int num = epoll_wait(epfd, evs, size, -1);
+        int num = epoll_wait(epfd, evs, size, -1);  //返回就绪文件描述符个数，储存在evs数组里
         for (int i = 0; i < num; ++i)
         {
             // 取出当前的文件描述符
@@ -114,15 +111,11 @@ int main(int argc, const char* argv[])
           /*        如果 buf 的最后一个字符不是空字符(\0)，则在使用 printf 函数输出时可能会导致乱码或意外的结果。
                     使用 write 函数直接输出 buf 的内容，不依赖字符串的结尾空字符。因此，即使最后一个字符不是空字符，
                     也不会出现乱码，write 函数会按照指定的长度输出。
-                    printf 函数是通过寻找字符串的结尾空字符(\0) 来确定字符串的结束位置的。如果 buf 的最后一个字符不是空字符，
-                    则 printf 函数会继续读取内存中的其他数据，直到遇到第一个空字符为止，这可能导致乱码或意外的输出结果。
                     为了避免出现乱码或意外结果，确保 buf 是以空字符结尾的字符串或者明确指定要输出的字节数。*/
 
-                    send(curfd, buf, len, 0);
+                    //send(curfd, buf, len, 0);
                     //如果一次读五个，一次读不完的情况下，会打印乱码，以下是解决方案
-                    // send(fd, buf, strlen(buf) + 1, 0);
-                    //strlen(buf) + 1 的值通常用于确保完整发送包括字符串结尾的空字符（'\0'）。
-                    //如果要发送的数据不是以空字符结尾的字符串，而只是普通的字节数据，则不需要在第三个参数中加一，直接使用数据的长度即可。
+                    send(curfd, buf, strlen(buf) + 1, 0);
                 }
                 else
                 {
