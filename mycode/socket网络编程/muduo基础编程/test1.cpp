@@ -24,6 +24,8 @@ public:
     {
         // 绑定连接建立和断开时的回调函数
         server_.setConnectionCallback(std::bind(&ChatServer::onConnection, this, std::placeholders::_1));
+        //当一个新的连接建立或者断开时，server_对象会调用onConnection函数
+        
         // 绑定消息接收时的回调函数
         server_.setMessageCallback(std::bind(&ChatServer::onMessage, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
         // 设置服务器工作线程数量

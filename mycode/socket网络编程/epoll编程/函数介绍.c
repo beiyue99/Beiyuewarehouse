@@ -93,7 +93,7 @@ fcntl(cfd, F_SETFL, flag);
 int len = recv(curfd, buf, sizeof(buf), 0);
 if (len == -1)
 {
-    if (errno == EAGAIN)
+    if (errno == EAGAIN | EWOULDBLOCK)
     {
         printf("数据读完了...\n");
     }
@@ -121,12 +121,21 @@ int scandir(const char* dirp, struct dirent*** namelist,
     int (*compar)(const struct dirent**, const struct dirent**));
 
 第二个参数是一个三级指针，假如struct dirent* mylist指向指针数组的首元素的地址，namelist就是mylist的地址。
-mylist指向一个指针数组，每次读取到文件，就开辟一个内存块储存这个文件内容
+mylist指向一个指针数组，每次读取到文件，就开辟一个内存块储存这个文件内容(指的不是文件本身，是他的信息)
+每个文件内容都被存到指针数组里面的结构体指针里面：
+struct dirent {
+    ino_t          d_ino;       /* inode编号 */
+    off_t          d_off;       /* 到下一个目录项的偏移 */
+    unsigned short d_reclen;    /* 这个记录的长度 */
+    unsigned char  d_type;      /* 文件类型；不是所有文件系统类型都支持 */
+    char           d_name[256]; /* 文件名 */
+};
+
 
 dirp：这是指向目录路径的指针，我们希望从中读取条目。
 namelist：这是指向指针的指针，将指向匹配项数组。这个数组由函数动态分配。当你用完这个数组后，你应该释放它。
 filter：这是一个函数指针，用于过滤目录中的条目。如果这个参数为NULL，所有的条目都会返回。
-compar：这是一个函数指针，用于比较两个目录条目。如果这个参数为NULL，条目将按字母顺序排列。
+compar：这是一个函数指针，用于比较两个目录条目。如果这个参数为NULL，条目可能按未定义顺序返回。
 这个函数在使用时通常配合alphasort()函数一起使用，alphasort()是一个预定义的比较函数，用于按字母顺序对目录项进行排序。
 返回值是读取到文件的个数
 
@@ -153,8 +162,7 @@ int main(void) {
 
 
 
-readdir()函数是用于读取目录中的条目的。它在<dirent.h>头文件中定义，用于读取由opendir()函数打开的目录。这是它的函数原型：
- 
+readdir()函数是用于读取目录中的条目的。
 struct dirent* readdir(DIR* dirp);   dirp：这是一个指向DIR类型的指针，通常是由opendir()函数返回的。
     
 
@@ -171,14 +179,11 @@ int main(void)
         perror("opendir");
         return 1;
     }
-
-    while ((entry = readdir(dir)) != NULL)
+    while ((entry = readdir(dir)) != NULL)  
     {
         printf("%s\n", entry->d_name);
     }
-
     closedir(dir);
-
     return 0;
 }
 

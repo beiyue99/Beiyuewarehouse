@@ -5,22 +5,21 @@ SET(VAR[VALUE][CACHE TYPE DOCSTRING[FORCE]])
 VAR:变量名
 VALUE : 变量值
 
-set(SRC_LIST add.c div.cmain.c mult.c sub.c)
+set(SRC_LIST add.c div.c main.c mult.c sub.c)
 add_executable(app ${SRC_LIST})
 
 
 #增加 - std = c + 17
-1.在CMakeLists.tbxt中通过set命令指定
+1.在CMakeLists.txt中通过set命令指定
 set(CMAKE_CXX_STANDARD 17)    
 2 在执行cmake命令的时候指定出这个宏的值
-cmake CMakeLists.txt文件路径 - DCMAKE_CXX_STANDARD = 17
+cmake CMakeLists.txt文件路径 - D CMAKE_CXX_STANDARD = 17
 
 
 
 在CMake中指定可执行程序输出的路径, 也对应一个宏, 叫做EXECUTABLE_OUTPUT_PATH, 它的值还是通过set命令进行设置:
 set(HOME /home/robin/Linux/Sort)
-set(EXECUTABLE_OUTPUT_PATH  ${HOME}/bin)   #输出到home目录下的bin目录
-#如果指定的路径不存在，会自动创建
+set(EXECUTABLE_OUTPUT_PATH  ${HOME}/bin)   #输出到home目录下的bin目录，如果指定的路径不存在，会自动创建
 
 
 

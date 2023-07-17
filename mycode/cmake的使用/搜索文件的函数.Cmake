@@ -3,7 +3,8 @@ aux_source_directory(<dir> <variable >)
 #dir : 要搜索的目录
 #variable : 将从dir目录下搜索到的源文件列表存储到该变量中
 
-aux_source_directory(${PROJECT_SOURCE_DIR} SRC)     PROJECT_SOURCE_DIR代表cmake后跟的路径，如果不用这个宏，需要手动指定路径
+aux_source_directory(${PROJECT_SOURCE_DIR} SRC) 
+#PROJECT_SOURCE_DIR代表cmake后跟的路径，如果不用这个宏，需要手动指定路径
 
 
 
@@ -14,8 +15,8 @@ cmake_minimum_required(VERSION 3.15)
 project(test)
 #set(SRC add.cpp div.cpp mul.cpp main.cpp sub.cpp)
 #aux_source_directory(${ PROJECT_SOURCE_DIR } SRC)
-file(GLOB SRC ${ CMAKE_CURRENT_SOURCE_DIR/*.cpp})
-set(EXECUTABLE_OUTPUT_PATH / mnt / c / Users / 北月 / OneDrive / 桌面 / codeLinux / exe)   把可执行文件放入指定目录exe下
+file(GLOB SRC ${ CMAKE_CURRENT_SOURCE_DIR/ *.cpp})
+set(EXECUTABLE_OUTPUT_PATH /mnt/c/Users/北月/OneDrive/桌面/codeLinux/exe)   把可执行文件放入指定目录exe下
 set(CMAKE_CXX_STANDARD 11)
 add_executable(app ${ SRC })  指定可执行文件名称
 
@@ -30,7 +31,7 @@ file(GLOB MAIN_HEAD ${CMAKE_CURRENT_SOURCE_DIR}/include/ *.h)
 
 cmake_minimum_required(VERSION 3.15)
 project(test)
-file(GLOB SRC ${CMAKE_CURRENT_SOURCE_DIR}src/*.cpp)
+file(GLOB SRC ${CMAKE_CURRENT_SOURCE_DIR}src/ *.cpp)
 set(EXECUTABLE_OUTPUT_PATH /mnt/c/Users/北月/OneDrive/桌面/codeLinux/exe)   #把可执行文件放入指定目录exe下
 set(CMAKE_CXX_STANDARD 11)
 add_executable(app ${SRC})  #指定可执行文件名称
