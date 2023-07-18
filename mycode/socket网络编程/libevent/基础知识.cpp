@@ -20,9 +20,12 @@ EV_SIGNAL（信号事件）。
 event_callback_fn cb : 事件回调函数，当事件触发时，此函数将被调用。
 void* arg : 用户参数，传递给回调函数。
 这个函数会返回一个新创建的事件，你可以使用 event_add() 将其添加到事件循环中:
+
+
+
 int event_add(struct event* ev, const struct timeval* timeout);
 
-const struct timeval* timeout : 这是一个可选的超时参数，可以设置为NULL。如果提供了一个timeval结构体，
+const struct timeval* timeout : 这是一个可选的超时参数，如果提供了一个timeval结构体，
 那么事件将在没有激活的情况下等待这么长的时间，然后就超时。如果设置为NULL，那么事件将等待直到被激活。
 
 
@@ -33,15 +36,15 @@ const struct timeval* timeout : 这是一个可选的超时参数，可以设置
 
 int event_base_dispatch(struct event_base* base);
 
-它会阻塞并等待事件发生，一旦有事件发生（比如 socket 可读、可写，或者定时器超时等），
+它会阻塞并等待事件发生，一旦有事件发生
 它就会调用相应的回调函数来处理这个事件。当所有的事件都被处理后，
-event_base_dispatch() 函数会再次阻塞并等待新的事件。这个循环会一直持续，
+会再次阻塞并等待新的事件。这个循环会一直持续，
 直到没有更多的活动事件，或者直到调用 event_base_loopbreak() 或 event_base_loopexit() 函数。
 
 
 如果函数成功地完成了所有的事件循环，那么返回 0。
 如果没有注册事件，那么返回 1。
-如果因为某种错误（比如提供了一个无效的 event_base）而不能开始事件循环，那么返回 - 1。
+如果因为某种错误（比如提供了一个无效的 event_base而不能开始事件循环，那么返回 - 1。
 如果事件循环被 event_base_loopbreak() 打断，那么返回 - 1。
 如果事件循环被 event_base_loopexit() 设置的超时结束，那么返回 0。
 
@@ -150,7 +153,7 @@ int bufferevent_socket_connect(struct bufferevent* bev,
 
 bufferevent_socket_connect 是 libevent 库中的一个函数，用于建立 TCP 连接。这个函数是异步的，也就是说，
 它并不会阻塞直到连接建立完成，而是在开始连接后就立即返回。你可以设置回调函数来处理连接完成或失败时的情况。
-
+bufferevent_socket_connect函数会自动创建一个socket，并与指定的主机和端口进行连接
 
 
 
@@ -187,8 +190,6 @@ event_base_dispatch(base);
 对于evconnlistener_new_bind函数，你只需要提供一个要监听的地址（struct sockaddr结构），
 libevent会自动为你创建socket，并绑定到这个地址上。
 
-evconnlistener_new_bind用于创建一个新的连接监听器（connection listener）。
-连接监听器会在一个给定的socket上监听新的连接。当有新的连接到来时，它会接受这个连接，并调用用户指定的回调函数。
 struct evconnlistener*
     evconnlistener_new_bind(
         struct event_base* base,

@@ -2,7 +2,8 @@
 #include <event2/bufferevent.h>
 #include <sys/socket.h>
 #include <string.h>
-
+#include <event2/buffer.h>
+#include <event2/listener.h>
 void echo_read_cb(struct bufferevent *bev, void *ctx) {
     /* This callback is invoked when there is data to read on bev. */
     struct evbuffer *input = bufferevent_get_input(bev);
@@ -24,7 +25,7 @@ void accept_conn_cb(struct evconnlistener *listener, evutil_socket_t fd, struct 
     /* We got a new connection! Set up a bufferevent for it. */
     struct event_base *base = evconnlistener_get_base(listener);
     //evconnlistener_get_base 是 libevent 库中的一个函数，它返回与特定 evconnlistener 关联的 event_base。
-    struct bufferevent *bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE);
+    struct bufferevent *bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE);  
 
     bufferevent_setcb(bev, echo_read_cb, NULL, echo_event_cb, NULL);
 

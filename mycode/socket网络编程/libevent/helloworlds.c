@@ -16,15 +16,13 @@ static const char MESSAGE[] = "Hello, World!\n";
 
 static const int PORT = 9995;
 
-static void listener_cb(struct evconnlistener*, evutil_socket_t,
-	struct sockaddr*, int socklen, void*);
+static void listener_cb(struct evconnlistener*, evutil_socket_t,struct sockaddr*, int socklen, void*);
 static void conn_writecb(struct bufferevent*, void*);
 static void conn_readcb(struct bufferevent*, void*);
 static void conn_eventcb(struct bufferevent*, short, void*);
 static void signal_cb(evutil_socket_t, short, void*);
 
-int
-main(int argc, char** argv)
+int main(int argc, char** argv)
 {
 	struct event_base* base;//根节点定义
 	struct evconnlistener* listener;//监听器定义
@@ -44,7 +42,7 @@ main(int argc, char** argv)
 
 	//创建监听器-端口复用-关闭自动释放
 	listener = evconnlistener_new_bind(base, listener_cb, (void*)base,
-		LEV_OPT_REUSEABLE | LEV_OPT_CLOSE_ON_FREE, -1,
+		LEV_OPT_REUSEABLE | LEV_OPT_CLOSE_ON_FREE, -1,    //-1是系统默认的连接队列大小
 		(struct sockaddr*)&sin,
 		sizeof(sin));
 
@@ -123,7 +121,7 @@ conn_writecb(struct bufferevent* bev, void* user_data)
 	printf("---call------%s----\n", __FUNCTION__);
 	struct evbuffer* output = bufferevent_get_output(bev);
 	if (evbuffer_get_length(output) == 0) {
-		printf("flushed answer\n");
+		printf("flushed answer\n");   //表示已经将所有待发送的数据从输出缓冲区刷新出去，发送到目标的接收端
 		//	bufferevent_free(bev);
 	}
 }

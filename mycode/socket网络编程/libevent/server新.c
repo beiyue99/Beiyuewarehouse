@@ -32,6 +32,7 @@ void accept_conn_cb(evutil_socket_t listener, short event, void* arg) {
     }
     else
     {
+        printf("new client connect :%d\n", fd);
         struct bufferevent* bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE);
         bufferevent_setcb(bev, echo_read_cb, NULL, echo_event_cb, NULL);
         bufferevent_enable(bev, EV_READ | EV_WRITE);

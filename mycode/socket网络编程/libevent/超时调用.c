@@ -12,7 +12,9 @@
 void cb_func(evutil_socket_t fd, short what, void* arg) {
     printf("cb_func is call back!\n");
 }
-//void callback(evutil_socket_t fd, short what, void* arg);
+
+
+
 
 int main() {
     struct event_base* base = event_base_new();
@@ -20,7 +22,7 @@ int main() {
     struct event* ev = event_new(base, -1, EV_PERSIST, cb_func, NULL);
 
     struct timeval one_sec = {1, 0};    
-    evutil_timerclear(&one_sec);  //清空为0
+    //evutil_timerclear(&one_sec);  //清空为0,只调用一次就退出
 
     if (event_add(ev, &one_sec) != 0)
     {

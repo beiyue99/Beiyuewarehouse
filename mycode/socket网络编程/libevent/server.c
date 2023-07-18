@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
 
     // 初始化 lfd 上树节点
     struct event* ev = event_new(base, lfd, EV_READ | EV_PERSIST, lfdcb, base);
-//lfd, EV_READ | EV_PERSIST 和 base是在调用event_new时传入的参数，然后lfd和base分别会作为回调函数lfdcb的第一个参数和第三个参数。
+//lfd和base分别会作为回调函数lfdcb的第一个参数和第三个参数。
 //而回调函数的第二个参数event则会由Libevent库根据具体被触发的事件类型来设置。
     if (!ev)
     {

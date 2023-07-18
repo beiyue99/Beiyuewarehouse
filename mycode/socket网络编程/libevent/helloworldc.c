@@ -77,7 +77,7 @@ void server_msg_cb(struct bufferevent* bev, void* arg)
     char msg[1024];
 
     size_t len = bufferevent_read(bev, msg, sizeof(msg));
-    msg[len] = '\0';
+    msg[len-1] = '\0';    //清除换行符
 
     printf("recv %s from server\n", msg);
 }
