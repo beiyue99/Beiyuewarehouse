@@ -150,6 +150,7 @@ void read_client_request(int epfd, struct epoll_event* ev,char*pwd_path)
 	if (strcasecmp(method, "get") == 0)
 	{
 		char* strfile = content + 1;
+
 		decodeMsg(strfile, strfile);
 		//GET HTTP/1.1\R\N
 		if (*strfile == 0) // 如果没有请求文件, 默认请求当前目录
