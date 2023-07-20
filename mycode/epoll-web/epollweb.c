@@ -96,10 +96,6 @@ void send_file(int cfd, char* path,struct epoll_event*ev,int epfd,int flag)
 }
 
 
-
-
-
-
 const char* getFileType(const char* name)
 {
 	// a.jpg a.mp4 a.html
@@ -141,8 +137,6 @@ const char* getFileType(const char* name)
 	return "text/plain; charset=utf-8";
 }
 
-
-
 void decodeMsg(char* to, char* from)
 {
 	for (; *from != '\0'; ++to, ++from)
@@ -166,7 +160,6 @@ void decodeMsg(char* to, char* from)
 	*to = '\0';
 }
 
-
 int hexit(char c)
 {
 	if (c >= '0' && c <= '9')
@@ -178,7 +171,6 @@ int hexit(char c)
 
 	return 0;
 }
-
 
 void read_client_request(int epfd, struct epoll_event* ev,char*pwd_path)
 {
@@ -272,15 +264,6 @@ void read_client_request(int epfd, struct epoll_event* ev,char*pwd_path)
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
 int main(int argc, char const* argv[])
 {
 	signal(SIGPIPE, SIG_IGN);
@@ -293,9 +276,6 @@ int main(int argc, char const* argv[])
 	strcpy(pwd_path, path);
 	strcat(pwd_path, "/web-http");
 	chdir(pwd_path);
-
-
-
 	//剑建套接字绑定
 	int lfd = tcp4bind(PORT, NULL);
 	// 监听
@@ -351,12 +331,3 @@ int main(int argc, char const* argv[])
 
 
 
-
-
-
-//如果使用 libevent，你会使用事件回调和缓冲事件（bufferevent）来读写数据，这意味着 libevent 会帮你处理网络缓冲区满的情况，
-//你不需要直接处理 send() 和 recv() 系统调用。一旦你添加了数据到 libevent 的输出缓冲区，
-// libevent 就会处理实际的发送操作，包括处理部分写入的情况。
-//此外，libevent 支持非阻塞 IO 和水平触发（level - triggered）模式，所以你不需要手动重新尝试读写操作。
-//然而，即使使用了 libevent，你仍然需要处理 HTTP 分块传输编码的问题。
-//libevent 不包含 HTTP 协议的具体处理，你需要自己解析 HTTP 请求和响应，包括处理分块传输编码。
