@@ -48,18 +48,6 @@ void send_header(int cfd, int code, char* info,const  char* filetype,int length)
 	
 
 
-//发送文件
-//发送大文件
-//写缓存区可能满, 写不进去, 写不进去监听EPOLLOUT, 
-//将没有发送的数据保存, 等写事件触发, 写出去
-//调用 send() 时没有检查它是否已经发送了所有的数据。在一些情况下，
-//例如网络缓冲区已满，send() 可能会发送部分数据然后返回。
-//如果 send() 只发送了部分数据，那么文件的一部分可能就丢失了。
-
-//在 libevent 中，可以通过设置回调函数和事件来实现你的需求。
-//如果 send 函数因为缓冲区已满而不能发送数据，你可以设置一个 EV_WRITE 事件，
-//然后把数据保存在某个地方（比如某个缓冲区或者链表）。
-//然后在可写事件的回调函数中再次尝试发送数据。
 void send_file(int cfd, char* path,struct epoll_event*ev,int epfd,int flag)
 {
 	int fd = open(path, O_RDONLY);
@@ -112,10 +100,84 @@ void send_file(int cfd, char* path,struct epoll_event*ev,int epfd,int flag)
 
 
 
+const char* getFileType(const char* name)
+{
+	// a.jpg a.mp4 a.html
+	// 自右向左查找‘.’字符, 如不存在返回NULL
+	const char* dot = strrchr(name, '.');
+	if (dot == NULL)
+		return "text/plain; charset=utf-8";	// 纯文本
+	if (strcmp(dot, ".html") == 0 || strcmp(dot, ".htm") == 0)
+		return "text/html; charset=utf-8";
+	if (strcmp(dot, ".jpg") == 0 || strcmp(dot, ".jpeg") == 0)
+		return "image/jpeg";
+	if (strcmp(dot, ".gif") == 0)
+		return "image/gif";
+	if (strcmp(dot, ".png") == 0)
+		return "image/png";
+	if (strcmp(dot, ".css") == 0)
+		return "text/css";
+	if (strcmp(dot, ".au") == 0)
+		return "audio/basic";
+	if (strcmp(dot, ".wav") == 0)
+		return "audio/wav";
+	if (strcmp(dot, ".avi") == 0)
+		return "video/x-msvideo";
+	if (strcmp(dot, ".mov") == 0 || strcmp(dot, ".qt") == 0)
+		return "video/quicktime";
+	if (strcmp(dot, ".mpeg") == 0 || strcmp(dot, ".mpe") == 0)
+		return "video/mpeg";
+	if (strcmp(dot, ".vrml") == 0 || strcmp(dot, ".wrl") == 0)
+		return "model/vrml";
+	if (strcmp(dot, ".midi") == 0 || strcmp(dot, ".mid") == 0)
+		return "audio/midi";
+	if (strcmp(dot, ".mp3") == 0)
+		return "audio/mpeg";
+	if (strcmp(dot, ".ogg") == 0)
+		return "application/ogg";
+	if (strcmp(dot, ".pac") == 0)
+		return "application/x-ns-proxy-autoconfig";
+
+	return "text/plain; charset=utf-8";
+}
 
 
 
+void decodeMsg(char* to, char* from)
+{
+	for (; *from != '\0'; ++to, ++from)
+	{
+		// isxdigit -> 判断字符是不是16进制格式
+		// Linux%E5%86%85%E6%A0%B8.jpg
+		if (from[0] == '%' && isxdigit(from[1]) && isxdigit(from[2]))
+		{
+			// 将16进制的数 -> 十进制 将这个数值赋值给了字符 int -> char
+			// A1 == 161
+			*to = hexit(from[1]) * 16 + hexit(from[2]);
 
+			from += 2;
+		}
+		else
+		{
+			// 不是特殊字符字节赋值
+			*to = *from;
+		}
+	}
+	*to = '\0';
+}
+
+
+int hexit(char c)
+{
+	if (c >= '0' && c <= '9')
+		return c - '0';
+	if (c >= 'a' && c <= 'f')
+		return c - 'a' + 10;
+	if (c >= 'A' && c <= 'F')
+		return c - 'A' + 10;
+
+	return 0;
+}
 
 
 void read_client_request(int epfd, struct epoll_event* ev,char*pwd_path)
@@ -290,60 +352,11 @@ int main(int argc, char const* argv[])
 
 
 
-//send_file 函数在一个循环中连续读取和发送文件内容。这里使用的是 send 系统调用，
-//这是一个同步（或者说阻塞）操作。如果内核输出缓冲区已满，这个调用将会阻塞，
-//直到有足够的空间来存储新的数据。然而，你的 socket 是被设置为非阻塞的，所以如果内核缓冲区满了，send 会立即返回一个错误。
-//
-//你的 send_file 函数没有处理这种情况，所以当 send 返回错误时，你就看到了 
-//"send file failed: Resource temporarily unavailable" 的错误消息。
-//
-//你可以采取以下两种方式之一来解决这个问题：
-//
-//改为阻塞模式：你可以在发送文件内容之前把 socket 重新设置为阻塞模式，然后在发送完文件后再把它设置回非阻塞模式。
-//
-//正确处理非阻塞 send：你可以改进你的 send_file 函数，让它能够正确处理非阻塞 send。
-//如果 send 返回一个错误并且错误是 EAGAIN 或 EWOULDBLOCK，你可以暂停发送数据，
-//然后等待 socket 可写事件（EPOLLOUT）再继续发送。这种做法可能需要把未发送的数据和文件描述符存储在某处，然后在 socket 可写时再继续发送。
-//
-//
-//
-//
-//这个错误是由于你的 HTTP 服务器在尝试向客户端发送数据时，出现了 "Resource temporarily unavailable" 错误。
-//这通常意味着你的进程尝试进行了一个会被阻塞的系统调用，但是这个系统调用由于某种原因无法立即完成。在你的代码中，这个系统调用是 send，它用于将数据从服务器发送到客户端。
-//
-//这个错误通常发生在下列情况：
-//
-//在非阻塞模式下，如果调用 send 函数并且内核的输出缓冲区已满，那么 send 函数会返回错误，并设置错误码为 EAGAIN 或 EWOULDBLOCK。这种情况下，你应该稍后再次尝试发送数据。
-//
-//在阻塞模式下，如果 send 函数在完成之前被信号中断，那么 send 函数也会返回错误，并设置错误码为 EINTR。这种情况下，你可以立即再次尝试发送数据。
-//
-//你的服务器在发送大量数据（如文件内容）时，可能会遇到上述的第一种情况。为了解决这个问题，你可以改进你的 send_file 函数，
-//让它能够正确处理非阻塞 send。具体来说，如果 send 返回一个错误并且错误是 EAGAIN 或 EWOULDBLOCK，那么你应该暂停发送数据，等待 socket 可写（EPOLLOUT）再继续发送。
-//
-//这个错误通常在你打印的最后一行出现，这可能是因为这是你在大量数据发送后首次遇到输出缓冲区已满的情况，也可能是因为 send 函数在发送最后一部分数据时遇到了错误。
-
-
-
-//你的代码在发送文件时没有处理可能发生的“资源暂时不可用（EAGAIN 或 EWOULDBLOCK）”的错误情况，这是因为网络缓冲区已满。当你尝试发送一个较大的文件时，很可能会遇到这种情况。
-//当 send() 函数无法立即发送所有数据时，它可能会发送部分数据并返回已发送数据的数量。你的代码没有检查这种可能性，所以当 send() 函数只发送了部分数据时，剩余的数据就会丢失。
-//
-//解决这个问题的方法是修改 send_file 函数，使其能够在 send() 函数只发送部分数据时正确处理。具体来说，如果 send() 函数返回的值小于你尝试发送的数据量，
-//那么你需要将剩余的数据保存下来，然后在稍后再次尝试发送。
-//
-//此外，你需要设置 socket 为非阻塞模式，并在 epoll 中注册 EPOLLOUT 事件。这样，当 socket 可以发送更多数据时，你就可以收到一个通知。
-//
-//还需要注意，你的代码在读取和发送文件时使用了同一个缓冲区。这可能会导致在尝试发送剩余数据时覆盖了部分数据。
-//你应该使用两个独立的缓冲区：一个用于读取文件，另一个用于存储尚未发送的数据。
-//
-//最后，你的代码在处理 HTTP 请求时没有正确处理分块传输编码（Chunked transfer encoding）。
-//这是 HTTP / 1.1 中的一种功能，允许服务器在开始发送响应之前不需要知道响应的总长度。这对于发送大文件或生成内容需要很长时间的响应非常有用。
-//你应该检查 HTTP 请求的 "Transfer-Encoding" 头部，如果它的值是 "chunked"，那么你需要使用分块传输编码来发送响应。
-
 
 
 //如果使用 libevent，你会使用事件回调和缓冲事件（bufferevent）来读写数据，这意味着 libevent 会帮你处理网络缓冲区满的情况，
-//你不需要直接处理 send() 和 recv() 系统调用。一旦你添加了数据到 libevent 的输出缓冲区，libevent 就会处理实际的发送操作，包括处理部分写入的情况。
-//
+//你不需要直接处理 send() 和 recv() 系统调用。一旦你添加了数据到 libevent 的输出缓冲区，
+// libevent 就会处理实际的发送操作，包括处理部分写入的情况。
 //此外，libevent 支持非阻塞 IO 和水平触发（level - triggered）模式，所以你不需要手动重新尝试读写操作。
-//
-//然而，即使使用了 libevent，你仍然需要处理 HTTP 分块传输编码的问题。libevent 不包含 HTTP 协议的具体处理，你需要自己解析 HTTP 请求和响应，包括处理分块传输编码。
+//然而，即使使用了 libevent，你仍然需要处理 HTTP 分块传输编码的问题。
+//libevent 不包含 HTTP 协议的具体处理，你需要自己解析 HTTP 请求和响应，包括处理分块传输编码。

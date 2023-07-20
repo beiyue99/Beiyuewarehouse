@@ -12,6 +12,11 @@
 #include<ctype.h>
 #include<string.h>
 #include<stdlib.h>
+
+
+
+
+ //创建，绑定，监听
 int initListenFd(unsigned short port)
 {
 	// 1. 创建监听的套接字
@@ -52,7 +57,6 @@ int initListenFd(unsigned short port)
 	// 5. 将得到的可用的套接字返回个调用者
 	return lfd;
 }
-
 
 
 int acceptConn(int lfd, int epfd)
@@ -164,8 +168,8 @@ int recvHttpRequest(int cfd, int epfd)
 	// 没有必要将所有的http请求全部保存下来
 	// 因为需要的数据都在请求行中
 	// - 客户端向服务器请求都是静态资源, 请求的资源内容在请求行的第二部分
-	// - 只需要将请求完整的保存下来就可以, 请求行后边请求头和空行
-	// - 不需要解析请求头中的数据, 因此接收到 之后不存储也是没问题的
+	// - 只关心请求行，所以它不需要保存请求头和请求体的数据
+	// - 不需要解析请求头中的数据, 因此接收到之后不存储也是没问题的
 	while ((len = recv(cfd, tmp, sizeof(tmp), 0)) > 0)
 	{
 		if (total + len < sizeof(buf))
@@ -184,7 +188,7 @@ int recvHttpRequest(int cfd, int epfd)
 		// 在http协议中换行使用的是 \r\n
 		// 遍历字符串, 当遇到第一个\r\n的时候意味着请求行就拿到了
 		// buf中存储了接收的客户端的http请求数据
-		char* pt = strstr(buf, "\r\n");
+		char* pt = strstr(buf, "\r\n");   //返回的pt是一个指针，它指向buf中"\r\n"首次出现的位置
 		// 请求行字节数(长度)
 		int reqlen = pt - buf;
 		// 保留请求行就可以
@@ -211,8 +215,6 @@ int parseRequestLine(int cfd, const char * reqLine)
 	// 请求行分为三部分
 	// GET /helo/world/ http/1.1
 	// 1. 将请求行的三部分依次拆分, 有用的前两部分
-	//	- 提交数据的方式
-	//  - 客户端向服务器请求的文件名
 	char method[6];
 	// 存储了请求行中的第二部分数据
 	// 客户端向服务器请求的静态文件的名字/目录名
@@ -228,15 +230,13 @@ int parseRequestLine(int cfd, const char * reqLine)
 		return -1;
 	}
 
-	// 3. 判断用户提交的请求是要访问服务器端的文件还是目录
-	//	 /helo/world/
+	// 3. 判断用户提交的请求是要访问服务器端的文件还是目录   /helo/world/
 	//	- 第一个 / : 服务器的提供资源根目录, 在服务器端可以随意指定
 	//	- hello/world/ -> 服务器资源根目录中的两个目录
 	// 需要在程序中判断得到的文件的属性 - stat()
-	// 判断path中存储的到底是什么字符串?
+	// 判断path中存储的到底是什么字符串
 	char* file = NULL; // file中保存的文件路径是相对路径
-	// 如果文件名中有中文, 需要还原
-	decodeMsg(path, path);
+	decodeMsg(path, path);// 如果文件名中有中文, 需要还原
 	if (strcmp(path, "/") == 0)
 	{
 		// 访问的是服务器提供的资源根目录 假设是: /home/robin/luffy
@@ -252,7 +252,7 @@ int parseRequestLine(int cfd, const char * reqLine)
 		// 假设是这样的: /hello/a.txt
 		//	/ ==  /home/robin/luffy ==> /home/robin/luffy/hello/a.txt
 		// 如果不把 / 去掉就相当于要访问系统的根目录
-		file = path + 1; // hello/a.txt == ./hello/a.txt
+		file = path + 1; //      hello/a.txt <- /hello/a.txt
 	}
 
 	printf("客户端请求的文件名: %s\n", file);
@@ -483,8 +483,6 @@ int hexit(char c)
 }
 
 // 解码
-// from: 要被转换的字符 -> 传入参数
-// to: 转换之后得到的字符 -> 传出参数
 void decodeMsg(char *to, char *from)
 {
 	for (; *from != '\0'; ++to, ++from)
