@@ -3,11 +3,17 @@
 //为使错误处理的代码不影响主程序的可读性, 我们把与socket相关的一些系统函数加上错误处理代码包装成
 //新的函数, 做成一个模块wrap.c:
 #include "wrap.h"
+
+
+
 void perr_exit(const char* s)
 {
 	perror(s);
 	exit(1);
 }
+
+
+
 int Accept(int fd, struct sockaddr* sa, socklen_t* salenptr)
 {
 	int n;
@@ -24,15 +30,84 @@ again:
 
 
 
-
-int Bind(int fd, const struct sockaddr* sa, socklen_t salen)
+const char* getFileType(const char* name)
 {
-	int n;
-	if ((n = bind(fd, sa, salen))< 0)
-		perr_exit("bind error");
-	return n;
+	// a.jpg a.mp4 a.html
+	// 自右向左查找‘.’字符, 如不存在返回NULL
+	const char* dot = strrchr(name, '.');
+	if (dot == NULL)
+		return "text/plain; charset=utf-8";	// 纯文本
+	if (strcmp(dot, ".html") == 0 || strcmp(dot, ".htm") == 0)
+		return "text/html; charset=utf-8";
+	if (strcmp(dot, ".jpg") == 0 || strcmp(dot, ".jpeg") == 0)
+		return "image/jpeg";
+	if (strcmp(dot, ".gif") == 0)
+		return "image/gif";
+	if (strcmp(dot, ".png") == 0)
+		return "image/png";
+	if (strcmp(dot, ".css") == 0)
+		return "text/css";
+	if (strcmp(dot, ".au") == 0)
+		return "audio/basic";
+	if (strcmp(dot, ".wav") == 0)
+		return "audio/wav";
+	if (strcmp(dot, ".avi") == 0)
+		return "video/x-msvideo";
+	if (strcmp(dot, ".mov") == 0 || strcmp(dot, ".qt") == 0)
+		return "video/quicktime";
+	if (strcmp(dot, ".mpeg") == 0 || strcmp(dot, ".mpe") == 0)
+		return "video/mpeg";
+	if (strcmp(dot, ".vrml") == 0 || strcmp(dot, ".wrl") == 0)
+		return "model/vrml";
+	if (strcmp(dot, ".midi") == 0 || strcmp(dot, ".mid") == 0)
+		return "audio/midi";
+	if (strcmp(dot, ".mp3") == 0)
+		return "audio/mpeg";
+	if (strcmp(dot, ".ogg") == 0)
+		return "application/ogg";
+	if (strcmp(dot, ".pac") == 0)
+		return "application/x-ns-proxy-autoconfig";
+
+	return "text/plain; charset=utf-8";
 }
 
+
+
+void decodeMsg(char* to, char* from)
+{
+	for (; *from != '\0'; ++to, ++from)
+	{
+		// isxdigit -> 判断字符是不是16进制格式
+		// Linux%E5%86%85%E6%A0%B8.jpg
+		if (from[0] == '%' && isxdigit(from[1]) && isxdigit(from[2]))
+		{
+			// 将16进制的数 -> 十进制 将这个数值赋值给了字符 int -> char
+			// A1 == 161
+			*to = hexit(from[1]) * 16 + hexit(from[2]);
+
+			from += 2;
+		}
+		else
+		{
+			// 不是特殊字符字节赋值
+			*to = *from;
+		}
+	}
+	*to = '\0';
+}
+
+
+int hexit(char c)
+{
+	if (c >= '0' && c <= '9')
+		return c - '0';
+	if (c >= 'a' && c <= 'f')
+		return c - 'a' + 10;
+	if (c >= 'A' && c <= 'F')
+		return c - 'A' + 10;
+
+	return 0;
+}
 
 
 
@@ -72,24 +147,6 @@ int tcp4bind(short port, const char* IP)
 	return lfd;
 }
 
-
-
-
-
-
-
-
-
-int Connect(int fd, const struct sockaddr* sa, socklen_t salen)
-{
-	int n;
-	if ((n = connect(fd, sa, salen))< 0)
-		perr_exit("connect error");
-	return n;
-}
-
-
-
 int Listen(int fd, int backlog)
 {
 	int n;
@@ -97,8 +154,6 @@ int Listen(int fd, int backlog)
 		perr_exit("listen error");
 	return n;
 }
-
-
 
 
 int Socket(int family, int type, int protocol)
@@ -111,91 +166,8 @@ int Socket(int family, int type, int protocol)
 
 
 
-ssize_t Read(int fd, void* ptr, size_t nbytes)
-{
-	ssize_t n;
-again:
-	if ((n = read(fd, ptr, nbytes))== -1) {
-		if (errno == EINTR)
-			goto again;
-		else
-			return -1;
-	}
-	return n;
-}
 
 
-
-ssize_t Write(int fd, const void* ptr, size_t nbytes)
-{
-	ssize_t n;
-again:
-	if ((n = write(fd, ptr, nbytes))== -1) 
-	{
-		if (errno == EINTR)  //EINTR 代表一个系统调用因为接收到信号而被中断，
-			//如果一个函数在执行时返回 EINTR，那通常意味着这个函数可能需要被重新执行。
-			goto again;
-		else
-			return -errno;
-	}
-	return n;
-}
-
-
-
-int Close(int fd)
-{
-	int n;
-	if ((	n = close(fd))== -1)
-		perr_exit("close error");
-	return n;
-}
-ssize_t Readn(int fd, void* vptr, size_t n)
-{
-	size_t nleft;
-	ssize_t nread;
-	char* ptr;
-	ptr = vptr;
-	nleft = n;
-	while (nleft > 0) {
-		if ((nread = read(fd, ptr, nleft))< 0) {
-			if (errno == EINTR)
-				nread = 0;
-			else
-				return -1;
-		}
-		else if (nread == 0)
-			break;
-		nleft -= nread;
-		ptr += nread;
-	}
-	return n - nleft;
-}
-ssize_t Writen(int fd, const void* vptr, size_t n)
-{
-	size_t nleft;
-	ssize_t nwritten;
-	const char* ptr;
-	ptr = vptr;
-	nleft = n;
-	while (nleft > 0) {
-		if ((nwritten = write(fd, ptr, nleft))<= 0) {
-			if (nwritten < 0 && errno == EINTR)
-				nwritten = 0;
-			else
-				return -1;
-		}
-		nleft -= nwritten;
-		ptr += nwritten;
-	}
-	return n;
-}
-
-
-
-
-//这个函数用于从文件描述符fd中读取一个字符到ptr。为了提高效率，
-//这个函数会一次读取多个字符（最多100个），然后逐个返回。当所有字符都返回后，它会再次尝试读取。
 
 /*这个函数在读取时可能会被中断（比如因为接收到了一个信号），所以它使用了goto语句在被中断时重新尝试读取。
 虽然在许多情况下使用goto是不推荐的，但在处理错误和中断的时候，使用goto可以使代码更加清晰*/ 
@@ -213,7 +185,6 @@ ssize_t my_read(int fd, char* ptr)
 
 	/*			errno是一个全局变量，用于在C和C++中报告错误。当你调用一些可能会失败的函数（比如read）时，
 				如果发生错误，这些函数通常会设置errno的值来指示具体的错误类型。
-
 				EINTR是errno的一个可能值，代表了“Interrupted system call”（被中断的系统调用）。
 				当你的程序正在执行一个系统调用（比如read）时，如果接收到一个可以被捕获的信号，
 				那么系统调用可能会被中断，而不是正常完成。当这种情况发生时，系统调用会返回 - 1，并且设置errno为EINTR。*/
@@ -228,9 +199,6 @@ ssize_t my_read(int fd, char* ptr)
 	*ptr = *read_ptr++;
 	return 1;
 }
-
-
-
 //从文件描述符fd中读取一行数据，直到遇到换行符\n或读取到的字符数达到maxlen为止。
 //这个函数会将读取到的数据存储到vptr指向的内存空间中，并在结束时添加一个空字符作为结束标志。
 ssize_t Readline(int fd, void* vptr, size_t maxlen)

@@ -1,16 +1,10 @@
-#include "stdio.h"
 #include "wrap.h"
-#define PORT 8080
-#include<sys/epoll.h>
-#include<fcntl.h>
-#include<sys/stat.h>
-#include"serverhttp.h"
-#include<ctype.h>
-#include<stdlib.h>
-#include<dirent.h>
-#include<signal.h>
-//发送消息头
-void send_header(int cfd, int code, char* info,const  char* filetype,int length)//文件描述符，状态行，状态信息
+#include"epollweb.h"
+
+
+
+
+void send_header(int cfd, int code, char* info, const  char* filetype, int length)//文件描述符，状态行，状态信息
 {
 	//发送状态行
 	char buf[1024] = "";
@@ -45,10 +39,8 @@ void send_header(int cfd, int code, char* info,const  char* filetype,int length)
 		return;
 	}
 }
-	
 
-
-void send_file(int cfd, char* path,struct epoll_event*ev,int epfd,int flag)
+void send_file(int cfd, char* path, struct epoll_event* ev, int epfd, int flag)
 {
 	int fd = open(path, O_RDONLY);
 	if (fd < 0)
@@ -96,83 +88,9 @@ void send_file(int cfd, char* path,struct epoll_event*ev,int epfd,int flag)
 }
 
 
-const char* getFileType(const char* name)
-{
-	// a.jpg a.mp4 a.html
-	// 自右向左查找‘.’字符, 如不存在返回NULL
-	const char* dot = strrchr(name, '.');
-	if (dot == NULL)
-		return "text/plain; charset=utf-8";	// 纯文本
-	if (strcmp(dot, ".html") == 0 || strcmp(dot, ".htm") == 0)
-		return "text/html; charset=utf-8";
-	if (strcmp(dot, ".jpg") == 0 || strcmp(dot, ".jpeg") == 0)
-		return "image/jpeg";
-	if (strcmp(dot, ".gif") == 0)
-		return "image/gif";
-	if (strcmp(dot, ".png") == 0)
-		return "image/png";
-	if (strcmp(dot, ".css") == 0)
-		return "text/css";
-	if (strcmp(dot, ".au") == 0)
-		return "audio/basic";
-	if (strcmp(dot, ".wav") == 0)
-		return "audio/wav";
-	if (strcmp(dot, ".avi") == 0)
-		return "video/x-msvideo";
-	if (strcmp(dot, ".mov") == 0 || strcmp(dot, ".qt") == 0)
-		return "video/quicktime";
-	if (strcmp(dot, ".mpeg") == 0 || strcmp(dot, ".mpe") == 0)
-		return "video/mpeg";
-	if (strcmp(dot, ".vrml") == 0 || strcmp(dot, ".wrl") == 0)
-		return "model/vrml";
-	if (strcmp(dot, ".midi") == 0 || strcmp(dot, ".mid") == 0)
-		return "audio/midi";
-	if (strcmp(dot, ".mp3") == 0)
-		return "audio/mpeg";
-	if (strcmp(dot, ".ogg") == 0)
-		return "application/ogg";
-	if (strcmp(dot, ".pac") == 0)
-		return "application/x-ns-proxy-autoconfig";
 
-	return "text/plain; charset=utf-8";
-}
 
-void decodeMsg(char* to, char* from)
-{
-	for (; *from != '\0'; ++to, ++from)
-	{
-		// isxdigit -> 判断字符是不是16进制格式
-		// Linux%E5%86%85%E6%A0%B8.jpg
-		if (from[0] == '%' && isxdigit(from[1]) && isxdigit(from[2]))
-		{
-			// 将16进制的数 -> 十进制 将这个数值赋值给了字符 int -> char
-			// A1 == 161
-			*to = hexit(from[1]) * 16 + hexit(from[2]);
-
-			from += 2;
-		}
-		else
-		{
-			// 不是特殊字符字节赋值
-			*to = *from;
-		}
-	}
-	*to = '\0';
-}
-
-int hexit(char c)
-{
-	if (c >= '0' && c <= '9')
-		return c - '0';
-	if (c >= 'a' && c <= 'f')
-		return c - 'a' + 10;
-	if (c >= 'A' && c <= 'F')
-		return c - 'A' + 10;
-
-	return 0;
-}
-
-void read_client_request(int epfd, struct epoll_event* ev,char*pwd_path)
+void read_client_request(int epfd, struct epoll_event* ev, char* pwd_path)
 {
 	//读取请求(先读取一行在把其他行读取扔掉)
 	char buf[1024] = "";
@@ -209,8 +127,8 @@ void read_client_request(int epfd, struct epoll_event* ev,char*pwd_path)
 		//GET HTTP/1.1\R\N
 		if (*strfile == 0) // 如果没有请求文件, 默认请求当前目录
 			strfile = "./";
-			// 判断请求的文件在不在
-			struct stat s;
+		// 判断请求的文件在不在
+		struct stat s;
 		//stat函数在C语言中被用来获取关于文件的信息
 		if (stat(strfile, &s) < 0)  //不存在	 
 		{
@@ -221,8 +139,8 @@ void read_client_request(int epfd, struct epoll_event* ev,char*pwd_path)
 			printf("Error file path: %s\n", errorFilePath);
 			//先发送报头(状态行消息头空行)
 			send_header(ev->data.fd, 404, "NOT FOUND", getFileType("*.html"), 0);
-            //发送文件error.html 
-			send_file(ev->data.fd, "error.html",ev,epfd,1);
+			//发送文件error.html 
+			send_file(ev->data.fd, "error.html", ev, epfd, 1);
 		}
 		else
 		{
@@ -230,16 +148,16 @@ void read_client_request(int epfd, struct epoll_event* ev,char*pwd_path)
 			{
 				printf("file\n");
 				//先发送报头(状态行消息头空行)
-				send_header(ev->data.fd,200,"OK", getFileType(strfile),s.st_size);
-                //发送文件
-				send_file(ev->data.fd, strfile,ev,epfd,1);
+				send_header(ev->data.fd, 200, "OK", getFileType(strfile), s.st_size);
+				//发送文件
+				send_file(ev->data.fd, strfile, ev, epfd, 1);
 			}
 			else if (S_ISDIR(s.st_mode))
 			{
 				printf("dir\n");
 				//发送一个列表网页
 				send_header(ev->data.fd, 200, "OK", getFileType("*.html"), 0);
-				send_file(ev->data.fd,"dir_header.html", ev, epfd,0);
+				send_file(ev->data.fd, "dir_header.html", ev, epfd, 0);
 				struct dirent** mylist = NULL;
 				char buf[1024] = "";
 				int len = 0;
@@ -255,7 +173,7 @@ void read_client_request(int epfd, struct epoll_event* ev,char*pwd_path)
 					{
 						len = sprintf(buf, "<li><a href=%s >%s</a></li>", mylist[i]->d_name, mylist[i]->d_name);
 					}
-					send(ev->data.fd,buf,len ,0);
+					send(ev->data.fd, buf, len, 0);
 					free(mylist[i]);
 				}
 				free(mylist);
@@ -264,13 +182,14 @@ void read_client_request(int epfd, struct epoll_event* ev,char*pwd_path)
 		}
 	}
 }
-int main(int argc, char const* argv[])
+
+void  epollRun()
 {
 	signal(SIGPIPE, SIG_IGN);
 	//切换工作目录
 	//获取当前目录的工作路径
 	char pwd_path[256] = "";
-	char *path = getenv("PWD");
+	char* path = getenv("PWD");
 	//如果程序中修改了目录，再调用 getenv("PWD")，它可能还会返回旧的工作目录
 	//（除非你的程序自己更新了 "PWD" 环境变量）。而如果你调用 getcwd()，它会返回正确的新工作目录 
 	strcpy(pwd_path, path);
@@ -283,14 +202,14 @@ int main(int argc, char const* argv[])
 	// 创建树
 	int epfd = epoll_create(1);
 	// lfd上树
-	struct epoll_event ev,evs[1024];
+	struct epoll_event ev, evs[1024];
 	ev.data.fd = lfd;
 	ev.events = EPOLLIN;
 	epoll_ctl(epfd, EPOLL_CTL_ADD, lfd, &ev);
 	//循环监听
 	while (1)
 	{
-		int nready =  epoll_wait(epfd, evs, 1024, -1);
+		int nready = epoll_wait(epfd, evs, 1024, -1);
 		if (nready == 0)
 		{
 			perror("");
@@ -301,33 +220,29 @@ int main(int argc, char const* argv[])
 			for (int i = 0; i < nready; i++)
 			{
 				//判断是否是Lfd
-					if (evs[i].data.fd == lfd && evs[i].events & EPOLLIN)
-					{
-						struct sockaddr_in cliaddr;
-						char ip[16] = "";
-						socklen_t len = sizeof(cliaddr);
-						int cfd = Accept(lfd, (struct sockaddr*)&cliaddr, &len);
-						printf("new client ip=%s port=%d\n",
+				if (evs[i].data.fd == lfd && evs[i].events & EPOLLIN)
+				{
+					struct sockaddr_in cliaddr;
+					char ip[16] = "";
+					socklen_t len = sizeof(cliaddr);
+					int cfd = Accept(lfd, (struct sockaddr*)&cliaddr, &len);
+					printf("new client ip=%s port=%d\n",
 						inet_ntop(AF_INET, &cliaddr.sin_addr.s_addr, ip, 16),
 						ntohs(cliaddr.sin_port));
-						//设置cfd为非阻塞
-						int flag = fcntl(cfd, F_GETFL);
-						flag |= O_NONBLOCK;
-						fcntl(cfd, F_SETFL, flag);
-						//上树
-						ev.data.fd = cfd;
-						ev.events = EPOLLIN;
-						epoll_ctl(epfd, EPOLL_CTL_ADD, cfd, &ev);
-					}
-					else if (evs[i].events & EPOLLIN)//cfd
-					{
-						read_client_request( epfd ,&evs[i],pwd_path);
-					}
+					//设置cfd为非阻塞
+					int flag = fcntl(cfd, F_GETFL);
+					flag |= O_NONBLOCK;
+					fcntl(cfd, F_SETFL, flag);
+					//上树
+					ev.data.fd = cfd;
+					ev.events = EPOLLIN;
+					epoll_ctl(epfd, EPOLL_CTL_ADD, cfd, &ev);
+				}
+				else if (evs[i].events & EPOLLIN)//cfd
+				{
+					read_client_request(epfd, &evs[i], pwd_path);
+				}
 			}
 		}
 	}
-	return 0;
 }
-
-
-
