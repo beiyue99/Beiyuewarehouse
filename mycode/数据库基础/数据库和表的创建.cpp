@@ -29,6 +29,9 @@ SHOW CREATE TABLE表名;
 
 
 DDL - 表操作 - 创建
+
+
+
 CREATE TABLE表名(
 	字段1字段1类型[COMMENT字段1注释],
 	字段2字段2类型[COMMENT字段2注释],
@@ -40,98 +43,6 @@ CREATE TABLE表名(
 
 age TINYINT UNSIGNED     表示age是个无符号整型
 score double(4, 1)   表示score最大4个长度，如100.0   小数点后面一位
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
