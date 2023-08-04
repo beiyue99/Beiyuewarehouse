@@ -109,18 +109,18 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "D:/fileswjf/MyCode/mycode/socket\u7f51\u7edc\u7f16\u7a0b/muduo\u57fa\u7840\u7f16\u7a0b/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-obgwb1"
-      binary: "D:/fileswjf/MyCode/mycode/socket\u7f51\u7edc\u7f16\u7a0b/muduo\u57fa\u7840\u7f16\u7a0b/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-obgwb1"
+      source: "D:/fileswjf/MyCode/mycode/socket\u7f51\u7edc\u7f16\u7a0b/muduo\u57fa\u7840\u7f16\u7a0b/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-xquvqj"
+      binary: "D:/fileswjf/MyCode/mycode/socket\u7f51\u7edc\u7f16\u7a0b/muduo\u57fa\u7840\u7f16\u7a0b/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-xquvqj"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
     buildResult:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: D:/fileswjf/MyCode/mycode/socket网络编程/muduo基础编程/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-obgwb1
+        Change Dir: D:/fileswjf/MyCode/mycode/socket网络编程/muduo基础编程/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-xquvqj
         
-        Run Build Command(s):D:\\各类软件缓存\\VS\\COMMON7\\IDE\\COMMONEXTENSIONS\\MICROSOFT\\CMAKE\\Ninja\\ninja.exe -v cmTC_39f72 && [1/2] D:\\各类软件缓存\\vs\\VC\\Tools\\MSVC\\14.36.32532\\bin\\Hostx64\\x64\\cl.exe  /nologo   /DWIN32 /D_WINDOWS /W3  /MDd /Zi /Ob0 /Od /RTC1 /showIncludes /FoCMakeFiles\\cmTC_39f72.dir\\CMakeCCompilerABI.c.obj /FdCMakeFiles\\cmTC_39f72.dir\\ /FS -c D:\\各类软件缓存\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.26\\Modules\\CMakeCCompilerABI.c
-        [2/2] cmd.exe /C "cd . && D:\\各类软件缓存\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe -E vs_link_exe --intdir=CMakeFiles\\cmTC_39f72.dir --rc=D:\\WINDOW~1\\10\\bin\\100220~1.0\\x64\\rc.exe --mt=D:\\WINDOW~1\\10\\bin\\100220~1.0\\x64\\mt.exe --manifests  -- D:\\各类软件缓存\\vs\\VC\\Tools\\MSVC\\14.36.32532\\bin\\Hostx64\\x64\\link.exe /nologo CMakeFiles\\cmTC_39f72.dir\\CMakeCCompilerABI.c.obj  /out:cmTC_39f72.exe /implib:cmTC_39f72.lib /pdb:cmTC_39f72.pdb /version:0.0 /machine:x64  /debug /INCREMENTAL /subsystem:console  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib && cd ."
+        Run Build Command(s):D:\\各类软件缓存\\VS\\COMMON7\\IDE\\COMMONEXTENSIONS\\MICROSOFT\\CMAKE\\Ninja\\ninja.exe -v cmTC_73ce1 && [1/2] D:\\各类软件缓存\\vs\\VC\\Tools\\MSVC\\14.36.32532\\bin\\Hostx64\\x64\\cl.exe  /nologo   /DWIN32 /D_WINDOWS /W3  /MDd /Zi /Ob0 /Od /RTC1 /showIncludes /FoCMakeFiles\\cmTC_73ce1.dir\\CMakeCCompilerABI.c.obj /FdCMakeFiles\\cmTC_73ce1.dir\\ /FS -c D:\\各类软件缓存\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.26\\Modules\\CMakeCCompilerABI.c
+        [2/2] cmd.exe /C "cd . && D:\\各类软件缓存\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe -E vs_link_exe --intdir=CMakeFiles\\cmTC_73ce1.dir --rc=D:\\WINDOW~1\\10\\bin\\100220~1.0\\x64\\rc.exe --mt=D:\\WINDOW~1\\10\\bin\\100220~1.0\\x64\\mt.exe --manifests  -- D:\\各类软件缓存\\vs\\VC\\Tools\\MSVC\\14.36.32532\\bin\\Hostx64\\x64\\link.exe /nologo CMakeFiles\\cmTC_73ce1.dir\\CMakeCCompilerABI.c.obj  /out:cmTC_73ce1.exe /implib:cmTC_73ce1.lib /pdb:cmTC_73ce1.pdb /version:0.0 /machine:x64  /debug /INCREMENTAL /subsystem:console  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib && cd ."
         
       exitCode: 0
   -
@@ -132,18 +132,18 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "D:/fileswjf/MyCode/mycode/socket\u7f51\u7edc\u7f16\u7a0b/muduo\u57fa\u7840\u7f16\u7a0b/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-qejiqd"
-      binary: "D:/fileswjf/MyCode/mycode/socket\u7f51\u7edc\u7f16\u7a0b/muduo\u57fa\u7840\u7f16\u7a0b/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-qejiqd"
+      source: "D:/fileswjf/MyCode/mycode/socket\u7f51\u7edc\u7f16\u7a0b/muduo\u57fa\u7840\u7f16\u7a0b/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-6xrlwf"
+      binary: "D:/fileswjf/MyCode/mycode/socket\u7f51\u7edc\u7f16\u7a0b/muduo\u57fa\u7840\u7f16\u7a0b/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-6xrlwf"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
     buildResult:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: D:/fileswjf/MyCode/mycode/socket网络编程/muduo基础编程/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-qejiqd
+        Change Dir: D:/fileswjf/MyCode/mycode/socket网络编程/muduo基础编程/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-6xrlwf
         
-        Run Build Command(s):D:\\各类软件缓存\\VS\\COMMON7\\IDE\\COMMONEXTENSIONS\\MICROSOFT\\CMAKE\\Ninja\\ninja.exe -v cmTC_7ffd4 && [1/2] D:\\各类软件缓存\\vs\\VC\\Tools\\MSVC\\14.36.32532\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP   /DWIN32 /D_WINDOWS /W3 /GR /EHsc  /MDd /Zi /Ob0 /Od /RTC1 /showIncludes /FoCMakeFiles\\cmTC_7ffd4.dir\\CMakeCXXCompilerABI.cpp.obj /FdCMakeFiles\\cmTC_7ffd4.dir\\ /FS -c D:\\各类软件缓存\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.26\\Modules\\CMakeCXXCompilerABI.cpp
-        [2/2] cmd.exe /C "cd . && D:\\各类软件缓存\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe -E vs_link_exe --intdir=CMakeFiles\\cmTC_7ffd4.dir --rc=D:\\WINDOW~1\\10\\bin\\100220~1.0\\x64\\rc.exe --mt=D:\\WINDOW~1\\10\\bin\\100220~1.0\\x64\\mt.exe --manifests  -- D:\\各类软件缓存\\vs\\VC\\Tools\\MSVC\\14.36.32532\\bin\\Hostx64\\x64\\link.exe /nologo CMakeFiles\\cmTC_7ffd4.dir\\CMakeCXXCompilerABI.cpp.obj  /out:cmTC_7ffd4.exe /implib:cmTC_7ffd4.lib /pdb:cmTC_7ffd4.pdb /version:0.0 /machine:x64  /debug /INCREMENTAL /subsystem:console  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib && cd ."
+        Run Build Command(s):D:\\各类软件缓存\\VS\\COMMON7\\IDE\\COMMONEXTENSIONS\\MICROSOFT\\CMAKE\\Ninja\\ninja.exe -v cmTC_55bde && [1/2] D:\\各类软件缓存\\vs\\VC\\Tools\\MSVC\\14.36.32532\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP   /DWIN32 /D_WINDOWS /W3 /GR /EHsc  /MDd /Zi /Ob0 /Od /RTC1 /showIncludes /FoCMakeFiles\\cmTC_55bde.dir\\CMakeCXXCompilerABI.cpp.obj /FdCMakeFiles\\cmTC_55bde.dir\\ /FS -c D:\\各类软件缓存\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.26\\Modules\\CMakeCXXCompilerABI.cpp
+        [2/2] cmd.exe /C "cd . && D:\\各类软件缓存\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe -E vs_link_exe --intdir=CMakeFiles\\cmTC_55bde.dir --rc=D:\\WINDOW~1\\10\\bin\\100220~1.0\\x64\\rc.exe --mt=D:\\WINDOW~1\\10\\bin\\100220~1.0\\x64\\mt.exe --manifests  -- D:\\各类软件缓存\\vs\\VC\\Tools\\MSVC\\14.36.32532\\bin\\Hostx64\\x64\\link.exe /nologo CMakeFiles\\cmTC_55bde.dir\\CMakeCXXCompilerABI.cpp.obj  /out:cmTC_55bde.exe /implib:cmTC_55bde.lib /pdb:cmTC_55bde.pdb /version:0.0 /machine:x64  /debug /INCREMENTAL /subsystem:console  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib && cd ."
         
       exitCode: 0
 ...

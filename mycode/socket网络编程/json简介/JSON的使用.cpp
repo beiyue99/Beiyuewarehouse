@@ -30,8 +30,8 @@ void test1()   //json的序列化
 	vec.push_back(5);
 	js["list"] = vec;
 	//cout << js << endl;    //{"list":[1,2,5]}
-	string sendBuf  =  js.dump();
-	cout << sendBuf.c_str() << endl;
+	string sendBuf  =  js.dump();  // 把JSON 对象转储为一个可供查看的字符串格式
+	cout << sendBuf << endl;
 #endif
 }
 
@@ -82,7 +82,7 @@ void test3()
 {
 	string recvBuf = func2();  
 	json jsbuf = json::parse(recvBuf);
-#if 1
+#if 0
 	cout << jsbuf["id"] << endl;      //[1,2,3,4,5]
 	cout << jsbuf["name"] << endl;    //"zhang san"
 	cout << jsbuf["msg"] << endl;     //{"liu shuo":"hello china","zhang san":"hello world"}

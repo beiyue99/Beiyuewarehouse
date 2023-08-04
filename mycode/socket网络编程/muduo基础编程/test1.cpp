@@ -5,29 +5,22 @@ using namespace std;
 using namespace muduo;
 using namespace muduo::net;
 
-/*基于muduo网络库开发服务器程序
-1组合TcpServer对象
-2创建EventLoop事件循环对象的指针
-3明确TcpServer构造函数需要什么参数,输出ChatServer的构造函数
-4在当前服务器类的构造函数当中,注册处理连接的回调函数和处理读写事件的回调函数
-5设置合适的服务端线程数量
-
-*/
 
 class ChatServer 
 {
 public:
     // 构造函数，初始化服务器，绑定连接回调和消息回调，设置工作线程数量
     ChatServer(EventLoop* loop, const InetAddress& listenAddr, const string &nameArg)   
+        //InetAddress 类用于封装网络地址的信息，表示服务器要监听的 IP 地址和端口号。
         :loop_(loop),
         server_(loop, listenAddr, nameArg)
     {
         // 绑定连接建立和断开时的回调函数
         server_.setConnectionCallback(std::bind(&ChatServer::onConnection, this, std::placeholders::_1));
-        //当一个新的连接建立或者断开时，server_对象会调用onConnection函数
-        
+
         // 绑定消息接收时的回调函数
         server_.setMessageCallback(std::bind(&ChatServer::onMessage, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+
         // 设置服务器工作线程数量
         server_.setThreadNum(4);    
     }
@@ -45,6 +38,7 @@ private:
         if(conn->connected())
         {
             cout<<conn->peerAddress().toIpPort()<<"->"<<conn->localAddress().toIpPort()<<" state: online"<<endl;
+            //用于检查当前连接是否处于已连接状态。它返回一个布尔值，如果连接处于已连接状态，则返回 true
         }
         else
         {
