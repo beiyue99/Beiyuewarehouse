@@ -4,7 +4,7 @@
 // 数据库配置信息
 static string server = "127.0.0.1";
 static string user = "root";
-static string password = "123456";
+static string password = "beiyue99";
 static string dbname = "chat";
 
 // 初始化数据库连接
@@ -27,7 +27,6 @@ bool MySQL::connect()
                                   password.c_str(), dbname.c_str(), 3306, nullptr, 0);
     if (p != nullptr)
     {
-        // C和C++代码默认的编码字符是ASCII，如果不设置，从MySQL上拉下来的中文显示？
         mysql_query(_conn, "set names gbk");
         LOG_INFO << "connect mysql success!";
     }
@@ -35,7 +34,6 @@ bool MySQL::connect()
     {
         LOG_INFO << "connect mysql fail!";
     }
-
     return p;
 }
 
@@ -44,9 +42,9 @@ bool MySQL::update(string sql)
 {
     if (mysql_query(_conn, sql.c_str()))
     {
-        LOG_INFO << __FILE__ << ":" << __LINE__ << ":"
-                 << sql << "更新失败!";
+        LOG_INFO << __FILE__ << ":" << __LINE__ << ":" << sql << "更新失败!";
         return false;
+        //__FILE__ 在编译时会被替换为当前源文件的文件名，__LINE__ 的值表示出错的代码在源文件中的行号
     }
 
     return true;
@@ -61,7 +59,6 @@ MYSQL_RES *MySQL::query(string sql)
                  << sql << "查询失败!";
         return nullptr;
     }
-    
     return mysql_use_result(_conn);
 }
 

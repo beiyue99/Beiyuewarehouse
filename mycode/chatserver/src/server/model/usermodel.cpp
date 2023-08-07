@@ -18,6 +18,7 @@ bool UserModel::insert(User &user)
         {
             // 获取插入成功的用户数据生成的主键id
             user.setId(mysql_insert_id(mysql.getConnection()));
+            //mysql_insert_id用于获取最后插入的行的自增ID。
             return true;
         }
     }
@@ -51,7 +52,6 @@ User UserModel::query(int id)
             }
         }
     }
-
     return User();
 }
 

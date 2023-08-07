@@ -5,14 +5,11 @@
 using namespace std;
 using namespace muduo;
 
-// 获取单例对象的接口函数
 ChatService *ChatService::instance()
 {
     static ChatService service;
     return &service;
 }
-
-// 注册消息以及对应的Handler回调操作
 ChatService::ChatService()
 {
     // 用户基本业务管理相关事件处理回调注册
@@ -195,7 +192,7 @@ void ChatService::reg(const TcpConnectionPtr &conn, json &js, Timestamp time)
     }
 }
 
-// 处理注销业务
+// 处理注销业务  (退出登录)
 void ChatService::loginout(const TcpConnectionPtr &conn, json &js, Timestamp time)
 {
     int userid = js["id"].get<int>();
@@ -261,15 +258,15 @@ void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp time
             return;
         }
     }
-
-    // 查询toid是否在线 
+    //如果某个用户在其他服务器上登录并建立了连接，那么这个连接将不会在当前服务器的_userConnMap中被找到
+    
+    // 查询toid数据库信息是否在线 
     User user = _userModel.query(toid);
     if (user.getState() == "online")
     {
         _redis.publish(toid, js.dump());
         return;
     }
-
     // toid不在线，存储离线消息
     _offlineMsgModel.insert(toid, js.dump());
 }
