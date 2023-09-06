@@ -56,27 +56,19 @@ int main(int argc, char **argv)
         exit(-1);
     }
 
-    // 解析通过命令行参数传递的ip和port
     char *ip = argv[1];
     uint16_t port = atoi(argv[2]);
-
-    // 创建client端的socket
     int clientfd = socket(AF_INET, SOCK_STREAM, 0);
     if (-1 == clientfd)
     {
         cerr << "socket create error" << endl;
         exit(-1);
     }
-
-    // 填写client需要连接的server信息ip+port
     sockaddr_in server;
     memset(&server, 0, sizeof(sockaddr_in));
-
     server.sin_family = AF_INET;
     server.sin_port = htons(port);
     server.sin_addr.s_addr = inet_addr(ip);
-
-    // client和server进行连接
     if (-1 == connect(clientfd, (sockaddr *)&server, sizeof(sockaddr_in)))
     {
         cerr << "connect server error" << endl;
@@ -85,7 +77,7 @@ int main(int argc, char **argv)
     }
 
     // 初始化读写线程通信用的信号量
-    sem_init(&rwsem, 0, 0);
+    sem_init(&rwsem, 0, 0);   //如果信号量的值大于等于0，那么线程就可以继续执行
 
     // 连接服务器成功，启动接收子线程
     std::thread readTask(readTaskHandler, clientfd); // pthread_create

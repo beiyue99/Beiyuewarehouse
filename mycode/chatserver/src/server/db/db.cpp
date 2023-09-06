@@ -8,7 +8,7 @@ static string password = "beiyue99";
 static string dbname = "chat";
 
 // 初始化数据库连接
-MySQL::MySQL()
+MySQL::MySQL() 
 {
     _conn = mysql_init(nullptr);
 }

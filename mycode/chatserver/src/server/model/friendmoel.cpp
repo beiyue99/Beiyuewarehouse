@@ -20,9 +20,7 @@ vector<User> FriendModel::query(int userid)
 {
     // 1.组装sql语句
     char sql[1024] = {0};
-
     sprintf(sql, "select a.id,a.name,a.state from user a inner join friend b on b.friendid = a.id where b.userid=%d", userid);
-
     vector<User> vec;
     MySQL mysql;
     if (mysql.connect())
