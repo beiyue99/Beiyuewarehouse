@@ -24,7 +24,7 @@ int main() {
     serv_addr.sin_port = htons(PORT);
 
     // 将IPv4地址从点分十进制转换为二进制
-    if (inet_pton(AF_INET, "172.19.251.40", &serv_addr.sin_addr.s_addr) <= 0) {
+    if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr.s_addr) <= 0) {
         perror("Invalid address/ Address not supported");
         exit(EXIT_FAILURE);
     }
@@ -40,13 +40,11 @@ int main() {
         // 从用户输入读取消息
         printf("Enter message: ");
         fgets(message, BUFFER_SIZE, stdin); 
-        //并使用 fgets 函数将输入的消息存储在 message 字符数组中，
         //最多读取 BUFFER_SIZE-1 个字符。然后，它将输入的消息打印回来
-        //该函数从输入流（在这里是标准输入流 stdin）读取最多 n - 1 个字符，或者直到遇到换行符（'\n'）停止读取
         //该函数会在字符串的末尾自动添加一个终止符（'\0'）
         // fgets 会将换行符（'\n'）也读取并存储在字符串中，如果输入的行长度不超过 n-1，则换行符将是字符串的最后一个字符。
         //删除末尾的换行符
-        message[strcspn(message, "\n")] = 0;   //还函数返回第二个字符串中的任意子串，第一次出现在第一个字符串的位置
+        message[strcspn(message, "\n")] = 0;   //返回第二个字符串中的任意子串，第一次出现在第一个字符串的位置
 
         // 向服务器发送消息
         if (send(sock, message, strlen(message), 0) == -1) {

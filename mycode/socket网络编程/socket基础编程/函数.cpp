@@ -6,20 +6,14 @@
 //小端转大端
 int inet_pton(int af, const char* src, void* dst);
 af:地址族(ip地址的家族包括ipv4和ipv6)协议
-AF_INET : ipv4格式的ip地址
-AF_INET6 : ipv6格式的ip地址
 src : 传入参数, 对应要转换的点分十进制的ip地址 : 192.168.1.100
 dst : 传出参数, 函数调用完成, 转换得到的大端整形IP被写入到这块内存中
-返回值 : 成功返回1, 失败返回0或者 - 1
 
 
 //将大端的整形数,转换为小端的点分十进制的IP地址          
 const char* inet_ntop(int af, const void* src, char* dst, socklen_t size);
 参数:
 size : 修饰dst参数的, 标记dst指向的内存中最多可以存储多少个字节
-返回值 :
-成功:指针指向第三个参数对应的内存地址, 通过返回值也可以直接取出转换得到的IP字符串
-失败 :NULL
 
 
 
@@ -187,7 +181,7 @@ lags : 特殊的属性, 一般不使用, 指定为0
 
     //int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);
     //sockfd：套接字描述符，指定要设置选项的套接字。
-    //level：选项所属的协议层或套接字层。常用的级别包括 SOL_SOCKET（通用套接字选项）和特定协议的级别，如 IPPROTO_TCP（TCP协议选项）。
+    //level：选项所属的协议层或套接字层。SOL_SOCKET（通用套接字选项）和特定协议的级别，如 IPPROTO_TCP（TCP协议选项）。
     //optname：要设置的选项名称。这是一个整数常量，表示特定选项的标识符。
     //optval：指向包含选项值的缓冲区的指针。
     //optlen：选项值的长度。
@@ -210,7 +204,7 @@ int main(int argc, char* argv[])
 	int num = * (int*)buf;
 	int sum = htonl(num);   //小端转大端
 	unsigned char* p= &sum;
-	printf("%d%d%d%d小n", *p, *(p + 1), *(p + 2), *(p + 3));
+	printf("%d%d%d%d\n", *p, *(p + 1), *(p + 2), *(p + 3));
 	unsigned short a = 0x0102;
 	unsigned short b =  htons(a);
 	printf("%x\n", b);   //0201

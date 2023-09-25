@@ -1,34 +1,20 @@
-查询
-查询所有数据库
-SHOW DATABASES;
+
 查询当前数据库
 SELECT DATABASE();
 
-创建
-CREATE DATABASE「IF NOT EXISTS]数据库名「DEFAULT CHARSET字符集]「COLLATE排序规则]:
+
 
 删除
 DROP DATABASE「IF EXISTS]数据库名;
 
-使用
-USE数据库名;
 
 
-
-
-查询当前数据库所有表
-SHOW TABLES;
 查询表结构
 DESC表名;
 查询指定表的建表语句
 SHOW CREATE TABLE表名;
 
 
-
-
-
-
-DDL - 表操作 - 创建
 
 
 

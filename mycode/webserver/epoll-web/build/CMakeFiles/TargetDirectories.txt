@@ -1,0 +1,3 @@
+/mnt/d/fileswjf/MyCode/mycode/epoll-web/build/CMakeFiles/app.dir
+/mnt/d/fileswjf/MyCode/mycode/epoll-web/build/CMakeFiles/edit_cache.dir
+/mnt/d/fileswjf/MyCode/mycode/epoll-web/build/CMakeFiles/rebuild_cache.dir

@@ -25,9 +25,14 @@ CHECK
 用来让两张表的数据之间建立连接, 保证数据的一致性和完整性
 FOREIGN KEY
 
+CREATE TABLE t_emp(
+	id INT PRIMARY KEY,
+	name VARCHAR(22),
+	sex VARCHAR(2) DEFAULT '男'
+) DEFAULT CHARSET = utf8;
 
-
-
+如果是添加字符串型默认值要使用单引号，如果是整型则不需要加任何符号；
+如果要添加的是中文默认值，则需要加上DEFAULT CHARSET = utf8; 使用英文字符则不需要。
 
 
 id				  	   name					   age							  status						gender

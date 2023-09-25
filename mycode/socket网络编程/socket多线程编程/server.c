@@ -36,23 +36,18 @@ int main() {
         perror("bind failed");
         exit(EXIT_FAILURE);
     }
-
     if (listen(serverSocket, 5) == -1) {
         perror("listen failed");
         exit(EXIT_FAILURE);
     }
-
     printf("Server listening on port %d\n", PORT);
 
     while (1) 
     {
-        // ���ܿͻ�������
         if ((clientSocket = accept(serverSocket, (struct sockaddr*)&clientAddress, &clientAddressLength)) == -1) {
             perror("accept failed");
             exit(EXIT_FAILURE);
         }
-
-        // �������̴߳����ͻ�������
         pthread_t tid;
         ClientInfo* clientInfo = (ClientInfo*)malloc(sizeof(ClientInfo));
         clientInfo->clientSocket = clientSocket;
@@ -60,26 +55,18 @@ int main() {
         pthread_create(&tid, NULL, handleClient, clientInfo);
         pthread_detach(tid);
     }
-
-    // �رշ������׽���
     close(serverSocket);
     return 0;
 }
-
-
-
 
 void* handleClient(void* arg) {
     ClientInfo* clientInfo = (ClientInfo*)arg;
     int clientSocket = clientInfo->clientSocket;
     struct sockaddr_in clientAddress = clientInfo->clientAddress;
     char buffer[BUFFER_SIZE];
-
-    // ��ӡ�ͻ���������Ϣ
     printf("Client connected: IP %s, Port %d\n",inet_ntoa(clientAddress.sin_addr), ntohs(clientAddress.sin_port));
 
     while (1) {
-        // ��ȡ�ͻ��˷��͵�����
         int bytesRead = read(clientSocket, buffer, sizeof(buffer) - 1);
         if (bytesRead == -1) {
             perror("read error");
@@ -89,31 +76,24 @@ void* handleClient(void* arg) {
             printf("Client disconnected\n");
             break;
         }
-
         buffer[bytesRead] = '\0';
         printf("Received message from client: %s\n", buffer);
-
-        // �޸�����
         for (int i = 0; i < bytesRead; i++) {
             buffer[i] = toupper(buffer[i]);
         }
 
         printf("Modified message: %s\n", buffer);
 
-        // �ж�ͨ���Ƿ����
         if (strcmp(buffer, "QUIT") == 0) {
             printf("Closing connection\n");
             break;
         }
-
-        // ��ͻ��˷�����Ϣ
         if (send(clientSocket, buffer, strlen(buffer), 0) == -1) {
             perror("send failed");
             break;
         }
     }
 
-    // �رտͻ����׽���
     close(clientSocket);
     free(clientInfo);
     return NULL;
