@@ -3,6 +3,7 @@
 struct ChannelMap
 {
     int size;   // 记录指针指向的数组的元素总个数
+    // struct Channel* list[];
     struct Channel** list;
 };
 

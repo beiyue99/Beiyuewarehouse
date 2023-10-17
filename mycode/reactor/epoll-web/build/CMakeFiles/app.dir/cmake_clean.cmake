@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/mnt/d/fileswjf/MyCode/mycode/webserver/epoll-web/exe/app"
-  "/mnt/d/fileswjf/MyCode/mycode/webserver/epoll-web/exe/app.pdb"
+  "../exe/app"
+  "../exe/app.pdb"
   "CMakeFiles/app.dir/epollweb.c.o"
   "CMakeFiles/app.dir/epollweb.c.o.d"
   "CMakeFiles/app.dir/main.c.o"

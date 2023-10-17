@@ -140,7 +140,6 @@ void* acceptClient(void* arg)
     return NULL;
 }
 
-//int recvHttpRequest(int cfd, int epfd)
 void* recvHttpRequest(void* arg)
 {
     struct FdInfo* info = (struct FdInfo*)arg;
