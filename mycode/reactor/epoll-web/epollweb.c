@@ -122,7 +122,6 @@ void read_client_request(int epfd, struct epoll_event* ev, char* pwd_path)
 	if (strcasecmp(method, "get") == 0)
 	{
 		char* strfile = content + 1;
-
 		decodeMsg(strfile, strfile);
 		//GET HTTP/1.1\R\N
 		if (*strfile == 0) // 如果没有请求文件, 默认请求当前目录
@@ -190,8 +189,7 @@ void  epollRun()
 	//获取当前目录的工作路径
 	char pwd_path[256] = "";
 	char* path = getenv("PWD");
-	//如果程序中修改了目录，再调用 getenv("PWD")，它可能还会返回旧的工作目录
-	//（除非你的程序自己更新了 "PWD" 环境变量）。而如果你调用 getcwd()，它会返回正确的新工作目录 
+	//如果程序中修改了目录，再调用 getenv("PWD")，它可能还会返回旧的工作目录（除非你的程序自己更新了 "PWD" 环境变量）。
 	strcpy(pwd_path, path);
 	strcat(pwd_path, "/web-http");
 	chdir(pwd_path);

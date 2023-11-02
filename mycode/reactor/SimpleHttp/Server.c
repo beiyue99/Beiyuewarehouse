@@ -22,6 +22,7 @@ struct FdInfo
     pthread_t tid;
 };
 
+
 int initListenFd(unsigned short port)
 {
     // 1. 创建监听的fd
@@ -95,13 +96,11 @@ int epollRun(int lfd)
             if (fd == lfd)
             {
                 // 建立新连接 accept
-                // acceptClient(lfd, epfd);
                 pthread_create(&info->tid, NULL, acceptClient, info);
             }
             else
             {
                 // 主要是接收对端的数据
-                // recvHttpRequest(fd, epfd);
                 pthread_create(&info->tid, NULL, recvHttpRequest, info);
             }
         }
@@ -109,7 +108,6 @@ int epollRun(int lfd)
     return 0;
 }
 
-//int acceptClient(int lfd, int epfd)
 void* acceptClient(void* arg)
 {
     struct FdInfo* info = (struct FdInfo*)arg;
@@ -143,7 +141,7 @@ void* acceptClient(void* arg)
 void* recvHttpRequest(void* arg)
 {
     struct FdInfo* info = (struct FdInfo*)arg;
-    printf("开始接收数据了...\n");
+    printf("receive...\n");
     int len = 0, totle = 0;
     char tmp[1024] = { 0 };
     char buf[4096] = { 0 };
@@ -154,14 +152,13 @@ void* recvHttpRequest(void* arg)
             memcpy(buf + totle, tmp, len);
         }
         totle += len;
+        printf("reveive len = %d\n", len);
     }
     // 判断数据是否被接收完毕
     if (len == -1 && errno == EAGAIN)
     {
         // 解析请求行
         char* pt = strstr(buf, "\r\n");
-        int reqLen = pt - buf;
-        buf[reqLen] = '\0';
         parseRequestLine(buf, info->fd);
     }
     else if (len == 0)
@@ -182,7 +179,6 @@ void* recvHttpRequest(void* arg)
 
 int parseRequestLine(const char* line, int cfd)
 {
-    // 解析请求行 get /xxx/1.jpg http/1.1
     char method[12];
     char path[1024];
     sscanf(line, "%[^ ] %[^ ]", method, path);
@@ -415,7 +411,7 @@ void decodeMsg(char* to, char* from)
         }
         else
         {
-            // 字符拷贝, 赋值
+            // 不是特殊字符字节赋值
             *to = *from;
         }
 

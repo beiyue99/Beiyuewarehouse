@@ -2,3 +2,16 @@
 **/.vscode/
 **/web-http/
 build-*/
+
+**/Debug/
+**/Release/
+**/x64/
+**/.sln/
+**/a.out/
+
+**/.user/
+**/.vcxproj.filters/
+**/.vcxproj/
+
+
+

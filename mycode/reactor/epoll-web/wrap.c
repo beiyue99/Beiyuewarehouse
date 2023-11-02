@@ -1,7 +1,3 @@
-//上面的例子不仅功能简单, 而且简单到几乎没有什么错误处理, 我们知道, 系统调用不能保证每次都成功,
-//必须进行出错处理, 这样一方面可以保证程序逻辑正常, 另一方面可以迅速得到故障信息。
-//为使错误处理的代码不影响主程序的可读性, 我们把与socket相关的一些系统函数加上错误处理代码包装成
-//新的函数, 做成一个模块wrap.c:
 #include "wrap.h"
 
 
@@ -77,19 +73,14 @@ void decodeMsg(char* to, char* from)
 {
 	for (; *from != '\0'; ++to, ++from)
 	{
-		// isxdigit -> 判断字符是不是16进制格式
-		// Linux%E5%86%85%E6%A0%B8.jpg
 		if (from[0] == '%' && isxdigit(from[1]) && isxdigit(from[2]))
 		{
-			// 将16进制的数 -> 十进制 将这个数值赋值给了字符 int -> char
-			// A1 == 161
 			*to = hexit(from[1]) * 16 + hexit(from[2]);
 
 			from += 2;
 		}
 		else
 		{
-			// 不是特殊字符字节赋值
 			*to = *from;
 		}
 	}
@@ -105,7 +96,6 @@ int hexit(char c)
 		return c - 'a' + 10;
 	if (c >= 'A' && c <= 'F')
 		return c - 'A' + 10;
-
 	return 0;
 }
 
