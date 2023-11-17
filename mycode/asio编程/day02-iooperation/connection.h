@@ -1,6 +1,5 @@
 #pragma once
 #include "boost/asio.hpp"
-#include "connection.h"
 using namespace boost;
 using namespace std;
 extern int accept_new_connection();

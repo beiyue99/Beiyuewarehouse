@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/dock.ico</file>
+        <file>res/new.ico</file>
+        <file>res/edit.ico</file>
+    </qresource>
+</RCC>

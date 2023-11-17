@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    qDebug()<<"我很帅"<<'*'<<10000;
+    qDebug() << "我很帅" << '*' << 10000;
 }
 
 MainWindow::~MainWindow()

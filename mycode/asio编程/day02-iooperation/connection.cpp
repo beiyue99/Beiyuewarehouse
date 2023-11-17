@@ -26,6 +26,7 @@ int accept_new_connection(){
 		asio::ip::tcp::socket sock(ios);
 
 		acceptor.accept(sock);
+        return 0;
 
 	}
 	catch (system::system_error& e) {
@@ -68,24 +69,13 @@ void use_buffer_str() {
 
 void use_stream_buffer() {
 	asio::streambuf buf;
-
 	std::ostream output(&buf);
-
-	// Writing the message to the stream-based buffer.
 	output << "Message1\nMessage2";
-
-	// Now we want to read all data from a streambuf
-	// until '\n' delimiter.
-	// Instantiate an input stream which uses our 
-	// stream buffer.
 	std::istream input(&buf);
-
-	// We'll read data into this string.
+	//文本内容 "Message1\nMessage2" 写入到 asio::streambuf 缓冲区对象 buf ,由换行符 "\n" 分隔。
 	std::string message1;
-
-	std::getline(input, message1);
-
-	// Now message1 string contains 'Message1'.
+	std::getline(input, message1);	// Now message1 string contains 'Message1'.
+	//getline函数会读取一行文本，因此它会读取第一条消息"Message1"，并将其存储在message1中。
 }
 
 void  wirte_to_socket(asio::ip::tcp::socket& sock) {
@@ -100,6 +90,7 @@ void  wirte_to_socket(asio::ip::tcp::socket& sock) {
 		total_bytes_written += sock.write_some(
 			asio::buffer(buf.c_str()+total_bytes_written, 
 				buf.length()- total_bytes_written));
+		//写入的位置，和要写入的长度
 	}
 }
 
@@ -114,7 +105,6 @@ int send_data_by_write_some() {
 
 		asio::io_service ios;
 
-		// Step 1. Allocating and opening the socket.
 		asio::ip::tcp::socket sock(ios, ep.protocol());
 
 		sock.connect(ep);
@@ -141,7 +131,6 @@ int send_data_by_send(){
 
 		asio::io_service ios;
 
-		// Step 1. Allocating and opening the socket.
 		asio::ip::tcp::socket sock(ios, ep.protocol());
 
 		sock.connect(ep);
@@ -172,7 +161,6 @@ int send_data_by_wirte() {
 
 		asio::io_service ios;
 
-		// Step 1. Allocating and opening the socket.
 		asio::ip::tcp::socket sock(ios, ep.protocol());
 
 		sock.connect(ep);
@@ -261,7 +249,6 @@ int read_data_by_receive() {
 
 		return e.code().value();
 	}
-
 	return 0;
 }
 
@@ -280,8 +267,8 @@ int read_data_by_read() {
 
 		sock.connect(ep);
 		const unsigned char BUFF_SIZE = 7;
-		char buffer_receive[BUFF_SIZE];
-		int receive_length = asio::read(sock, asio::buffer(buffer_receive, BUFF_SIZE));
+		char buffer_read[BUFF_SIZE];
+		int receive_length = asio::read(sock, asio::buffer(buffer_read, BUFF_SIZE));
 		if (receive_length <= 0) {
 			cout << "receive failed" << endl;
 		}
@@ -299,15 +286,10 @@ int read_data_by_read() {
 std::string  read_data_by_until(asio::ip::tcp::socket& sock) {
 	asio::streambuf buf;
 
-	// Synchronously read data from the socket until
-	// '\n' symbol is encountered.  
 	asio::read_until(sock, buf, '\n');
-
+	//类streambuf提供了一个可变大小的缓冲区，可以在其中读取和写入数据	
 	std::string message;
 
-	// Because buffer 'buf' may contain some other data
-	// after '\n' symbol, we have to parse the buffer and
-	// extract only symbols before the delimiter. 
 
 	std::istream input_stream(&buf);
 	std::getline(input_stream, message);

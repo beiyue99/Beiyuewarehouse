@@ -20,7 +20,8 @@ void Session::WriteCallBack(const boost::system::error_code & ec,  std::size_t b
 	send_data->_cur_len += bytes_transferred;
 	//数据未发送完， 则继续发送
 	if (send_data->_cur_len < send_data->_total_len) {
-		this->_socket->async_write_some(asio::buffer(send_data->_msg + send_data->_cur_len, send_data->_total_len-send_data->_cur_len),
+		this->_socket->async_write_some(asio::buffer(send_data->_msg + send_data->_cur_len,
+			send_data->_total_len-send_data->_cur_len),
 			std::bind(&Session::WriteCallBack,
 			this, std::placeholders::_1, std::placeholders::_2));
 		return;
@@ -36,7 +37,8 @@ void Session::WriteCallBack(const boost::system::error_code & ec,  std::size_t b
 	//如果队列不是空，则继续将队首元素发送
 	if (!_send_queue.empty()) {
 		auto& send_data = _send_queue.front();
-		this->_socket->async_write_some(asio::buffer(send_data->_msg + send_data->_cur_len, send_data->_total_len - send_data->_cur_len),
+		this->_socket->async_write_some(asio::buffer(send_data->_msg + send_data->_cur_len,
+			send_data->_total_len - send_data->_cur_len),
 			std::bind(&Session::WriteCallBack,
 				this, std::placeholders::_1, std::placeholders::_2));
 	}
@@ -89,7 +91,8 @@ void Session::WriteAllCallBack(const boost::system::error_code& ec, std::size_t 
 	//如果队列不是空，则继续将队首元素发送
 	if (!_send_queue.empty()) {
 		auto& send_data = _send_queue.front();
-		this->_socket->async_send(asio::buffer(send_data->_msg + send_data->_cur_len, send_data->_total_len - send_data->_cur_len),
+		this->_socket->async_send(asio::buffer(send_data->_msg + send_data->_cur_len, 
+			send_data->_total_len - send_data->_cur_len),
 			std::bind(&Session::WriteAllCallBack,
 				this, std::placeholders::_1, std::placeholders::_2));
 	}
@@ -104,7 +107,8 @@ void Session::ReadFromSocket() {
 	/*auto _recv_nodez = std::make_unique<MsgNode>(RECVSIZE);
 	_recv_node = _recv_nodez;*/
 	_recv_node = std::make_shared<MsgNode>(RECVSIZE);
-	_socket->async_read_some(asio::buffer(_recv_node->_msg, _recv_node->_total_len), std::bind(&Session::ReadCallBack, this,
+	_socket->async_read_some(asio::buffer(_recv_node->_msg, _recv_node->_total_len),
+		std::bind(&Session::ReadCallBack, this,
 		std::placeholders::_1, std::placeholders::_2));
 	_recv_pending = true;
 }
@@ -135,7 +139,8 @@ void Session::ReadAllFromSocket(const std::string& buf) {
 	/*auto _recv_nodez = std::make_unique<MsgNode>(RECVSIZE);
 	_recv_node = _recv_nodez;*/
 	_recv_node = std::make_shared<MsgNode>(RECVSIZE);
-	_socket->async_receive(asio::buffer(_recv_node->_msg, _recv_node->_total_len), std::bind(&Session::ReadAllCallBack, this,
+	_socket->async_receive(asio::buffer(_recv_node->_msg, _recv_node->_total_len), 
+		std::bind(&Session::ReadAllCallBack, this,
 		std::placeholders::_1, std::placeholders::_2));
 	_recv_pending = true;
 }

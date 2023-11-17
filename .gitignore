@@ -13,5 +13,6 @@ build-*/
 **/.vcxproj.filters/
 **/.vcxproj/
 
-
-
+**/.vcxproj.user/
+**/.qmake.stash/
+**/.pro.user/
