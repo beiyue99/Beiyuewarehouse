@@ -2,7 +2,7 @@
 **/.vscode/
 **/web-http/
 **/build-*/
-
+**/*vcxproj*/
 **/Debug/
 **/Release/
 **/x64/
