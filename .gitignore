@@ -1,18 +1,20 @@
 **/.vs/
 **/.vscode/
 **/web-http/
-build-*/
+**/build-*/
 
 **/Debug/
 **/Release/
 **/x64/
-**/.sln/
-**/a.out/
+**/.sln
+**/a.out
 
-**/.user/
-**/.vcxproj.filters/
-**/.vcxproj/
+**/.user
+**/.vcxproj.filters
+**/.vcxproj
 
-**/.vcxproj.user/
-**/.qmake.stash/
-**/.pro.user/
+**/.vcxproj.user
+**/.qmake.stash
+
+**/.pro.user
+
