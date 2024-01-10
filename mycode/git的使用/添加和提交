@@ -10,10 +10,10 @@
 
 
 
-git add <filename>，例如git add README.txt  添加到仓库暂存区
 
 
-输入git commit -m "your commit message"命令提交你的变更。在引号中的信息是提交消息
+
+
 
 
 如果你想要在一步操作中将所有已修改的文件添加到暂存区并提交，
