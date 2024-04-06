@@ -1,27 +1,11 @@
-#define _CRT_SECURE_NO_WARNINGS 1
-
-#include<iostream>
-using namespace std;
-#include<functional>
-#include<algorithm>
-#include<vector>
-
-
-
-
-
-//lambda表达式：
-//省去了函数定义的过程，直接可以使用
-
 
 
 //int main()
 //{
 //	int i = 10;
-//	[i]     
-//	(int elem)//如果有参数可以加这个小括号
-//	//加等于号表示按值捕获所有变量 &表示按引用捕获所有变量 这两个可以混合使用
+// //	//加等于号表示按值捕获所有变量 &表示按引用捕获所有变量 这两个可以混合使用
 //	// i表示按值单独捕获i &i表示按引用单独捕获i
+//	[i](int elem)//如果有参数可以加这个小括号
 //	{
 //		cout << i << endl;
 //		cout << elem << endl;
@@ -59,68 +43,6 @@ using namespace std;
 
 
 
-
-
-
-//lambda表达式的常用用法：
-//
-//using pf_type = void(*)(int);
-//void myfunc(pf_type pf, int i)
-//{
-//	pf(i);
-//}
-//
-//int main()
-//{
-//	int i1 = 10;
-//	myfunc([](int i)                  //lambda表达式作为函数指针对象，捕获列表必须为空
-//		{
-//			cout << i << endl;
-//			cout << "lambda" << endl;
-//		}, 200);
-//}
-//
-
-
-
-
-//
-//#include<functional>
-//
-////using pf_type = void(*)(int);
-//using func_type =function<void(int)>;        //用此函数代替函数指针，可以让lambda表达式捕获东西
-//
-//void myfunc(func_type func, int i)
-//{
-//	func(i);
-//}
-//
-//int main()
-//{
-//	int i1 = 10;
-//	myfunc([i1](int i)                  
-//		{
-//			cout << i << endl;
-//			cout << i1 << endl;
-//			cout << "lambda" << endl;
-//		}, 200);
-//}
-//
-//
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
 //int main()
 //{
 //	int a = 97;
@@ -129,10 +51,6 @@ using namespace std;
 //	cout << c << endl;
 //	//  static_cast用于内置的数据类型，还有具有继承关系的指针或引用  如父类指针和子类指针相互转换
 //}
-
-
-
-
 
 
 

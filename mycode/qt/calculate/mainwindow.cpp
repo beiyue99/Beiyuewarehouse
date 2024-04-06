@@ -79,8 +79,7 @@ void MainWindow::numOnClick()
         texT = texT.mid(i+1);
         b = texT;
     }
-    else a=texT;
-    qDebug()<<a<<b;
+
 }
 
 void MainWindow::fuHao()

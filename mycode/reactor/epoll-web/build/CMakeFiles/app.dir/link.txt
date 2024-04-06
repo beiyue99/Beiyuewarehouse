@@ -1,1 +1,0 @@
-/usr/bin/cc CMakeFiles/app.dir/epollweb.c.o CMakeFiles/app.dir/main.c.o CMakeFiles/app.dir/wrap.c.o -o ../exe/app 

@@ -40,6 +40,10 @@ using namespace std;
 
 
 
+//	for_each(v.begin(), v.end(), mem_fun_ref(&Person::show));
+//	 如果存放的是对象指针
+//	for_each(v1.begin(), v1.end(), mem_fun(&Person::show));
+
 
 
 

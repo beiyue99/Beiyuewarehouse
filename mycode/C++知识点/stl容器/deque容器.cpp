@@ -48,7 +48,7 @@ using namespace std;
 // 
 	//	cout << "栈顶元素为：" << s1.top() << endl;
 	//	s1.pop();  //出栈
-	//cout << "站的大小：" << s1.size() << endl;
+	//cout << "栈的大小：" << s1.size() << endl;
 
 
 

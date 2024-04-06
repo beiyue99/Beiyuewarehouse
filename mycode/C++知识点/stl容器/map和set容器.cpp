@@ -16,9 +16,8 @@ using namespace std;
 
 
 
-//vector<int> v1(n); 创建的 vector 中，所有的元素都被初始化为0。
+//vector<int> v1(n); 创建的 vector 中，所有的n个元素都被初始化为0。
 //如果你想要初始化为特定的值，你可以使用 vector<int> v1(n, value);
-//vector<int> v1(n) 是一个 vector 容器，而 vector<int> v1[n] 是一个数组，每个元素都是 vector 容器
 //在set容器中，由于元素的值就是容器的键值，所以迭代器指向的元素的值不能被修改，
 //因为修改元素的值将会导致键值发生变化，破坏了set容器的有序性；
 

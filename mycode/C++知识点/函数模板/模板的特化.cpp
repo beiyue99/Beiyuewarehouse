@@ -1,6 +1,13 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include<iostream>
 using namespace std;
+
+
+
+
+
+
+
 // 模板的特化
 template< typename T1, typename T2>
 class A

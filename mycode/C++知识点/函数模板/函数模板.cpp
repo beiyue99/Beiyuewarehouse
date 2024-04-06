@@ -10,21 +10,6 @@ using namespace std;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //
 //template<typename T,int N>
 //void fun(T(&p)[N])
@@ -183,11 +168,6 @@ using namespace std;
 
 
 //template<>bool mycompare(Person& p1, Person& p2)      重写的时候跟重写前对应，&对应&
-
-
-
-
-
 
 
 
