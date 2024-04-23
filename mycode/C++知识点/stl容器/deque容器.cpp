@@ -10,49 +10,51 @@ using namespace std;
 
 
 
-//void print(const deque<int>& d)
-//{
-//	for (deque<int>::const_iterator it = d.begin(); it != d.end(); it++)
-//	{
-//		cout << *it << " ";
-//	}
-//	cout << endl;
-//}
-//int main()
-//{
-//	deque<int>d1;
-//	d1.push_front(200);  //头插
-//	d1.push_front(300);  
-//	d1.push_front(400);  
-//	d1.pop_front();     //头删
-//	d1.pop_back();     //尾删
-//	d1.insert(d1.begin(), 100);        //头部插入100   d1.insert(d1.begin(),2，100)   头部插入两个100
-//	print(d1);          //100 300
-//	deque<int> d2;
-//	d2.push_back(10);
-//	d2.push_back(20);
-//	d2.push_back(30);
-//	d1.insert(d1.begin(), d2.begin(), d2.end());
-//	print(d1);   //10 20 30 100 300
-//	deque<int>::iterator it1 = d1.begin();
-//	d1.erase(it1);
-//	print(d1);      //20 30 100 300
-//}
 
 
 
+//安全队列
+#include <queue>
+#include <mutex>
+#include <condition_variable>
+template <typename T>
 
+class ThreadSafeQueue {
+private:
+    std::queue<T> queue_;
+    std::mutex mutex_;
+    std::condition_variable condition_;
 
+public:
+    ThreadSafeQueue() = default;
+    ThreadSafeQueue(const ThreadSafeQueue& other) = delete;
+    ThreadSafeQueue& operator=(const ThreadSafeQueue& other) = delete;
+    ~ThreadSafeQueue() = default;
 
-//stack容器
-// 
-	//	cout << "栈顶元素为：" << s1.top() << endl;
-	//	s1.pop();  //出栈
-	//cout << "栈的大小：" << s1.size() << endl;
+    void push(T new_value) {
+        std::unique_lock<std::mutex> lock(mutex_);
+        queue_.push(new_value);
+        lock.unlock();
+        condition_.notify_one();
+    }
 
+    T pop() {
+        std::unique_lock<std::mutex> lock(mutex_);
+        while (queue_.empty()) {
+            condition_.wait(lock);   //如果为空一直等待，也可以定义别的行为
+        }
+        T rc(std::move(queue_.front()));
+        //将指针或资源所有权从一个对象转移到另一个对象，而不需要复制整个对象的内容
+        //使用 std::move() 是为了避免拷贝构造函数的调用，提高性能。
+        queue_.pop();
+        return rc;
+    }
 
-
-
+    bool empty() const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        return queue_.empty();
+    }
+};
 
 
 
