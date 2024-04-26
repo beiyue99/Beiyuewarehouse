@@ -1,3 +1,8 @@
+
+
+
+
+
 int main(int argc,char**argv)   //主函数可以带参数
 
 (gdb) set args 10 20 30 40     //设置参数 show args可以显示出设置的参数
