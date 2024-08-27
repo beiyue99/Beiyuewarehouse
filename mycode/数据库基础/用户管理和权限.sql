@@ -7,7 +7,7 @@ CREATE USER '用户名'@'主机名'IDENTIFIED BY'密码';
 
 
 创建用户
-itcast, 能够在当前主机Loca1h0st访问, 密码123456;
+itcast, 能够在当前主机Loca1host访问, 密码123456;
 create user 'itcast'@'localhost'identified by '123456';        
 
 --创建用户heima,
@@ -69,43 +69,6 @@ REVOKE权限列表ON数据库名.表名 FROM‘用户名'@'主机名';
 
 --撤销权限
 revoke all on itcast.*from 'heima'@'%';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

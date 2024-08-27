@@ -86,7 +86,11 @@ DELETE语句不能删除某一个字段的值(可以使用UPDATE)。
 
 
 
+添加
+ALTER TABLE student ADD sex CHAR(1) NOT NULL DEFAULT 'M';
 
+更新
+UPDATE student SET sex = 'F' WHERE id IN(1, 3);
 
 
 

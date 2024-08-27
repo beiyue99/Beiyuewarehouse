@@ -27,6 +27,10 @@ void zuhe()
 	nodeF.RChild = &nodeG;
 	nodeG.LChild = &nodeH;
 }
+
+
+
+
 void recursion(struct BinaryNode* root) //遍历
 {
 	if (root == nullptr) { return; }
@@ -44,7 +48,8 @@ void cacullateLeafNum(BinaryNode* root, int* p)//计算叶子数
 	cacullateLeafNum(root->LChild,p);
 	cacullateLeafNum(root->RChild,p);
 }
-int get_Height(BinaryNode* root)
+
+int get_Height(BinaryNode* root)   //深度
 {
 	if (root == nullptr) { return 0; }
 	int LHeight = get_Height(root->LChild);
@@ -94,9 +99,9 @@ void test03() //求深度
 int main()
 {
 	zuhe();
-	//test01();
+	test01();
 	//test02();
-	test03();
+	//test03();
 	//BinaryNode* newNode = Copy_fun(&nodeA);
 	cout << "+++++++++++++++" << endl;
 	//recursion(newNode);

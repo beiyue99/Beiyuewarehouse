@@ -19,7 +19,8 @@ int main() {
     std::shared_ptr<MyClass> ptr1 = std::make_shared<MyClass>();  //ptr1 被创建，引用计数为1。
     // 在对象内部调用 shared_from_this() 获取与对象关联的 shared_ptr
     ptr1->printShared();  //shared_from_this() 获取了一个新的std::shared_ptr，增加了引用计数，此时引用计数为2。
-    std::cout << "External use count: " << ptr1.use_count() << std::endl;  //  外部输出 ptr1.use_count()，引用计数为1。
+    std::cout << "External use count: " << ptr1.use_count() << std::endl; 
+    //  外部输出 ptr1.use_count()，引用计数为1。
     //因为在 printShared中获得的 sharedPtr 是在其作用域结束后销毁的。
     // 在外部再次获取 shared_ptr
     std::shared_ptr<MyClass> ptr2 = ptr1->shared_from_this();
@@ -38,6 +39,10 @@ int main() {
 
 class Register;
 
+
+
+
+
 class login : public std::enable_shared_from_this<login> {
 public:
     void initSignals();
@@ -45,6 +50,7 @@ public:
 private:
     std::shared_ptr<Register> _register;
 };
+
 
 class Register {
 public:
@@ -60,13 +66,7 @@ void login::initSignals() {
     _register = std::make_shared<Register>();
     //_register->set_login(this);  
     //this 指针是裸指针，这样做将会导致两个独立的智能指针对象来管理同一个对象，可能会导致对象被重复析构
-
     //_register->set_login(std::shared_ptr<login>(this)); // 这也是错误的，会导致对象的二次析构
-    //新的 std::shared_ptr<login> 拥有自己的引用计数。
-    //_login 是另一个 std::shared_ptr<login> 对象，拥有自己的引用计数。
-    //set_login函数返回后，这个局部创建的 std::shared_ptr<login> 对象会被销毁
-    //    当程序继续执行时，当这两个 std::shared_ptr<login> 对象中的一个尝试释放对象的内存时，
-    //    由于另一个 std::shared_ptr<login> 仍然在使用对象，会导致对象的二次析构，可能会导致未定义行为。
     _register->set_login(shared_from_this());
     // 正确的做法，返回一个当前类的智能指针,前提是已经有一个智能指针对它做了管理
 }

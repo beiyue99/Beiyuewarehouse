@@ -9,26 +9,6 @@ using namespace std;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //	shared_ptr<int>sharedI(move (uniqueI));             //通过move移除独占属性
 
 

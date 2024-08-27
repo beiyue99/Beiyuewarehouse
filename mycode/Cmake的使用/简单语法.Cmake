@@ -6,10 +6,6 @@
 
 
 
-#project:定义工程名称, 并可指定工程的版本、工程描述、web主页地址、支持的语言
-#如果不需要这些都是可以忽略的, 只需要指定出工程名字即可。 
-project(<PROJECT - NAME>[<Language - name>...])
-
 
 
 #add_executable(app add.c div.c main.c mult.c sub.c)

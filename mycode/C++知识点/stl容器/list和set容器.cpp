@@ -9,10 +9,6 @@ using namespace std;
 
 
 
-
-
-
-
 // L.remove(n)    删除容器中等于n的元素
 
 
@@ -25,34 +21,12 @@ using namespace std;
 
 
 
-
-
-
-
 //  set 容器：
 
 //插入数据只有insert方式  不允许插入重复值  插入自动排序
 //	set<int>::iterator it = S.find(220);   
 //  找到返回该元素的迭代器，否则返回end迭代器
 //	int num = S.count(30);   //对于set而言 结果只有0和1
-
-
-
-
-
-
-
-
-
-
-//pair对组的创建方式
-//int main()
-//{
-//	pair<string, int>p("张三", 22);
-//	cout << p.first << endl;
-//	pair<string, int>p2=make_pair("张s", 22);
-//	cout << p2.first << endl;
-//}
 
 
 
@@ -70,11 +44,8 @@ using namespace std;
 //};
 
 //	set<int, Mycompare> S2;       //使降序排列传入的元素
-//compare是一个类（即函数对象，也称为仿函数），那么可以使用std::set<int, compare> S2; 
+//compare是一个类（即函数对象，也称为仿函数），那么可以使用set<int, compare> S2; 
 //的写法。这是因为此时的compare是一个类型，符合模板参数的要求。
-
-
-
 
 
 //bool compare(int a, int b) { // 普通函数定义比较函数，实现降序排序
@@ -83,21 +54,9 @@ using namespace std;
 //    std::set<int, bool(*)(int, int)> S2(compare); // 使用普通函数实例化set
 //
 //
-//
-//
-//
-// 
-// 
 // 
 //    auto compare = [](int a, int b) { return a > b; }; // Lambda表达式定义比较函数，实现降序排序
 //    std::set<int, decltype(compare)> S2(compare); // 使用lambda表达式实例化set
-
-
-
-
-
-
-
 
 
 

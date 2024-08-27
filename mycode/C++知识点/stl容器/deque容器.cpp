@@ -8,11 +8,6 @@ using namespace std;
 #include<ctime>
 
 
-
-
-
-
-
 //安全队列
 #include <queue>
 #include <mutex>
@@ -41,11 +36,9 @@ public:
     T pop() {
         std::unique_lock<std::mutex> lock(mutex_);
         while (queue_.empty()) {
-            condition_.wait(lock);   //如果为空一直等待，也可以定义别的行为
+            condition_.wait(lock);   //释放锁，进入等待
         }
         T rc(std::move(queue_.front()));
-        //将指针或资源所有权从一个对象转移到另一个对象，而不需要复制整个对象的内容
-        //使用 std::move() 是为了避免拷贝构造函数的调用，提高性能。
         queue_.pop();
         return rc;
     }

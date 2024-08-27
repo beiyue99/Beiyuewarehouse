@@ -2,7 +2,8 @@
 
 git remote add origin <repository url>
 git push -u origin master
-origin 就是我们给远程仓库指定的名字
+git branch -m master main   //改分支
+
 -u参数意味着在未来你只需要运行git push和git pull就能更新你的远程仓库。
 最后一步命令中的master为对应的分支名称。
 

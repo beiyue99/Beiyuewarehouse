@@ -31,7 +31,6 @@ private:
     // 禁止实例化  
     ShapeFactory() = delete;
 
-
     static std::unordered_map<std::string, std::function<std::unique_ptr<Shape>()>> shapeCreators;
     //保存了形状类型，和一个可调用对象（形状创建函数），该对象返回形状指针
 
